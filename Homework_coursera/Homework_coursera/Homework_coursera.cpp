@@ -17,37 +17,9 @@ using namespace std;
 
 const int N = 40;
 
-void sum(int*p, int n, int d[])
-{
-
-	int i;
-
-	*p = 0;
-
-	for (i = 0; i < n; ++i)
-
-		*p = *p + d[i];
-}
-
-int original_main()
-{
-	int data[N];
-	for (int i = 0; i < N; ++i)
-
-		data[i] = i;
-
-	int accum = 0;
-
-	sum(&accum, N, data);
-
-	cout << "Sum is " << accum << endl;
-
-	return 0;
-}
-
-// std vector tiene un iterador propio ... asi q no veo porque no usarlo ... 
+// approach one: keeping the structure from the Homework
 template <class T, class S>
-inline void sum_vector(T& accumulator, vector<S> &data)
+inline void sum(T& accumulator, vector<S> &data)
 {
 	accumulator = 0;
 	for (auto i = data.begin(); i != data.end(); i++)
@@ -60,8 +32,8 @@ int main()
 	for (int i = 0; i < N; ++i)
 		data.push_back(i);
 
-	float accum = 0;
-	sum_vector(accum, data);
+	float accum;
+	sum(accum, data);
 	cout << "Sum is " << accum << endl;
 
 	return 0;
