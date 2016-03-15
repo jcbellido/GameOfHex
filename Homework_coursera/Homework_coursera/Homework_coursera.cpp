@@ -18,8 +18,8 @@ using namespace std;
 const int N = 40;
 
 // approach one: keeping the structure from the Homework
-template <class T, class S>
-inline void sum(T& accumulator, vector<S> &data)
+template <class T>
+inline void sum(T& accumulator, const vector<T> &data)
 {
 	accumulator = 0;
 	for (auto i = data.begin(); i != data.end(); i++)
@@ -32,7 +32,7 @@ int main()
 	for (int i = 0; i < N; ++i)
 		data.push_back(i);
 
-	float accum;
+	int accum;
 	sum(accum, data);
 	cout << "Sum is " << accum << endl;
 
