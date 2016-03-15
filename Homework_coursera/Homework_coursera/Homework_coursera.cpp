@@ -22,8 +22,8 @@ template <class T>
 inline void sum(T& accumulator, const vector<T> &data)
 {
 	accumulator = 0;
-	for (auto i = data.begin(); i != data.end(); i++)
-		accumulator += *i;
+	for (auto i : data)
+		accumulator += i;
 }
 
 int main()
