@@ -1,53 +1,57 @@
-/* Convert this program to C++
+// --------------------------------------------------
+// Coursera Homework 1
+//
+// Author: Stefan Woehrer
+// Last Modified: 2016-03-17
+//
+// Compiled with CMake/g++ using the Clion IDE
+//
+// Functionality:
+//  Calculates the sum of the first CNT_ADDENDS integers
+//
+// Assignment description:
+//  Convert this program to C++
+//  change to C++ io
+//  change to one line comments
+//  change defines of constants to const
+//  change array to vector<>
+//  inline any short function
+// --------------------------------------------------
 
-* change to C++ io
+#include <iostream>
+#include <vector>
 
-* change to one line comments
+using namespace std;
 
-* change defines of constants to const
+// Number we need to sum up to. Used constexpr instead of const, because this value is known at compile time.
+const int CNT_ADDENDS = 40;
 
-* change array to vector<>
-
-* inline any short function
-
-*/
-
-#include <stdio.h>
-
-#define N 40
-
-void sum(int*p, int n, int d[])
-
+// --------------------------------------------------
+// Calculates the sum of all elements of int vector "addends" and writes
+// the sum into the byref param "sum"
+// --------------------------------------------------
+inline void sum(int& sum, const vector<int>& addends)
 {
-
-	int i;
-
-	*p = 0;
-
-	for (i = 0; i < n; ++i)
-
-		*p = *p + d[i];
-
+	sum = 0;
+	for (unsigned int i = 0; i < addends.size(); i++) {
+		sum += addends[i];
+	}
 }
 
-int old_main()
-
+// --------------------------------------------------
+// Main
+// Calculates the sum and prints it on the screen.
+// --------------------------------------------------
+int main()
 {
-
-	int i;
+	vector<int> data{ CNT_ADDENDS };
+	for (int i = 0; i < CNT_ADDENDS; i++) {
+		data.push_back(i);
+	}
 
 	int accum = 0;
-
-	int data[N];
-
-	for (i = 0; i < N; ++i)
-
-		data[i] = i;
-
-	sum(&accum, N, data);
-
-	printf("sum is %d\n", accum);
-
+	sum(accum, data);
+	cout << "cmake clion sum is " << accum << endl;
 	return 0;
-
 }
+
