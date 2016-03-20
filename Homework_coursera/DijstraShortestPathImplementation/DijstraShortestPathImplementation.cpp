@@ -9,32 +9,51 @@
 //			edge distance range as a parameter
 // Dijstra's algorithm should be a class member function 
 
+#include <exception>
 #include <iostream>
 #include <vector>
-#include <cassert>
 
 using namespace std;
 
 template<class weight>
 class Graph
 {
-private:
-	// let's use matrixes for now ... makes thing simpler ...
-	vector<vector<weight>> m_matrix_weight;
 public: 
 	Graph(unsigned int vertex_count, float edge_density, weight min_weight, weight max_weight)
 	{
-		// static_assert(0.0f < edge_density <= 1.0f, "Edge should be a value between (0, 1]");
-		// static_assert(max_weight > min_weight, "Weight should be a valid range, max > min");
-		// static_assert(vertex_count >= 2, "Vertex count should be 2 or greater");
-		// move 
+		if (vertex_count == 0)
+			throw invalid_argument("Vertex count must be bigger than zero");
 
+		if ((0.0f >= edge_density) || (edge_density > 1.0f))
+			throw invalid_argument("Edge density must be in the range (0, 1]");
 
+		if (max_weight <= min_weight)
+			throw invalid_argument("Max weight must be bigger than min weight");
+		construct_graph_representation(vertex_count, edge_density, min_weight, max_weight);
 	}
 
 	~Graph()
 	{
-		std::cout << "Graph deletion ... " << std::endl;
+		if (m_matrix_weight != nullptr)
+			delete(m_matrix_weight);
+	}
+
+private:
+	vector<vector<weight>>* m_matrix_weight = nullptr;
+
+protected: 
+	virtual void construct_graph_representation(unsigned int vertex_count, float edge_density, weight min_weight, weight max_weight)
+	{
+		m_matrix_weight = new vector<vector<weight>>(vertex_count);
+		
+		for (unsigned int i = 0; i < vertex_count; ++i)
+			m_matrix_weight->push_back(vector<weight>(vertex_count));	// Initialize the structure
+
+		for (unsigned int i = 0; i < vertex_count; ++i)
+			for (unsigned int j = 0; j < vertex_count; ++j)
+			{
+				cout << std::rand() << endl;
+			}
 	}
 };
 
@@ -42,6 +61,6 @@ int main()
 {
 	cout << "Executing Dijstra shortest" << endl;
 	auto g = new Graph<float>(50, 0.1f, 1.0f, 10.0f);
-
+	delete(g);
 	return 0;
 }
