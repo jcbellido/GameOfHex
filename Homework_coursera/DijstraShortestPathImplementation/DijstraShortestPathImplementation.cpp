@@ -121,7 +121,7 @@ protected:
 		}
 	}
 
-	weight get_vertex_weight(int origin, int destination)
+	weight get_edge_value(unsigned int origin, unsigned int destination)
 	{
 		if (destination > origin)
 			swap(origin, destination);	// Note: This implementation keeps the lower part of the matrix
@@ -129,13 +129,28 @@ protected:
 		return *(m_matrix_weight[origin][destination]);
 	}
 	
-	bool is_connected(int origin, int destination)
+	bool adjacent(unsigned int origin, unsigned int destination)
 	{
+		if (destination == origin)
+			return true;
+
 		if (destination > origin)
 			swap(origin, destination);	// Note: This implementation keeps the lower part of the matrix
 		
-		if (*(m_matrix_weight[origin][destination]) > 0)
+		if (get_edge_value(origin, destination) > 0)
 			return true;
+	}
+
+	const vector<unsigned int> neighbors(unsigned int origin)
+	{
+		vector<unsigned int> output;
+		for (unsigned int i = 0; i < vertex_count; i++)
+		{
+			if (origin != i)
+				if (adjacent(origin, i))
+					output.push_back(i);
+		}
+		return output;
 	}
 };
 
