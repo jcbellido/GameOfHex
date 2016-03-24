@@ -13,6 +13,7 @@
 #include <exception>
 #include <iostream>
 #include <iomanip>
+#include <queue>
 #include <vector>
 
 using namespace std;
@@ -154,12 +155,54 @@ protected:
 	}
 };
 
+
+template<class weight>
+class NodeDistance
+{
+private: 
+	const int nodeIndex;
+	weight pathAggregateCost;
+
+public:
+	NodeDistance(int nodeIndex, weight currentWeight) : nodeIndex(nodeIndex), pathAggregateCost(currentWeight) { }
+
+// properties
+public: 
+	const weight getCost() { return pathAggregateCost; }
+	void setCost(weight newCost) { pathAggregateCost = newCost; }
+	const int getNodeIndex() { return nodeIndex; }
+};
+
+template<class weight>
+class DijkstraAlgorithm
+{
+private:
+	const Graph<weight> &m_graph;
+	priority_queue<NodeDistance<weight>> m_open;
+	priority_queue<NodeDistance<weight>> m_closed;
+
+public:
+	DijkstraAlgorithm(const Graph<weight> &graph) : m_graph(graph) 
+	{	
+
+	}
+
+	/// Returns the shortest path for the specific algorithm
+	void SolveAlgorithm(int source, int destination)
+	{
+		cout << "solving " << source << " to " << destination << endl;
+	}
+};
+
 int main()
 {
 	srand(time(0));
 	cout << "Executing Dijstra shortest" << endl;
-	auto g = new Graph<float>(10, 0.5f, 1.0f, 10.0f);
-	g->print();
-	delete(g);
+	auto graph = new Graph<float>(10, 0.5f, 1.0f, 10.0f);
+	auto algorithm = new DijkstraAlgorithm<float>(*graph);
+	graph->print();
+	algorithm->SolveAlgorithm(0, 5);
+	delete(algorithm);
+	delete(graph);
 	return 0;
 }
