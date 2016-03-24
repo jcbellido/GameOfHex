@@ -155,12 +155,11 @@ protected:
 	}
 };
 
-
 template<class weight>
 class NodeDistance
 {
 private: 
-	const int nodeIndex;
+	int nodeIndex;
 	weight pathAggregateCost;
 
 public:
@@ -168,10 +167,16 @@ public:
 
 // properties
 public: 
-	const weight getCost() { return pathAggregateCost; }
+	const weight getCost() const { return pathAggregateCost; }
 	void setCost(weight newCost) { pathAggregateCost = newCost; }
-	const int getNodeIndex() { return nodeIndex; }
+	const int getNodeIndex() const { return nodeIndex; }
 };
+
+template<class weight>
+bool operator< (const NodeDistance<weight>& lhs, const NodeDistance<weight>& rhs)
+{
+	return lhs.getCost() > rhs.getCost();
+}
 
 template<class weight>
 class DijkstraAlgorithm
@@ -184,13 +189,18 @@ private:
 public:
 	DijkstraAlgorithm(const Graph<weight> &graph) : m_graph(graph) 
 	{	
-
+		m_open.push(NodeDistance<weight>(0, 0));
+		m_open.push(NodeDistance<weight>(1, 1));
+		m_open.push(NodeDistance<weight>(2, 2));
+		m_open.push(NodeDistance<weight>(3, 3));
 	}
 
 	/// Returns the shortest path for the specific algorithm
 	void SolveAlgorithm(int source, int destination)
 	{
 		cout << "solving " << source << " to " << destination << endl;
+		auto node = m_open.top();
+		cout << node.getCost();
 	}
 };
 
