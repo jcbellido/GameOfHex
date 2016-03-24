@@ -215,7 +215,7 @@ public:
 	DijkstraAlgorithm(const Graph<weight> &graph) : m_graph(graph)  { }
 
 	/// Returns the shortest path for the specific algorithm
-	void SolveAlgorithm(unsigned int source, unsigned int destination)
+	stack<unsigned int> SolveAlgorithm(unsigned int source, unsigned int destination)
 	{
 		if (!m_graph.DoesVertexExists(source) || !m_graph.DoesVertexExists(destination))
 			throw invalid_argument("Sources or Destinations indexes not present in the graph");
@@ -235,26 +235,23 @@ public:
 				if (alt < m_dist[v])
 				{
 					auto f = find(m_q.begin(), m_q.end(), NodeDistance<weight>(v, m_dist[v]));
+					m_q.erase(f);
 					m_q.insert(NodeDistance<weight>(v, alt));
 					m_dist[v] = alt;
 					m_prev[v] = u.getNodeIndex();
 				}
 			}
 		}
-
-	
-
-
-
-
-		1  S ← empty sequence
-		2  u ← target
-		3  while prev[u] is defined :                  // Construct the shortest path with a stack S
-		4      insert u at the beginning of S         // Push the vertex onto the stack
-			5      u ← prev[u]                            // Traverse from target to source
-			6  insert u at the beginning of S             // Push the source onto the stack
-
-
+		
+		stack<unsigned int> path;
+		unsigned int u = destination;
+		while (m_prev[u] != numeric_limits<unsigned int>::min())
+		{
+			path.push(u);
+			u = m_prev[u];
+		}
+		path.push(source);
+		return path;
 	}
 
 private:
@@ -287,10 +284,16 @@ int main()
 {
 	srand(time(0));
 	cout << "Executing Dijstra shortest" << endl;
-	auto graph = new Graph<float>(10, 0.5f, 1.0f, 10.0f);
+	auto graph = new Graph<float>(5, 0.5f, 1.0f, 10.0f);
 	auto algorithm = new DijkstraAlgorithm<float>(*graph);
 	graph->print();
-	algorithm->SolveAlgorithm(0, 5);
+	auto path = algorithm->SolveAlgorithm(0, 5);
+	while (!path.empty())
+	{
+		cout << path.top() << " ";
+		path.pop();
+	}
+	cout << endl;
 	delete(algorithm);
 	delete(graph);
 	return 0;
