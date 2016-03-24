@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <limits>
 #include <set>
+#include <stack>
 #include <vector>
 
 using namespace std;
@@ -133,15 +134,16 @@ private:
 	}
 
 public: 
-	weight get_edge_value(unsigned int origin, unsigned int destination)
+	weight get_edge_value(unsigned int origin, unsigned int destination) const
 	{
 		if (destination > origin)
 			swap(origin, destination);	// Note: This implementation keeps the lower part of the matrix
 
-		return *(m_matrix_weight[origin][destination]);
+		vector<weight> row = (*m_matrix_weight)[origin];
+		return row[destination];
 	}
 	
-	bool adjacent(unsigned int origin, unsigned int destination)
+	bool adjacent(unsigned int origin, unsigned int destination) const
 	{
 		if (destination == origin)
 			return true;
@@ -151,9 +153,11 @@ public:
 		
 		if (get_edge_value(origin, destination) > 0)
 			return true;
+		
+		return false;
 	}
 
-	const vector<unsigned int> neighbors(unsigned int origin)
+	const vector<unsigned int> neighbors(unsigned int origin) const
 	{
 		vector<unsigned int> output;
 		for (unsigned int i = 0; i < vertex_count; i++)
@@ -191,6 +195,9 @@ public:
 
 	bool operator< (const NodeDistance<weight>& other) const
 	{
+		if (this->getCost() == other.getCost())
+			return this->getNodeIndex() < other.getNodeIndex();
+
 		return this->getCost() < other.getCost();
 	}
 };
@@ -202,7 +209,7 @@ private:
 	const Graph<weight> &m_graph;
 	set<NodeDistance<weight>> m_q;
 	vector<weight> m_dist;
-	vector<weight> m_prev;
+	vector<unsigned int> m_prev;
 
 public:
 	DijkstraAlgorithm(const Graph<weight> &graph) : m_graph(graph)  { }
@@ -214,21 +221,40 @@ public:
 			throw invalid_argument("Sources or Destinations indexes not present in the graph");
 
 		initialization(source);
-		cout << "solving " << source << " to " << destination << endl;
 		// auto f = find(m_open.begin(), m_open.end(), NodeDistance<weight>(1, 0.75f));
 		while (!m_q.empty())
 		{
+			auto u = *m_q.begin();
+			m_q.erase(m_q.begin());
+			cout << "checking node: " <<  u.getNodeIndex() << endl;
 
-
-			//14     while Q is not empty :                              // The main loop
-			//15         u ← Q.extract_min()                            // Remove and return best vertex
-			//16         for each neighbor v of u :                       // only v that is still in Q
-			//17             alt = dist[u] + length(u, v)
-			//18             if alt < dist[v]
-			//19                 dist[v] ← alt
-			//20                 prev[v] ← u
-			//21                 Q.decrease_priority(v, alt)
+			auto neighbors = m_graph.neighbors(u.getNodeIndex());
+			for (auto v : neighbors)
+			{
+				weight alt = m_dist[u.getNodeIndex()] + m_graph.get_edge_value(u.getNodeIndex(), v);
+				if (alt < m_dist[v])
+				{
+					auto f = find(m_q.begin(), m_q.end(), NodeDistance<weight>(v, m_dist[v]));
+					m_q.insert(NodeDistance<weight>(v, alt));
+					m_dist[v] = alt;
+					m_prev[v] = u.getNodeIndex();
+				}
+			}
 		}
+
+	
+
+
+
+
+		1  S ← empty sequence
+		2  u ← target
+		3  while prev[u] is defined :                  // Construct the shortest path with a stack S
+		4      insert u at the beginning of S         // Push the vertex onto the stack
+			5      u ← prev[u]                            // Traverse from target to source
+			6  insert u at the beginning of S             // Push the source onto the stack
+
+
 	}
 
 private:
@@ -245,12 +271,12 @@ private:
 		m_dist.resize(m_graph.VertexCount());
 		m_prev.resize(m_graph.VertexCount());
 		m_dist[source] = 0;
-		for (int i = 0; i < m_graph.VertexCount(); ++i)
+		for (unsigned int i = 0; i < m_graph.VertexCount(); ++i)
 		{
 			if (i != source)
 			{
 				m_dist[i] = numeric_limits<weight>::max();
-				m_prev[i] = numeric_limits<weight>::min();
+				m_prev[i] = numeric_limits<unsigned int>::min();
 			}
 			m_q.insert(NodeDistance<weight>(i, m_dist[i]));
 		}
