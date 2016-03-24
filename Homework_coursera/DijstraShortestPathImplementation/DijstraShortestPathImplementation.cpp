@@ -1,4 +1,4 @@
-// DijstraShortestPathImplementation.cpp : Defines the entry point for the console application.
+﻿// DijstraShortestPathImplementation.cpp : Defines the entry point for the console application.
 //
 // Create a graph as an abstract data type: using C++ classes
 //		assume UNDIRECTED graphs
@@ -13,7 +13,8 @@
 #include <exception>
 #include <iostream>
 #include <iomanip>
-#include <queue>
+#include <limits>
+#include <set>
 #include <vector>
 
 using namespace std;
@@ -31,7 +32,7 @@ inline int rand_int_in_positive_range(unsigned int min, unsigned int max)
 template<class weight>
 class Graph
 {
-public: 
+public:
 	Graph(unsigned int vertex_count, float edge_density, weight min_weight, weight max_weight)
 	{
 		if (vertex_count == 0)
@@ -61,7 +62,7 @@ public:
 	void print()
 	{
 		cout << "Edge density: " << edge_density << endl;
-		cout << "Vertex count: " << vertex_count << endl; 
+		cout << "Vertex count: " << vertex_count << endl;
 		for (auto row : *m_matrix_weight)
 		{
 			for (auto column : row)
@@ -75,6 +76,16 @@ public:
 		}
 	}
 
+	bool DoesVertexExists(unsigned int key) const
+	{
+		return  key <= vertex_count;
+	}
+
+	unsigned int VertexCount() const
+	{
+		return vertex_count;
+	}
+
 private:
 	vector<vector<weight>>* m_matrix_weight = nullptr;
 	float edge_density = 0.0f; 
@@ -82,24 +93,10 @@ private:
 	weight min_weight;
 	weight max_weight;
 
-	inline bool does_edge_exists()
-	{
-		return rand_zero_to_one() < this->edge_density;
-	}
-
-	inline weight get_random_weight()
-	{
-		weight random = static_cast<weight>(rand()) / static_cast <weight>(RAND_MAX);
-		weight diff = max_weight - min_weight;
-		weight r = random * diff;
-		return min_weight + r;
-	}
-
-protected: 
 	virtual void construct_graph_representation(weight min_weight, weight max_weight)
 	{
 		m_matrix_weight = new vector<vector<weight>>();
-	
+
 		for (unsigned int i = 1; i <= vertex_count; ++i)
 			m_matrix_weight->push_back(vector<weight>(i));	// Initialize the structure
 
@@ -122,6 +119,20 @@ protected:
 		}
 	}
 
+	inline bool does_edge_exists()
+	{
+		return rand_zero_to_one() < this->edge_density;
+	}
+
+	inline weight get_random_weight()
+	{
+		weight random = static_cast<weight>(rand()) / static_cast <weight>(RAND_MAX);
+		weight diff = max_weight - min_weight;
+		weight r = random * diff;
+		return min_weight + r;
+	}
+
+public: 
 	weight get_edge_value(unsigned int origin, unsigned int destination)
 	{
 		if (destination > origin)
@@ -159,48 +170,90 @@ template<class weight>
 class NodeDistance
 {
 private: 
-	int nodeIndex;
+	unsigned int nodeIndex;
 	weight pathAggregateCost;
 
 public:
-	NodeDistance(int nodeIndex, weight currentWeight) : nodeIndex(nodeIndex), pathAggregateCost(currentWeight) { }
+	NodeDistance() : nodeIndex(-1), pathAggregateCost(-1) { }
+	NodeDistance(unsigned int nodeIndex, weight currentWeight) : nodeIndex(nodeIndex), pathAggregateCost(currentWeight) { }
 
 // properties
 public: 
 	const weight getCost() const { return pathAggregateCost; }
 	void setCost(weight newCost) { pathAggregateCost = newCost; }
-	const int getNodeIndex() const { return nodeIndex; }
-};
+	const unsigned int getNodeIndex() const { return nodeIndex; }
 
-template<class weight>
-bool operator< (const NodeDistance<weight>& lhs, const NodeDistance<weight>& rhs)
-{
-	return lhs.getCost() > rhs.getCost();
-}
+public:
+	bool operator== (const NodeDistance<weight>& other) const
+	{
+		return this->getNodeIndex() == other.getNodeIndex();
+	}
+
+	bool operator< (const NodeDistance<weight>& other) const
+	{
+		return this->getCost() < other.getCost();
+	}
+};
 
 template<class weight>
 class DijkstraAlgorithm
 {
 private:
 	const Graph<weight> &m_graph;
-	priority_queue<NodeDistance<weight>> m_open;
-	priority_queue<NodeDistance<weight>> m_closed;
+	set<NodeDistance<weight>> m_q;
+	vector<weight> m_dist;
+	vector<weight> m_prev;
 
 public:
-	DijkstraAlgorithm(const Graph<weight> &graph) : m_graph(graph) 
-	{	
-		m_open.push(NodeDistance<weight>(0, 0));
-		m_open.push(NodeDistance<weight>(1, 1));
-		m_open.push(NodeDistance<weight>(2, 2));
-		m_open.push(NodeDistance<weight>(3, 3));
-	}
+	DijkstraAlgorithm(const Graph<weight> &graph) : m_graph(graph)  { }
 
 	/// Returns the shortest path for the specific algorithm
-	void SolveAlgorithm(int source, int destination)
+	void SolveAlgorithm(unsigned int source, unsigned int destination)
 	{
+		if (!m_graph.DoesVertexExists(source) || !m_graph.DoesVertexExists(destination))
+			throw invalid_argument("Sources or Destinations indexes not present in the graph");
+
+		initialization(source);
 		cout << "solving " << source << " to " << destination << endl;
-		auto node = m_open.top();
-		cout << node.getCost();
+		// auto f = find(m_open.begin(), m_open.end(), NodeDistance<weight>(1, 0.75f));
+		while (!m_q.empty())
+		{
+
+
+			//14     while Q is not empty :                              // The main loop
+			//15         u ← Q.extract_min()                            // Remove and return best vertex
+			//16         for each neighbor v of u :                       // only v that is still in Q
+			//17             alt = dist[u] + length(u, v)
+			//18             if alt < dist[v]
+			//19                 dist[v] ← alt
+			//20                 prev[v] ← u
+			//21                 Q.decrease_priority(v, alt)
+		}
+	}
+
+private:
+	void clear()
+	{
+		m_q.clear();
+		m_dist.clear();
+		m_prev.clear();
+	}
+
+	void initialization(unsigned int source)
+	{
+		clear();
+		m_dist.resize(m_graph.VertexCount());
+		m_prev.resize(m_graph.VertexCount());
+		m_dist[source] = 0;
+		for (int i = 0; i < m_graph.VertexCount(); ++i)
+		{
+			if (i != source)
+			{
+				m_dist[i] = numeric_limits<weight>::max();
+				m_prev[i] = numeric_limits<weight>::min();
+			}
+			m_q.insert(NodeDistance<weight>(i, m_dist[i]));
+		}
 	}
 };
 
