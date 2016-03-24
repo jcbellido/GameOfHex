@@ -287,7 +287,7 @@ int main()
 	auto graph = new Graph<float>(5, 0.5f, 1.0f, 10.0f);
 	auto algorithm = new DijkstraAlgorithm<float>(*graph);
 	graph->print();
-	auto path = algorithm->SolveAlgorithm(0, 5);
+	auto path = algorithm->SolveAlgorithm(0, 3);
 	while (!path.empty())
 	{
 		cout << path.top() << " ";
