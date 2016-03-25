@@ -1,16 +1,21 @@
-﻿// DijstraShortestPathImplementation.cpp 
+﻿// DijkstraShortestPathImplementation.cpp 
+
 // Some notes about the graph implementation: 
-// 1. I am using a matrix approach to keep the graph structure
+// 1. I am using a matrix approach to keep the graph structure, it seemed simpler for debuggin purposes
 // 2. The grah is non directed
-// 3. Edges that go from a node into itself are not allowed
+// 3. I'm not generating edges that go from a node into itself
 // 4. For practice purposes I'm keeping the edge cost as a templated class
 
-// About the algorithm itself
-// I'm using sets as data containers
-// All the Dijkstra 
+// About the Dijkstra algorithm implemented
+// 1. It follows wikipedia's pseudocode and names.
+// 2. Using sets as data containers.
+// 3. I'm using the limits package to construct undefined and infinity values.
+// 4. It's not the optimized version, this way the code is clearer. 
 
-// General implementation notes: 
+// Some general notes: 
 // 1. I was curious about the use of exceptions in C++ and I'm using them to report bad parameters
+// 2. I used cout a bit and there's some output formating (through iomanip)
+
 
 #include <ctime>
 #include <exception>
@@ -233,6 +238,7 @@ public:
 
 // Dijstra Algorithm 
 // Uses the variable names from the wikipedia pseudocode implementation
+// it's also the classical implementation
 template<class weight>
 class DijkstraAlgorithm
 {
@@ -331,33 +337,6 @@ private:
 	}
 };
 
-// ----------------------------------------------------------------------------
-// Testing: Simplified version for debug and testing purposes
-int main_debug()
-{
-	srand(0);	// Fixed srand to control the generation
-	auto graph = new Graph<float>(5, 0.1f, 1.0f, 10.0f);
-	auto algorithm = new DijkstraAlgorithm<float>(*graph);
-	cout << "Graph printing: " << (*graph) << endl;
-	auto path = algorithm->GetPath(0, 2);
-	if (!path.empty())
-	{
-		cout << "Cost: " << setprecision(2) << graph->PathWeight(path) << " path: "; 
-		while (!path.empty())
-		{
-			cout << path.top() << " ";
-			path.pop();
-		}
-	}
-	else
-	{
-		cout << "No path found" << endl; 
-	}
-	cout << endl;
-	delete(algorithm);
-	delete(graph);
-	return 0;
-}
 
 // ----------------------------------------------------------------------------
 // Assignement
@@ -391,7 +370,7 @@ weight GetAveragePathLength(unsigned int numberOfVertex, float edgeDensity, weig
 
 int main()
 {
-	srand(time(0));
+	srand(static_cast<unsigned int>(time(0)));
 	cout << "Average path length on 20% : " << GetAveragePathLength<float>(50, 0.2f, 1.0f, 10.0f) << endl;
 	cout << "Average path length on 40% : " << GetAveragePathLength<float>(50, 0.4f, 1.0f, 10.0f) << endl;
 	return 0;
