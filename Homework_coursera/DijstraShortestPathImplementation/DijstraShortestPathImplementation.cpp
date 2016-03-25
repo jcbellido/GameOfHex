@@ -1,7 +1,7 @@
 ﻿// DijkstraShortestPathImplementation.cpp 
 
 // Some notes about the graph implementation: 
-// 1. I am using a matrix approach to keep the graph structure, it seemed simpler for debuggin purposes
+// 1. I am using a matrix approach to keep the graph structure, it seemed simpler for debugging purposes
 // 2. The grah is non directed
 // 3. I'm not generating edges that go from a node into itself
 // 4. For practice purposes I'm keeping the edge cost as a templated class
@@ -15,7 +15,6 @@
 // Some general notes: 
 // 1. I was curious about the use of exceptions in C++ and I'm using them to report bad parameters
 // 2. I used cout a bit and there's some output formating (through iomanip)
-
 
 #include <ctime>
 #include <exception>
@@ -375,3 +374,4 @@ int main()
 	cout << "Average path length on 40% : " << GetAveragePathLength<float>(50, 0.4f, 1.0f, 10.0f) << endl;
 	return 0;
 }
+  
