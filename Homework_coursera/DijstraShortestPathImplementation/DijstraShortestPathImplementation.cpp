@@ -20,6 +20,8 @@
 
 using namespace std;
 
+// ----------------------------------------------------------------------------
+// Auxiliar math functions
 inline float rand_zero_to_one()
 {
 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -29,6 +31,10 @@ inline int rand_int_in_positive_range(unsigned int min, unsigned int max)
 {
 	return min + (rand() % (int)(max - min + 1));
 }
+
+
+// ----------------------------------------------------------------------------
+// Graph clases
 
 template<class weight>
 class Graph
@@ -79,7 +85,7 @@ public:
 
 	bool DoesVertexExists(unsigned int key) const
 	{
-		return  key <= vertex_count;
+		return  key < vertex_count;
 	}
 
 	unsigned int VertexCount() const
@@ -102,12 +108,14 @@ private:
 			m_matrix_weight->push_back(vector<weight>(i));	// Initialize the structure
 
 		// Traverse the lower half of the structure and then mirror it
+		// Also: avoids edges that starts at ends on the same node
 		auto row_iterator = m_matrix_weight->begin();
 		for (unsigned int i = 0; i < vertex_count; ++i)
 		{
+			unsigned int j = 0;
 			for (auto& column_iterator : *row_iterator)
 			{
-				if (does_edge_exists())
+				if ((i != j) && does_edge_exists())
 				{
 					column_iterator = get_random_weight();
 				}
@@ -115,6 +123,7 @@ private:
 				{
 					column_iterator = 0;
 				}
+				j++;
 			}
 			row_iterator++;
 		}
@@ -209,7 +218,10 @@ private:
 	const Graph<weight> &m_graph;
 	set<NodeDistance<weight>> m_q;
 	vector<weight> m_dist;
-	vector<unsigned int> m_prev;
+	vector<int> m_prev;
+
+	const weight WINFINITY = numeric_limits<weight>::max();
+	const int UNDEFINED = numeric_limits<int>::min();
 
 public:
 	DijkstraAlgorithm(const Graph<weight> &graph) : m_graph(graph)  { }
@@ -220,13 +232,22 @@ public:
 		if (!m_graph.DoesVertexExists(source) || !m_graph.DoesVertexExists(destination))
 			throw invalid_argument("Sources or Destinations indexes not present in the graph");
 
-		initialization(source);
-		// auto f = find(m_open.begin(), m_open.end(), NodeDistance<weight>(1, 0.75f));
+		if (source == destination)
+		{
+			stack<unsigned int> trivialPath;
+			trivialPath.push(source);
+			return trivialPath;
+		}
+
+		cout << "Looking for a path between: " << source <<  " and " << destination << endl;
+
+		initialization(source);	
 		while (!m_q.empty())
 		{
 			auto u = *m_q.begin();
 			m_q.erase(m_q.begin());
-			cout << "checking node: " <<  u.getNodeIndex() << endl;
+			if (u.getNodeIndex() == destination)
+				break;
 
 			auto neighbors = m_graph.neighbors(u.getNodeIndex());
 			for (auto v : neighbors)
@@ -245,16 +266,23 @@ public:
 		
 		stack<unsigned int> path;
 		unsigned int u = destination;
-		while (m_prev[u] != numeric_limits<unsigned int>::min())
+		while ((m_prev[u] != UNDEFINED) && (u != source))
 		{
 			path.push(u);
 			u = m_prev[u];
 		}
-		path.push(source);
-		return path;
-	}
 
-private:
+		if (u == source)
+		{
+			path.push(source);
+			return path;
+		}
+		else
+		{
+			return stack<unsigned int>(); 
+		}
+	}
+	
 	void clear()
 	{
 		m_q.clear();
@@ -272,8 +300,8 @@ private:
 		{
 			if (i != source)
 			{
-				m_dist[i] = numeric_limits<weight>::max();
-				m_prev[i] = numeric_limits<unsigned int>::min();
+				m_dist[i] = WINFINITY;
+				m_prev[i] = UNDEFINED;
 			}
 			m_q.insert(NodeDistance<weight>(i, m_dist[i]));
 		}
@@ -282,16 +310,24 @@ private:
 
 int main()
 {
-	srand(time(0));
-	cout << "Executing Dijstra shortest" << endl;
-	auto graph = new Graph<float>(5, 0.5f, 1.0f, 10.0f);
+	// srand(time(0));
+	cout << "FIXME: srand is fixed" << endl;
+	srand(0);
+	auto graph = new Graph<float>(5, 0.1f, 1.0f, 10.0f);
 	auto algorithm = new DijkstraAlgorithm<float>(*graph);
 	graph->print();
-	auto path = algorithm->SolveAlgorithm(0, 3);
-	while (!path.empty())
+	auto path = algorithm->SolveAlgorithm(3, 4);
+	if (!path.empty())
 	{
-		cout << path.top() << " ";
-		path.pop();
+		while (!path.empty())
+		{
+			cout << path.top() << " ";
+			path.pop();
+		}
+	}
+	else
+	{
+		cout << "no path found" << endl; 
 	}
 	cout << endl;
 	delete(algorithm);
