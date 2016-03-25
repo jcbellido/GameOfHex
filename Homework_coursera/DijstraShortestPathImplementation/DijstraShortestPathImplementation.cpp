@@ -284,7 +284,8 @@ public:
 				}
 			}
 		}
-		
+
+		// Generate a path as result
 		stack<unsigned int> path;
 		unsigned int u = destination;
 		while ((m_prev[u] != UNDEFINED) && (u != source))
@@ -331,12 +332,10 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-
-int main()
+// Testing: Simplified version for debug and testing purposes
+int main_debug()
 {
-	// srand(time(0));
-	cout << "FIXME: srand is fixed" << endl;
-	srand(0);
+	srand(0);	// Fixed srand to control the generation
 	auto graph = new Graph<float>(5, 0.1f, 1.0f, 10.0f);
 	auto algorithm = new DijkstraAlgorithm<float>(*graph);
 	cout << "Graph printing: " << (*graph) << endl;
@@ -357,5 +356,43 @@ int main()
 	cout << endl;
 	delete(algorithm);
 	delete(graph);
+	return 0;
+}
+
+// ----------------------------------------------------------------------------
+// Assignement
+template<class weight>
+weight GetAveragePathLength(unsigned int numberOfVertex, float edgeDensity, weight minDistance, weight maxDistance)
+{
+	if (numberOfVertex <= 1)
+		return 0;
+
+	weight output = 0;
+	int numberOfPaths = 0;
+	auto graph = new Graph<weight>(numberOfVertex, edgeDensity, minDistance, maxDistance);
+	auto algorithm = new DijkstraAlgorithm<float>(*graph);
+	
+	for (unsigned int i = 1; i < graph->VertexCount(); i++)
+	{
+		auto path = algorithm->GetPath(0, i);
+
+		if (!path.empty())
+		{
+			output += graph->PathWeight(path);
+			numberOfPaths++;
+		}
+	}
+
+	delete(algorithm);
+	delete(graph);
+
+	return output / static_cast<weight>(numberOfPaths);
+}
+
+int main()
+{
+	srand(time(0));
+	cout << "Average path length on 20% : " << GetAveragePathLength<float>(50, 0.2f, 1.0f, 10.0f) << endl;
+	cout << "Average path length on 40% : " << GetAveragePathLength<float>(50, 0.4f, 1.0f, 10.0f) << endl;
 	return 0;
 }
