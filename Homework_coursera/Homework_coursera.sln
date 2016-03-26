@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Week2Review", "Week2Review\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Week2ManguaSoufa", "Week2ManguaSoufa\Week2ManguaSoufa.vcxproj", "{ED66491C-7B12-4191-AD04-26194E62451C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HW2HansonChar", "HW2HansonChar\HW2HansonChar.vcxproj", "{EF7708EA-7A36-4629-BD61-D4A928913D21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -33,6 +35,10 @@ Global
 		{ED66491C-7B12-4191-AD04-26194E62451C}.Debug|Win32.Build.0 = Debug|Win32
 		{ED66491C-7B12-4191-AD04-26194E62451C}.Release|Win32.ActiveCfg = Release|Win32
 		{ED66491C-7B12-4191-AD04-26194E62451C}.Release|Win32.Build.0 = Release|Win32
+		{EF7708EA-7A36-4629-BD61-D4A928913D21}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EF7708EA-7A36-4629-BD61-D4A928913D21}.Debug|Win32.Build.0 = Debug|Win32
+		{EF7708EA-7A36-4629-BD61-D4A928913D21}.Release|Win32.ActiveCfg = Release|Win32
+		{EF7708EA-7A36-4629-BD61-D4A928913D21}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
