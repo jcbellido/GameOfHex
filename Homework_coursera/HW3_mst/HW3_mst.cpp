@@ -92,7 +92,7 @@ public:
 				myfile >> end;
 				myfile >> cost;
 				
-				if ((end >= VertexCount() || (start >= VertexCount()))
+				if ((end >= VertexCount()) || (start >= VertexCount()))
 					throw invalid_argument("File contains vertex indexes beyond the limit file must be greater than zero");
 
 				AddEdge(start, end, cost);
@@ -137,6 +137,7 @@ public:
 		return m_vertices.size();
 	}
 
+	// Returns the weight of an existing edge between origin and destination or weight::min (usually < 0) if it doesn't
 	weight GetEdgeCost(vertexKey origin, vertexKey destination) const
 	{
 		if (!DoesVertexExists(origin) || !DoesVertexExists(destination))
@@ -164,41 +165,44 @@ public:
 		return false;
 	}
 
-	//const vector<vertexKey> Neighbors(vertexKey origin) const
-	//{
-	//	vector<vertexKey> output;
-	//	for (vertexKey i = 0; i < vertex_count; i++)
-	//	{
-	//		if (origin != i)
-	//			if (IsAdjacent(origin, i))
-	//				output.push_back(i);
-	//	}
-	//	return output;
-	//}
+	const vector<vertexKey> Neighbors(vertexKey origin) const
+	{
+		if (!DoesVertexExists(origin))
+			throw invalid_argument("Neightbors origin vertex is wrong");
+		
+		vector<vertexKey> output;
+		auto vertexConnections = m_vertices[origin];
+		for (set< Edge<weight> >::iterator edge = vertexConnections.begin(); edge != vertexConnections.end(); edge++)
+		{
+			output.push_back((*edge).End());
+		}
+		return output;
+	}
 
-	//weight PathWeight(stack<vertexKey> path) const
-	//{
-	//	if (path.size() <= 1)
-	//		return 0;
+	weight PathWeight(stack<vertexKey> path) const
+	{
+		if (path.size() <= 1)
+			return 0;
 
-	//	weight output = 0;
-	//	vertexKey origin = path.top();
-	//	path.pop();
-	//	vertexKey destination;
-	//	do
-	//	{
-	//		destination = path.top();
-	//		path.pop();
-	//		if (!IsAdjacent(origin, destination))
-	//			throw invalid_argument("Invalid edge on path");
+		weight output = 0;
+		vertexKey origin = path.top();
+		path.pop();
+		vertexKey destination;
+		do
+		{
+			destination = path.top();
+			path.pop();
+			if (!IsAdjacent(origin, destination))
+				throw invalid_argument("Invalid edge on path");
 
-	//		output += GetEdgeValue(origin, destination);
-	//		swap(origin, destination);
-	//	} while (!path.empty());
-	//	return output;
-	//}
+			output += GetEdgeValue(origin, destination);
+			swap(origin, destination);	// compute the next position in the path stack
+		} while (!path.empty());
+		return output;
+	}
 
-private: 
+private:
+	// Just used by constructing methods, atm the graph isstatic 
 	void AddEdge(vertexKey start, vertexKey end, weight cost)
 	{
 		m_vertices[start].insert(Edge<weight>(start, end, cost));
@@ -212,9 +216,6 @@ private:
 		{
 			for (vertexKey j = 0; j < i; j++)
 			{
-				//if (i == j)
-				//	continue; 
-
 				if (doesEdgeExists(edge_density))
 				{
 					weight cost = get_random_weight(min_weight, max_weight);
@@ -225,13 +226,11 @@ private:
 		}
 	}
 
-	// Used by the random generation
 	inline bool doesEdgeExists(float edge_density)
 	{
 		return rand_zero_to_one() < edge_density;
 	}
 
-	// Used by the random generation
 	inline weight get_random_weight(weight min_weight, weight max_weight)
 	{
 		weight random = static_cast<weight>(rand()) / static_cast <weight>(RAND_MAX);
@@ -258,7 +257,6 @@ ostream& operator<<(ostream& cout, const Graph<weight>& g)
 	}
 	return cout;
 }
-
 
 //// ----------------------------------------------------------------------------
 //// Dijstra shortest path algorithm implementation 
@@ -427,10 +425,17 @@ int main()
 {
 	// srand(static_cast<unsigned int>(time(0)));
 	srand(7777);
+	cout << "No more randomness for the graph, from file" << endl;
 	Graph<float> random_g = Graph<float>(5, 0.4f, 1.0f, 10.0f);
+	auto n = random_g.Neighbors(0);
+	cout << "random graph, neighbors:" << "0 node, has " << n.size() << " neighbors "<< endl;
+	for (auto index : n)
+		cout << index << " "; 
+	cout << endl;
 	cout << random_g << endl;
 
+	cout << "No more randomness the graph read from a file:"<< endl;
 	Graph<float> from_file_g = Graph<float>("debug_data.txt");
-
+	cout << from_file_g << endl;
 	return 0;
 }
