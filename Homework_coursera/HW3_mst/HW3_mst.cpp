@@ -45,15 +45,23 @@ public:
 	const vertexKey End() const { return end; }
 	const weight Cost() const { return cost; }
 
-	// TODO: remove this one? 
-	bool operator== (const Edge<weight>& other) const
-	{
-		return this->End() == other.End();
-	}
-
 	bool operator< (const Edge<weight>& other) const
 	{
 		return this->End() < other.End();
+	}
+
+	// DELETEME? 
+	bool InternalCompareByWeight(const Edge<weight>& a, const Edge<weight>& b) const
+	{
+		return a.Cost() < b.Cost();
+	}
+};
+
+template<class weight>
+struct CompareByWeight{
+	bool operator() (const Edge<weight>& a, const Edge<weight>& b) const
+	{
+		return a.Cost() < b.Cost();
 	}
 };
 
@@ -179,6 +187,14 @@ public:
 		return output;
 	}
 
+	const set<Edge<weight>> EdgesFromNode(vertexKey origin) const
+	{
+		if (!DoesVertexExists(origin))
+			throw invalid_argument("Edges From Node origin vertex is wrong");
+		
+		return m_vertices[origin];
+	}
+
 	weight PathWeight(stack<vertexKey> path) const
 	{
 		if (path.size() <= 1)
@@ -201,8 +217,6 @@ public:
 		return output;
 	}
 
-private:
-	// Just used by constructing methods, atm the graph isstatic 
 	void AddEdge(vertexKey start, vertexKey end, weight cost)
 	{
 		m_vertices[start].insert(Edge<weight>(start, end, cost));
@@ -258,184 +272,84 @@ ostream& operator<<(ostream& cout, const Graph<weight>& g)
 	return cout;
 }
 
-//// ----------------------------------------------------------------------------
-//// Dijstra shortest path algorithm implementation 
-//template<class weight>
-//class NodeDistance
-//{
-//private:
-//	vertexKey nodeIndex;
-//	weight pathAggregateCost;
-//
-//public:
-//	NodeDistance() : nodeIndex(-1), pathAggregateCost(-1) { }
-//	NodeDistance(vertexKey nodeIndex, weight currentWeight) : nodeIndex(nodeIndex), pathAggregateCost(currentWeight) { }
-//
-//	const weight getCost() const { return pathAggregateCost; }
-//	void setCost(weight newCost) { pathAggregateCost = newCost; }
-//	const vertexKey getNodeIndex() const { return nodeIndex; }
-//
-//	bool operator== (const NodeDistance<weight>& other) const
-//	{
-//		return this->getNodeIndex() == other.getNodeIndex();
-//	}
-//
-//	bool operator< (const NodeDistance<weight>& other) const
-//	{
-//		if (this->getCost() == other.getCost())
-//			return this->getNodeIndex() < other.getNodeIndex();
-//
-//		return this->getCost() < other.getCost();
-//	}
-//};
-//
-//// Dijstra Algorithm 
-//// Uses the variable names from the wikipedia pseudocode implementation
-//// it's also the classical implementation
-//template<class weight>
-//class DijkstraAlgorithm
-//{
-//private:
-//	const Graph<weight> &m_graph;
-//	set<NodeDistance<weight>> m_q;
-//	vector<weight> m_dist;
-//	vector<int> m_prev;
-//
-//	const weight WINFINITY = numeric_limits<weight>::max();	// weight-infinity to avoid constant clash
-//	const int UNDEFINED = numeric_limits<int>::min();
-//
-//public:
-//	DijkstraAlgorithm(const Graph<weight> &graph) : m_graph(graph)  { }
-//
-//	/// Returns the shortest path for the specific algorithm
-//	/// or an empty stack if no path was found
-//	stack<vertexKey> GetPath(vertexKey source, vertexKey destination)
-//	{
-//		if (!m_graph.DoesVertexExists(source) || !m_graph.DoesVertexExists(destination))
-//			throw invalid_argument("Sources or Destinations indexes not present in the graph");
-//
-//		if (source == destination)
-//		{
-//			stack<vertexKey> trivialPath;
-//			trivialPath.push(source);
-//			return trivialPath;
-//		}
-//
-//		initialization(source);
-//		while (!m_q.empty())
-//		{
-//			auto u = *m_q.begin();
-//			m_q.erase(m_q.begin());
-//			if (u.getNodeIndex() == destination)
-//				break;
-//
-//			auto neighbors = m_graph.Neighbors(u.getNodeIndex());
-//			for (auto v : neighbors)
-//			{
-//				weight alt = m_dist[u.getNodeIndex()] + m_graph.GetEdgeValue(u.getNodeIndex(), v);
-//				if (alt < m_dist[v])
-//				{
-//					auto f = find(m_q.begin(), m_q.end(), NodeDistance<weight>(v, m_dist[v]));
-//					m_q.erase(f);
-//					m_q.insert(NodeDistance<weight>(v, alt));
-//					m_dist[v] = alt;
-//					m_prev[v] = u.getNodeIndex();
-//				}
-//			}
-//		}
-//
-//		// Generate a path as result
-//		stack<vertexKey> path;
-//		vertexKey u = destination;
-//		while ((m_prev[u] != UNDEFINED) && (u != source))
-//		{
-//			path.push(u);
-//			u = m_prev[u];
-//		}
-//
-//		if (u == source)
-//		{
-//			path.push(source);
-//			return path;
-//		}
-//		else
-//		{
-//			return stack<vertexKey>();	// Empty stack : no path found
-//		}
-//	}
-//
-//private:
-//	void clear()
-//	{
-//		m_q.clear();
-//		m_dist.clear();
-//		m_prev.clear();
-//	}
-//
-//	void initialization(vertexKey source)
-//	{
-//		clear();
-//		m_dist.resize(m_graph.VertexCount());
-//		m_prev.resize(m_graph.VertexCount());
-//		m_dist[source] = 0;
-//		for (vertexKey i = 0; i < m_graph.VertexCount(); ++i)
-//		{
-//			if (i != source)
-//			{
-//				m_dist[i] = WINFINITY;
-//				m_prev[i] = UNDEFINED;
-//			}
-//			m_q.insert(NodeDistance<weight>(i, m_dist[i]));
-//		}
-//	}
-//};
-//
-//
-//// ----------------------------------------------------------------------------
-//// Assignement
-//template<class weight>
-//weight GetAveragePathLength(vertexKey numberOfVertex, float edgeDensity, weight minDistance, weight maxDistance)
-//{
-//	if (numberOfVertex <= 1)
-//		return 0;
-//
-//	weight output = 0;
-//	int numberOfPaths = 0;
-//	auto graph = new Graph<weight>(numberOfVertex, edgeDensity, minDistance, maxDistance);
-//	auto algorithm = new DijkstraAlgorithm<float>(*graph);
-//
-//	for (vertexKey i = 1; i < graph->VertexCount(); i++)
-//	{
-//		auto path = algorithm->GetPath(0, i);
-//
-//		if (!path.empty())
-//		{
-//			output += graph->PathWeight(path);
-//			numberOfPaths++;
-//		}
-//	}
-//
-//	delete(algorithm);
-//	delete(graph);
-//
-//	return output / static_cast<weight>(numberOfPaths);
-//}
+// ----------------------------------------------------------------------------
+template<class weight>
+class PrimSolver
+{
+private:
+	const Graph<weight>& m_sourceGraph;
+	set<vertexKey> m_closedVertex;
+	vertexKey m_startingVertex; 
+	set<Edge<weight>, CompareByWeight<weight> > m_availableEdges;
+	set<Edge<weight>> m_choosenEdges;
+public:
+	// Obtain the MST for this graph
+	PrimSolver(const Graph<weight>& g, vertexKey startingVertex) : m_sourceGraph(g), m_startingVertex(startingVertex)
+	{	
+		if (!m_sourceGraph.DoesVertexExists(startingVertex))
+			throw invalid_argument("Prim Solver, starting Vertex not found");
+	}
 
+	void ComputePrim()
+	{
+		// Get the EDGES for starting vertex 
+		m_closedVertex.insert(m_startingVertex);
+		AddEdgesFromNode(m_startingVertex);
+		while (!m_availableEdges.empty())
+		{
+			set<Edge<weight>, CompareByWeight<weight>>::iterator it = m_availableEdges.begin();
+			if (m_closedVertex.find((*it).End()) == m_closedVertex.end())	// this is a new vertex
+			{
+				m_choosenEdges.insert((*it));
+				vertexKey newVertex = (*it).End();
+				m_closedVertex.insert(newVertex);
+				
+				if (m_closedVertex.size() == m_sourceGraph.VertexCount())	// check termination
+					break;
+				m_availableEdges.erase(it);
+				AddEdgesFromNode(newVertex);
+			}
+			else
+			{
+				m_availableEdges.erase(it);	// we have the destination vertex in our span tree --> remove this edge
+			}
+		}
+	}
+
+private: 
+	void AddEdgesFromNode(vertexKey key)
+	{
+		auto edges_from_node = m_sourceGraph.EdgesFromNode(key);
+		for (auto e : edges_from_node)
+		{ 
+			if (m_closedVertex.find(e.End()) == m_closedVertex.end())
+				m_availableEdges.insert(e);
+		}
+	}
+
+public: 
+	template<class weight>
+	friend ostream& operator<<(ostream& cout, const PrimSolver<weight>& p);
+};
+
+template<class weight>
+ostream& operator<<(ostream& cout, const PrimSolver<weight>& p)
+{
+	cout << "Prim solver output: not yet implemented" ; 
+	return cout; 
+}
+
+// ----------------------------------------------------------------------------
 int main()
 {
 	// srand(static_cast<unsigned int>(time(0)));
 	srand(7777);
-	cout << "No more randomness for the graph, from file" << endl;
-	Graph<float> random_g = Graph<float>(5, 0.4f, 1.0f, 10.0f);
-	auto n = random_g.Neighbors(0);
-	cout << "random graph, neighbors:" << "0 node, has " << n.size() << " neighbors "<< endl;
-	for (auto index : n)
-		cout << index << " "; 
-	cout << endl;
-	cout << random_g << endl;
 
 	cout << "No more randomness the graph read from a file:"<< endl;
 	Graph<float> from_file_g = Graph<float>("debug_data.txt");
 	cout << from_file_g << endl;
+	PrimSolver<float> p = PrimSolver<float>(from_file_g, 0);
+	p.ComputePrim();
+	cout << p << endl;
 	return 0;
 }
