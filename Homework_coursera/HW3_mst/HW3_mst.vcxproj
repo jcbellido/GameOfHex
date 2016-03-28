@@ -78,6 +78,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="debug_data.txt" />
+    <Text Include="practice_data.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

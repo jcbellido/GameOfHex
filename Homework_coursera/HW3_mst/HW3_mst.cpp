@@ -2,11 +2,13 @@
 
 #include <ctime>
 #include <exception>
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <limits>
 #include <set>
 #include <stack>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -64,8 +66,26 @@ private:
 public:
 	Graph() { }
 
-	// Generator that reads a file
-	// TODO
+	Graph(string filePath)
+	{
+		string line;
+		ifstream myfile(filePath);
+		if (myfile.is_open())
+		{
+			unsigned int vertexCount; 
+			vertexCount << cin; 
+			cout << vertexCount << endl; 
+			while (getline(myfile, line))
+			{
+				cout << line << endl;
+			}
+			myfile.close();
+		}
+		else
+		{
+			throw invalid_argument("File not found");
+		}
+	}
 
 	// Random generator constructor: call and populate the matrix
 	Graph(vertexKey vertex_count, float edge_density, weight min_weight, weight max_weight)
@@ -185,11 +205,13 @@ private:
 		}
 	}
 
+	// Used by the random generation
 	inline bool doesEdgeExists(float edge_density)
 	{
 		return rand_zero_to_one() < edge_density;
 	}
 
+	// Used by the random generation
 	inline weight get_random_weight(weight min_weight, weight max_weight)
 	{
 		weight random = static_cast<weight>(rand()) / static_cast <weight>(RAND_MAX);
@@ -387,6 +409,8 @@ int main()
 	srand(7777);
 	Graph<float> random_g = Graph<float>(5, 0.4f, 1.0f, 10.0f);
 	cout << random_g << endl;
+
+	Graph<float> from_file_g = Graph<float>("debug_data.txt");
 
 	return 0;
 }
