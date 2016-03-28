@@ -66,6 +66,7 @@ private:
 public:
 	Graph() { }
 
+	// Constructs the graph from a file
 	Graph(string filePath)
 	{
 		string line;
@@ -73,11 +74,28 @@ public:
 		if (myfile.is_open())
 		{
 			unsigned int vertexCount; 
-			vertexCount << cin; 
-			cout << vertexCount << endl; 
-			while (getline(myfile, line))
+			myfile >> vertexCount;
+			
+			if (vertexCount == 0)
 			{
-				cout << line << endl;
+				myfile.close();
+				throw invalid_argument("Vertex count in file must be greater than zero");
+			}
+
+			m_vertices.resize(vertexCount);
+
+			while(!myfile.eof())
+			{
+				vertexKey start, end;
+				weight cost;
+				myfile >> start;
+				myfile >> end;
+				myfile >> cost;
+				
+				if ((end >= VertexCount() || (start >= VertexCount()))
+					throw invalid_argument("File contains vertex indexes beyond the limit file must be greater than zero");
+
+				AddEdge(start, end, cost);
 			}
 			myfile.close();
 		}
@@ -87,12 +105,12 @@ public:
 		}
 	}
 
-	// Random generator constructor: call and populate the matrix
+	// Random generator constructor
 	Graph(vertexKey vertex_count, float edge_density, weight min_weight, weight max_weight)
 	{
 		if (vertex_count == 0)
 			throw invalid_argument("Vertex count must be greater than zero");
-
+		 
 		if ((0.0f >= edge_density) || (edge_density > 1.0f))
 			throw invalid_argument("Edge density must be in the range (0, 1]");
 
@@ -107,11 +125,13 @@ public:
 	template<class weight>
 	friend ostream& operator<<(ostream& cout, const Graph<weight>& g);
 
+	// The queried key is inside a valid range
 	bool DoesVertexExists(vertexKey key) const
 	{
 		return  key < static_cast<vertexKey>(m_vertices.size());
 	}
-
+	
+	// Returns the total count of keys
 	unsigned int VertexCount() const
 	{
 		return m_vertices.size();
