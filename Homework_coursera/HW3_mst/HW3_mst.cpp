@@ -50,13 +50,11 @@ public:
 		return this->End() < other.End();
 	}
 
-	// DELETEME? 
-	bool InternalCompareByWeight(const Edge<weight>& a, const Edge<weight>& b) const
-	{
-		return a.Cost() < b.Cost();
-	}
+	template<class weight>
+	friend ostream& operator<<(ostream& cout, const Edge<weight>& e);
 };
 
+// Convenience reordenation method used in Prim's
 template<class weight>
 struct CompareByWeight{
 	bool operator() (const Edge<weight>& a, const Edge<weight>& b) const
@@ -64,6 +62,13 @@ struct CompareByWeight{
 		return a.Cost() < b.Cost();
 	}
 };
+
+template<class weight>
+ostream& operator<<(ostream& cout, const Edge<weight>& e)
+{
+	cout << "{" << e.Start() << " to " << e.End() << " : " << e.Cost() <<  " }" << endl; 
+	return cout; 
+}
 
 template<class weight>
 class Graph
@@ -316,6 +321,11 @@ public:
 		}
 	}
 
+	bool IsSolved() const
+	{
+		return m_closedVertex.size() == m_sourceGraph.VertexCount();
+	}
+
 private: 
 	void AddEdgesFromNode(vertexKey key)
 	{
@@ -335,7 +345,18 @@ public:
 template<class weight>
 ostream& operator<<(ostream& cout, const PrimSolver<weight>& p)
 {
-	cout << "Prim solver output: not yet implemented" ; 
+	if (!p.IsSolved())
+	{
+		cout << "Prim did not find a solution for the Graph" << endl;
+		return cout; 
+	}
+
+	cout << "Solution found:" << endl;
+	for (auto edge : p.m_choosenEdges)
+	{
+		cout << edge;
+	}
+	cout << endl;
 	return cout; 
 }
 
