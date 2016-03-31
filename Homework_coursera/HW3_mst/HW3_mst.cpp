@@ -1,8 +1,12 @@
 // HW3: Minimum spanning tree exercise
 // For this exercise I choose the Prim solver
+// This code expects a file with the graph data called practice_data.txt in the same directory that the .exe resides
+
 // Some notes: 
 // -. I'm templating the weight class for practice purposes
 // -. The graph is implemented using edge lists as internal representation
+// -. This exercise does not 
+// -. The graph node is able to generate random graphs too (I used this during the Prim implementation) 
 
 #include <ctime>
 #include <exception>
@@ -17,10 +21,10 @@
 
 using namespace std;
  
-using vertexKey = unsigned int;
+using vertexKey = unsigned int;		// convenience purposes only
 
 // ----------------------------------------------------------------------------
-// Auxiliar math functions
+// Auxiliar math functions: used for random generation (not in HW3)
 inline float rand_zero_to_one()
 {
 	return static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -74,6 +78,7 @@ ostream& operator<<(ostream& cout, const Edge<weight>& e)
 	return cout; 
 }
 
+
 template<class weight>
 class Graph
 {
@@ -112,7 +117,6 @@ public:
 					throw invalid_argument("File contains vertex indexes beyond the limit file must be greater than zero");
 
 				AddEdge(start, end, cost);
-				AddEdge(end, start, cost);
 			}
 			myfile.close();
 		}
@@ -269,19 +273,22 @@ ostream& operator<<(ostream& cout, const Graph<weight>& g)
 }
 
 // ----------------------------------------------------------------------------
+// MST implementation 
 template<class weight>
 class PrimSolver
 {
+
 private:
 	const Graph<weight>& m_sourceGraph;
-	set<vertexKey> m_closedVertex;
-	vertexKey m_startingVertex; 
+	vector<bool> m_closedVertex;
+	unsigned long m_closedVertexCount;
+	vertexKey m_startingVertex;
 	set<Edge<weight>, CompareByWeight<weight> > m_availableEdges;
 	set<Edge<weight>> m_choosenEdges;
 	weight m_totalCost;
+
 public:
-	// Obtain the MST for this graph
-	PrimSolver(const Graph<weight>& g, vertexKey startingVertex) : m_sourceGraph(g), m_startingVertex(startingVertex), m_totalCost(0)
+	PrimSolver(const Graph<weight>& g, vertexKey startingVertex) : m_sourceGraph(g), m_startingVertex(startingVertex), m_totalCost(0), m_closedVertexCount(0)
 	{	
 		if (!m_sourceGraph.DoesVertexExists(startingVertex))
 			throw invalid_argument("Prim Solver, starting Vertex not found");
@@ -289,21 +296,21 @@ public:
 
 	void ComputePrim()
 	{
-		// Get the EDGES for starting vertex 
-		m_closedVertex.insert(m_startingVertex);
+		InitializeClosedVertex();
+		CloseVertex(m_startingVertex);
 		AddEdgesFromNode(m_startingVertex);
+
 		while (!m_availableEdges.empty())
 		{
-			set<Edge<weight>, CompareByWeight<weight>>::iterator it = m_availableEdges.begin();
-			if (m_closedVertex.find((*it).End()) == m_closedVertex.end())	// this is a new vertex
+			set<Edge<weight>, CompareByWeight<weight>>::iterator it = m_availableEdges.begin();	// Take the available edge with lesser cost
+			if (!m_closedVertex[(*it).End()])	// this is a new vertex
 			{
 				m_totalCost += (*it).Cost();
 				m_choosenEdges.insert((*it));
 				vertexKey newVertex = (*it).End();
 				m_availableEdges.erase(it);
 
-				m_closedVertex.insert(newVertex);
-				
+				CloseVertex(newVertex);
 				if (IsSolved())
 					break;
 				
@@ -318,9 +325,8 @@ public:
 
 	bool IsSolved() const
 	{
-		return m_closedVertex.size() == m_sourceGraph.VertexCount();
+		return m_closedVertexCount == m_sourceGraph.VertexCount();
 	}
-
 
 	weight GetTotalCost() const
 	{
@@ -330,13 +336,27 @@ public:
 			return numeric_limits<weight>::max();
 	}
 
-private: 
+private:
+	void InitializeClosedVertex()
+	{
+		m_closedVertex.resize(m_sourceGraph.VertexCount());
+		for (auto vertex : m_closedVertex)
+			vertex = false;
+	}
+
+	void CloseVertex(vertexKey key)
+	{
+		m_closedVertex[key] = true;
+		m_closedVertexCount++;
+	}
+
+	// Will add only the edges that doesn't end in an already visited vertex
 	void AddEdgesFromNode(vertexKey key)
 	{
 		auto edges_from_node = m_sourceGraph.EdgesFromNode(key);
 		for (auto e : edges_from_node)
 		{ 
-			if (m_closedVertex.find(e.End()) == m_closedVertex.end())
+			if (!m_closedVertex[e.End()])
 				m_availableEdges.insert(e);
 		}
 	}
