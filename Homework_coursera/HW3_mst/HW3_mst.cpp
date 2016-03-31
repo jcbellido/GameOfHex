@@ -1,4 +1,8 @@
-// Minimum spanning tree exercise
+// HW3: Minimum spanning tree exercise
+// For this exercise I choose the Prim solver
+// Some notes: 
+// -. I'm templating the weight class for practice purposes
+// -. The graph is implemented using edge lists as internal representation
 
 #include <ctime>
 #include <exception>
@@ -82,7 +86,6 @@ public:
 	// Constructs the graph from a file
 	Graph(string filePath)
 	{
-		string line;
 		ifstream myfile(filePath);
 		if (myfile.is_open())
 		{
@@ -109,6 +112,7 @@ public:
 					throw invalid_argument("File contains vertex indexes beyond the limit file must be greater than zero");
 
 				AddEdge(start, end, cost);
+				AddEdge(end, start, cost);
 			}
 			myfile.close();
 		}
@@ -132,7 +136,7 @@ public:
 
 		m_vertices.resize(vertex_count);
 
-		constructGraphRepresentation(edge_density, min_weight, max_weight);
+		ConstructRandomGraph(edge_density, min_weight, max_weight);
 	}
 
 	template<class weight>
@@ -178,20 +182,6 @@ public:
 		return false;
 	}
 
-	const vector<vertexKey> Neighbors(vertexKey origin) const
-	{
-		if (!DoesVertexExists(origin))
-			throw invalid_argument("Neightbors origin vertex is wrong");
-		
-		vector<vertexKey> output;
-		auto vertexConnections = m_vertices[origin];
-		for (set< Edge<weight> >::iterator edge = vertexConnections.begin(); edge != vertexConnections.end(); edge++)
-		{
-			output.push_back((*edge).End());
-		}
-		return output;
-	}
-
 	const set<Edge<weight>> EdgesFromNode(vertexKey origin) const
 	{
 		if (!DoesVertexExists(origin))
@@ -222,6 +212,7 @@ public:
 		return output;
 	}
 
+private:
 	void AddEdge(vertexKey start, vertexKey end, weight cost)
 	{
 		m_vertices[start].insert(Edge<weight>(start, end, cost));
@@ -229,7 +220,7 @@ public:
 
 // Random generation of the Graph
 private:
-	void constructGraphRepresentation(float edge_density, weight min_weight, weight max_weight)
+	void ConstructRandomGraph(float edge_density, weight min_weight, weight max_weight)
 	{
 		for (vertexKey i = 0; i < VertexCount(); ++i)
 		{
@@ -287,9 +278,10 @@ private:
 	vertexKey m_startingVertex; 
 	set<Edge<weight>, CompareByWeight<weight> > m_availableEdges;
 	set<Edge<weight>> m_choosenEdges;
+	weight m_totalCost;
 public:
 	// Obtain the MST for this graph
-	PrimSolver(const Graph<weight>& g, vertexKey startingVertex) : m_sourceGraph(g), m_startingVertex(startingVertex)
+	PrimSolver(const Graph<weight>& g, vertexKey startingVertex) : m_sourceGraph(g), m_startingVertex(startingVertex), m_totalCost(0)
 	{	
 		if (!m_sourceGraph.DoesVertexExists(startingVertex))
 			throw invalid_argument("Prim Solver, starting Vertex not found");
@@ -305,13 +297,16 @@ public:
 			set<Edge<weight>, CompareByWeight<weight>>::iterator it = m_availableEdges.begin();
 			if (m_closedVertex.find((*it).End()) == m_closedVertex.end())	// this is a new vertex
 			{
+				m_totalCost += (*it).Cost();
 				m_choosenEdges.insert((*it));
 				vertexKey newVertex = (*it).End();
+				m_availableEdges.erase(it);
+
 				m_closedVertex.insert(newVertex);
 				
-				if (m_closedVertex.size() == m_sourceGraph.VertexCount())	// check termination
+				if (IsSolved())
 					break;
-				m_availableEdges.erase(it);
+				
 				AddEdgesFromNode(newVertex);
 			}
 			else
@@ -324,6 +319,15 @@ public:
 	bool IsSolved() const
 	{
 		return m_closedVertex.size() == m_sourceGraph.VertexCount();
+	}
+
+
+	weight GetTotalCost() const
+	{
+		if (IsSolved())
+			return m_totalCost;
+		else
+			return numeric_limits<weight>::max();
 	}
 
 private: 
@@ -351,26 +355,30 @@ ostream& operator<<(ostream& cout, const PrimSolver<weight>& p)
 		return cout; 
 	}
 
-	cout << "Solution found:" << endl;
+	cout << "Solution found, with cost: " << p.GetTotalCost() << endl;
 	for (auto edge : p.m_choosenEdges)
-	{
 		cout << edge;
-	}
-	cout << endl;
+
 	return cout; 
 }
 
 // ----------------------------------------------------------------------------
 int main()
 {
-	// srand(static_cast<unsigned int>(time(0)));
-	srand(7777);
-
-	cout << "No more randomness the graph read from a file:"<< endl;
-	Graph<float> from_file_g = Graph<float>("debug_data.txt");
-	cout << from_file_g << endl;
-	PrimSolver<float> p = PrimSolver<float>(from_file_g, 0);
-	p.ComputePrim();
-	cout << p << endl;
-	return 0;
+	try
+	{
+		string filename = "practice_data.txt"; 
+		cout << "Reading graph data from file " << filename << endl;
+		Graph<float> from_file_g = Graph<float>(filename);
+		// cout << from_file_g << endl;	// this line will print the graph, useful when working with smaller data sets
+		PrimSolver<float> p = PrimSolver<float>(from_file_g, 0);
+		p.ComputePrim();
+		cout << p;
+		return 0;
+	}
+	catch (invalid_argument ia)
+	{
+		cout << "EXCEPTION: " << ia.what() << endl;
+		return 1; 
+	}
 }
