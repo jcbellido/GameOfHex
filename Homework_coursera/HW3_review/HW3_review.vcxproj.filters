@@ -35,5 +35,8 @@
     <ClCompile Include="HW3_peterMehle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="maheshwari.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
