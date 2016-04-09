@@ -122,7 +122,7 @@ int main()
 	dimensions, etc.
 	*/
 	IrrlichtDevice *device =
-		createDevice( video::EDT_SOFTWARE, dimension2d<u32>(640, 480), 16,
+		createDevice( video::EDT_DIRECT3D9, dimension2d<u32>(800, 600), 16,
 			false, false, false, 0);
 
 	if (!device)
@@ -201,6 +201,7 @@ int main()
 	more. This would be when the user closes the window or presses ALT+F4
 	(or whatever keycode closes a window).
 	*/
+	int i = 0;
 	while(device->run())
 	{
 		/*
@@ -213,9 +214,14 @@ int main()
 		driver->beginScene(true, true, SColor(255,100,101,140));
 
 		smgr->drawAll();
-		guienv->drawAll();
+		if (i == 4)
+		{
+			guienv->drawAll();
+			i = 0;
+		}
 
 		driver->endScene();
+		i++;
 	}
 
 	/*
