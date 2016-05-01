@@ -179,7 +179,7 @@ int main()
 	/*
 	Add a colorful irrlicht logo
 	*/
-	device->getGUIEnvironment()->addImage(
+	auto logoImage = device->getGUIEnvironment()->addImage(
 		driver->getTexture("../../media/irrlichtlogoalpha2.tga"),
 		core::position2d<s32>(10,20));
 
@@ -242,6 +242,7 @@ int main()
 
 			device->setWindowCaption(tmp.c_str());
 			lastFPS = fps;
+			logoImage->setVisible(!logoImage->isVisible());
 		}
 	}
 

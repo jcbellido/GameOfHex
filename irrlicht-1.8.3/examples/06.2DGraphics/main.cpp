@@ -32,7 +32,9 @@ int main()
 	// create device
 
 	IrrlichtDevice *device = createDevice(driverType,
-		core::dimension2d<u32>(512, 384));
+		core::dimension2d<u32>(512, 512));
+
+	device->setResizable(true);
 
 	if (device == 0)
 		return 1; // could not create selected driver.
@@ -68,8 +70,8 @@ int main()
 	gui::IGUIFont* font2 =
 		device->getGUIEnvironment()->getFont("../../media/fonthaettenschweiler.bmp");
 
-	core::rect<s32> imp1(349,15,385,78);
-	core::rect<s32> imp2(387,15,423,78);
+	core::rect<s32> imp1(349,15,385,78);	// jcb: left side of dragon
+	core::rect<s32> imp2(387,15,423,78);	// jcb: right side of dragon
 
 	/*
 	Prepare a nicely filtering 2d render mode for special cases.
@@ -105,7 +107,7 @@ int main()
 
 			// draw fire & dragons background world
 			driver->draw2DImage(images, core::position2d<s32>(50,50),
-				core::rect<s32>(0,0,342,224), 0,
+				core::rect<s32>(0,0,512,256), 0,
 				video::SColor(255,255,255,255), true);
 
 			// draw flying imp

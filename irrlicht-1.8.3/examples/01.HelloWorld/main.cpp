@@ -153,6 +153,8 @@ int main()
 	guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",
 		rect<s32>(10,10,260,22), true);
 
+	auto fpsReference = guienv->addStaticText(L"FPS", rect<s32>(10, 30, 260, 42), true);
+
 	/*
 	To show something interesting, we load a Quake 2 model and display it.
 	We only have to get the Mesh from the Scene Manager with getMesh() and add
@@ -201,27 +203,42 @@ int main()
 	more. This would be when the user closes the window or presses ALT+F4
 	(or whatever keycode closes a window).
 	*/
-	int i = 0;
-	while(device->run())
+
+	int fps = -1;
+
+	while (device->run())
 	{
-		/*
-		Anything can be drawn between a beginScene() and an endScene()
-		call. The beginScene() call clears the screen with a color and
-		the depth buffer, if desired. Then we let the Scene Manager and
-		the GUI Environment draw their content. With the endScene()
-		call everything is presented on the screen.
-		*/
-		driver->beginScene(true, true, SColor(255,100,101,140));
-
-		smgr->drawAll();
-		if (i == 4)
+		if (device->isWindowActive())
 		{
-			guienv->drawAll();
-			i = 0;
-		}
 
-		driver->endScene();
-		i++;
+			/*
+			Anything can be drawn between a beginScene() and an endScene()
+			call. The beginScene() call clears the screen with a color and
+			the depth buffer, if desired. Then we let the Scene Manager and
+			the GUI Environment draw their content. With the endScene()
+			call everything is presented on the screen.
+			*/
+			driver->beginScene(true, true, SColor(255, 100, 101, 140));
+
+			smgr->drawAll();
+
+			int currentFps = driver->getFPS();
+			if (fps != currentFps)
+			{
+				core::stringw strFps = "FPS: ";
+				strFps += currentFps;
+				fpsReference->setText(strFps.c_str());
+				fps = currentFps;
+			}
+
+			guienv->drawAll();
+
+			driver->endScene();
+		}
+		else
+		{
+			device->yield();
+		}
 	}
 
 	/*

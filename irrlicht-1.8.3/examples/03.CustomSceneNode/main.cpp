@@ -222,7 +222,7 @@ int main()
 		it again, ensure that I can't by setting to 0.
 		*/
 		anim->drop();
-		anim = 0;
+		anim = nullptr;
 	}
 
 	/*
@@ -232,7 +232,7 @@ int main()
 	custom scene node is removed from it.
 	*/
 	myNode->drop();
-	myNode = 0; // As I shouldn't refer to it again, ensure that I can't
+	myNode = nullptr; // As I shouldn't refer to it again, ensure that I can't
 
 	/*
 	Now draw everything and finish.
