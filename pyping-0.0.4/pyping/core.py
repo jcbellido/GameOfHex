@@ -1,4 +1,3 @@
-# Code blatantly stolen from: 
 # coding: utf-8
 
 """
@@ -15,6 +14,7 @@
 	:license: GNU GPL v2, see LICENSE for more details.
 """
 
+
 import os
 import select
 import signal
@@ -23,9 +23,6 @@ import struct
 import sys
 import time
 
-# Let's rock this boat
-import multiprocessing
-from multiprocessing import Pool, Lock
 
 if sys.platform.startswith("win32"):
 	# On Windows, the best timer is time.clock()
@@ -96,7 +93,6 @@ def is_valid_ip4_address(addr):
 		if number > 255:
 			return False
 	return True
-
 
 def to_ip(addr):
 	if is_valid_ip4_address(addr):
@@ -420,49 +416,3 @@ class Ping(object):
 def ping(hostname, timeout=1000, count=3, packet_size=55, *args, **kwargs):
 	p = Ping(hostname, timeout, packet_size, *args, **kwargs)
 	return p.run(count)
-
-
-children_lock = None
-def initializer_function(lock):
-	global children_lock
-	children_lock = lock
-
-def fast_ping_by_ip(hostname):
-	global children_lock
-	children_lock.acquire()
-	print "Testing: " + str(hostname)
-	children_lock.release()
-	p = ping(hostname, timeout=250, count=2)
-	if p is not None and p.ret_code == 0:
-		children_lock.acquire()
-		print (hostname + " found ")
-		children_lock.release()
-		return True
-	return False
-
-if __name__ == "__main__":
-	# NOTE: Win 32 specific
-	# Determine the hostname
-	hostname = socket.gethostname()
-	local_ip = socket.gethostbyname(hostname)
-	if not is_valid_ip4_address(local_ip):
-		print "ATM this thingie only works with IP4 addresses"
-	
-	ip_parts = local_ip.split('.')
-	print ("testing in the range: " + str('.'.join(ip_parts[:3])) + ".*")
-
-	ips_to_test = []
-	for i in range(1,255):
-		l = ip_parts[0:3]
-		l.append(str(i))
-		ips_to_test.append('.'.join(l))
-	
-	lock = Lock()
-
-	process_pool = Pool(multiprocessing.cpu_count() * 4, 
-		initializer=initializer_function, initargs=(lock,))
-	
-	does_ip_answers = process_pool.map(fast_ping_by_ip, ips_to_test)
-	for i in range(len(does_ip_answers)):
-		if does_ip_answers[i]:
-			print "Found: " + ips_to_test[i]
