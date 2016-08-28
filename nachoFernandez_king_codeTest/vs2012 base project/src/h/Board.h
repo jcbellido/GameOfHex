@@ -11,7 +11,6 @@ namespace KingsTest
 {
 	typedef std::array<std::array<Tile*, GRID_SIZE>, GRID_SIZE> Grid;
 	
-
 	class Board
 	{
 	public:
@@ -21,22 +20,28 @@ namespace KingsTest
 			int distY;
 		};
 
-		const enum STATE {
-			STATE_IDLE,
-			STATE_MOVED,
-			STATE_MATCHED,
-			STATE_AFFECTED,
-			STATE_FALLOUT
+		const enum class STATE {
+			IDLE,
+			MOVED,
+			MATCHED,
+			AFFECTED,
+			FALLOUT,
+			WAIT
 		};
 
 		Board(GENERATION_TYPES gen = GENERATION_TYPES::RANDOM_GENERATION);
 		~Board();
 
+		int GetGridSizeX();
+		int GetGridSizeY();
 		int Update(Tile* source, Tile* dest);
 		int GetColorOfTile(int x, int y);
 		Tile* GetTile(int x, int y);
 
 	private:
+		int mGridSizeX;
+		int mGridSizeY;
+
 		Grid mGrid;
 		STATE mState;
 		std::vector<Tile> mMatched;

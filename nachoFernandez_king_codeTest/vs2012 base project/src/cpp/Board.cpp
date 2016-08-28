@@ -17,7 +17,7 @@ namespace KingsTest
 
 	Board::Board(GENERATION_TYPES gen)
 	{
-		mState = STATE_IDLE;
+		mState = STATE::IDLE;
 		mMatched = std::vector<Tile>();
 		mAffected = std::map<int, AffectedTilesBarrier>();
 
@@ -37,6 +37,16 @@ namespace KingsTest
 
 	Board::~Board()
 	{
+	}
+
+	int Board::GetGridSizeX()
+	{
+		return mGridSizeX;
+	}
+
+	int Board::GetGridSizeY()
+	{
+		return mGridSizeY;
 	}
 
 	int Board::GetColorOfTile(int x, int y)
@@ -76,7 +86,7 @@ namespace KingsTest
 
 		switch (mState)
 		{
-		case STATE_IDLE:
+		case STATE::IDLE:
 			mSX = -1; mSY = -1; mDX = -1; mDY = -1;
 			if ((src != nullptr) && (dest != nullptr))
 			{
@@ -87,11 +97,12 @@ namespace KingsTest
 					return 0;
 
 				TileSwap(mSX, mSY, mDX, mDY);
-				mState = STATE_MOVED;
+				mState = STATE::MOVED;
 			}	
 
 			break;
-		case STATE_MOVED:
+
+		case STATE::MOVED:
 
 			mSColor = mGrid[mSX][mSY]->GetColor();
 			mDColor = mGrid[mDX][mDY]->GetColor();
@@ -106,38 +117,41 @@ namespace KingsTest
 			if (mMatched.empty())
 			{
 				TileSwap(mSX, mSY, mDX, mDY);
-				mState = STATE_IDLE;
+				mState = STATE::IDLE;
 				break;
 			}
 
-			mState = STATE_MATCHED;
+			mState = STATE::MATCHED;
 
 			break;
-		case STATE_MATCHED:
+
+		case STATE::MATCHED:
 			if (mMatched.empty())
 			{
-				mState = STATE_IDLE;
+				mState = STATE::IDLE;
 				break;
 			}
 				
 			ProcessMatchedTiles(mMatched, mAffected, total);
 			mMatched.clear();
-			mState = STATE_AFFECTED;
+			mState = STATE::AFFECTED;
 
 			break;
-		case STATE_AFFECTED:
+
+		case STATE::AFFECTED:
 			if (mAffected.empty())
 			{
-				mState = STATE_IDLE;
+				mState = STATE::IDLE;
 				break;
 			}
 
 			ProcessAffectedTiles(mAffected);
 			mAffected.clear();
-			mState = STATE_FALLOUT;
+			mState = STATE::FALLOUT;
 
 			break;
-		case STATE_FALLOUT:
+
+		case STATE::FALLOUT:
 			sMatchedTiles.clear();
 
 			// board wide check
@@ -156,7 +170,7 @@ namespace KingsTest
 				}
 			}
 
-			mState = STATE_MATCHED;
+			mState = STATE::MATCHED;
 
 			break;
 		default:

@@ -3,6 +3,8 @@
 #include <string>
 
 #include <king/Updater.h>
+
+#include <Timer.h>
 #include <Tile.h>
 #include <Board.h>
 
@@ -23,13 +25,10 @@ namespace KingsTest {
 	private:
 		King::Engine mEngine;
 		Board *mBoard;
+		Timer mTimer;
 
 		Tile *mFirstSelectedTile = NULL;
 		Tile *mSecondSelectedTile = NULL;
-		bool mClickControl = false;
-
-		void HandleMouse();
-		void Render();
 
 		int mCoordX = 0;
 		int mCoordY = 0;
@@ -37,6 +36,9 @@ namespace KingsTest {
 
 		float mMouseX = -1;
 		float mMouseY = -1;
+
+		void HandleMouse();
+		void Render();
 
 		inline float BoardCoordToPixelPosition(int c, float start) const
 		{

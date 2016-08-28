@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -7,10 +8,17 @@
 #include <MainGame.h>
 #include <Constants.h>
 #include <RandomGridGenerator.h>
+#include <Timer.h>
+#include <json.h>
 
 namespace KingsTest {
 	
-	MainGame::MainGame() : mEngine("./assets") { }
+	MainGame::MainGame() : mEngine("./assets") 
+	{
+		unsigned int width = mEngine.GetTextureWidth(King::Engine::TEXTURE_BACKGROUND);
+		unsigned int height = mEngine.GetTextureHeight(King::Engine::TEXTURE_BACKGROUND);
+		mEngine.ResizeWindow(width, height);
+	}
 	
 	MainGame::~MainGame()
 	{
@@ -23,9 +31,9 @@ namespace KingsTest {
 	void MainGame::Start()
 	{
 		mBoard = new Board(CURATED_RANDOM_GENERATION);
-
+		mTimer.Start();
 	    mEngine.Start(*this);
-	}
+}
 
 	void MainGame::Update()
 	{
@@ -96,8 +104,8 @@ namespace KingsTest {
 			{
 				float xPos = BoardCoordToPixelPosition(x, GRID_START_X);
 				float yPos = BoardCoordToPixelPosition(y, GRID_START_Y);
-				glm::mat4 transform = glm::mat4(SCALING_FACTOR, 0, 0, 0,
-					0, SCALING_FACTOR, 0, 0,
+				glm::mat4 transform = glm::mat4(1, 0, 0, 0,
+					0, 1, 0, 0,
 					0, 0, 0, 0,
 					xPos, yPos, 0, 1);
 				
@@ -111,6 +119,11 @@ namespace KingsTest {
 		std::stringstream score;
 		score << "Score: " << mTotalScore;
 		mEngine.Write(score.str().c_str(), SCORE_POS_X, SCORE_POS_Y);
+
+		score.str(std::string());
+		score.clear();
+		score << "Timer: " << mTimer.GetElapsedTime();
+		mEngine.Write(score.str().c_str(), TIMER_POS_X, TIMER_POS_Y);
 
 		// DEBUG BITS AND PIECES
 #ifdef _DEBUG_
@@ -140,6 +153,7 @@ namespace KingsTest {
 
 	void MainGame::Quit()
 	{
+		mTimer.Stop();
 		delete mBoard;
 	}
 }
