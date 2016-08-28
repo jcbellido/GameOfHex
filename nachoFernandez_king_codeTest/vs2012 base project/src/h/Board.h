@@ -31,12 +31,14 @@ namespace KingsTest
 	private:
 		Grid mGrid;
 
+		int GenerateTile(int x, int y);
 		int TileSwap(int sX, int sY, int dX, int dY);
 
 		std::vector<Tile*> MatchTile(int x, int y, King::Engine::Texture color);
 		int MatchTileRecur(int x, int y, int dx, int dy, King::Engine::Texture color, std::vector<Tile*> &matched);
 		int ProcessMatchedTiles(std::vector<Tile*> matched, std::map<int, AffectedTilesBarrier> &affected, int &total);
 		int ProcessAffectedTiles(std::map<int, AffectedTilesBarrier> affected);
+		bool ProcessChainReaction(std::map<int, AffectedTilesBarrier> affected);
 	};
 
 }

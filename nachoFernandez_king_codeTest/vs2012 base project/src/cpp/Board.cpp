@@ -17,16 +17,6 @@ namespace KingsTest
 
 	Board::Board(GENERATION_TYPES gen)
 	{
-		// IMPROVEMENT: MGRID_AS_UNIQUE_PTR
-		//mGrid = std::unique_ptr<Cell**[]>(new Cell**[GRID_SIZE]);
-		/*mGrid = new Tile**[GRID_SIZE];
-		for (int x = 0; x < GRID_SIZE; x++)
-		{
-		mGrid[x] = new Tile*[GRID_SIZE];
-		for (int y = 0; y < GRID_SIZE; y++)
-		mGrid[x][y] = (x == 3 && y == 5) ? new Tile(King::Engine::TEXTURE_RED) : new Tile(King::Engine::TEXTURE_GREEN);
-		}*/
-
 		switch (gen)
 		{
 		case GENERATION_TYPES::RANDOM_GENERATION:
@@ -55,6 +45,11 @@ namespace KingsTest
 		return mGrid[x][y];
 	}
 
+	int Board::GenerateTile(int x, int y)
+	{
+		return 0;
+	}
+
 	int Board::TileSwap(int sX, int sY, int dX, int dY)
 	{
 		Tile *temp = mGrid[dX][dY];
@@ -75,37 +70,59 @@ namespace KingsTest
 
 		// check distance
 		if (Dist(sX, sY, dX, dY) > 1)
-			return -1;
+			return 0;
 
 		TileSwap(sX, sY, dX, dY);
 
-		// IMPROVEMENT: use a set, make comparisons more elegant
-		
+
 		int total = 0;
 		std::vector<Tile*> matchedTiles = std::vector<Tile*>();
 		
 		std::vector<Tile*> sMatchedTiles = std::vector<Tile*>();
-		std::vector<Tile*> dMatchedTiles = std::vector<Tile*>();
 		King::Engine::Texture sColor = mGrid[sX][sY]->GetColor();
 		King::Engine::Texture dColor = mGrid[dX][dY]->GetColor();
 
-		// destination
-		dMatchedTiles = MatchTile(dX, dY, dColor);
-
+		matchedTiles = MatchTile(dX, dY, dColor);
+		
 		// source
 		sMatchedTiles = MatchTile(sX, sY, sColor);
 
-		if ((dMatchedTiles.empty()) && (sMatchedTiles.empty()))
+		matchedTiles.insert(matchedTiles.end(), sMatchedTiles.begin(), sMatchedTiles.end());
+
+		if (matchedTiles.empty())
 		{
 			TileSwap(sX, sY, dX, dY);
 		}
 
-		std::map<int, AffectedTilesBarrier> affectedTiles;
+		std::map<int, AffectedTilesBarrier> affectedTilesBarrier;
 
-		ProcessMatchedTiles(sMatchedTiles, affectedTiles, total);
-		ProcessMatchedTiles(dMatchedTiles, affectedTiles, total);
+		ProcessMatchedTiles(matchedTiles, affectedTilesBarrier, total);
 
-		ProcessAffectedTiles(affectedTiles);
+		bool stop = false;
+		while (!stop)
+		{
+			ProcessAffectedTiles(affectedTilesBarrier);
+
+			affectedTilesBarrier.clear();
+
+			// board wide check
+			for (int x = 0; x < GRID_SIZE; x++)
+			{
+				for (int y = 0; y < GRID_SIZE; y++)
+				{
+					matchedTiles.clear();
+
+					if (mGrid[x][y] == nullptr)
+						continue;
+
+					matchedTiles = MatchTile(x, y, mGrid[x][y]->GetColor());
+					ProcessMatchedTiles(matchedTiles, affectedTilesBarrier, total);
+				}
+			}
+
+			if (affectedTilesBarrier.empty())
+				stop = true;
+		}
 		
 		return total;
 	}
@@ -141,7 +158,10 @@ namespace KingsTest
 
 	int Board::MatchTileRecur(int x, int y, int dx, int dy, King::Engine::Texture color, std::vector<Tile*>& matched)
 	{
-		if ((!IsWithinBoard(x)) || (!IsWithinBoard(y)))
+		if (!IsWithinBoard(x, y))
+			return 0;
+
+		if (mGrid[x][y] == nullptr)
 			return 0;
 
 		if (mGrid[x][y]->GetColor() == color)
@@ -156,16 +176,12 @@ namespace KingsTest
 	{
 		for (auto t : matched)
 		{
+			if (t == nullptr)
+				continue;
+
 			int x = t->GetX(); int y = t->GetY();
 			if (mGrid[x][y] != nullptr)
 			{
-				/*
-				The single element versions (1) return a pair, with its member pair::first set to an iterator 
-				pointing to either the newly inserted element or to the element with an equivalent key in the map. 
-				The pair::second element in the pair is set to true if a new element was inserted or false if an 
-				equivalent key already existed.
-				*/
-
 				affected.insert(std::pair<int, AffectedTilesBarrier>(x, AffectedTilesBarrier()));
 				affected.at(x).distY += 1;
 				if (y < affected.at(x).minY)
@@ -193,19 +209,24 @@ namespace KingsTest
 				mGrid[x][y + distY]->SetCoords(x, y + distY);
 
 				mGrid[x][y] = nullptr;
+
+				// IMPROVEMENT look at the neighbours to reduce chance of chain reactions
+
 				mGrid[x][y] = new Tile(RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND), x, y);
 			}
 			
-			// handle out of board
+			// handle elements close to the edge
 			for (int y = 0; y <= distY; y++)
 			{
 				if (mGrid[x][y] == nullptr)
+					// IMPROVEMENT look at the neighbours to reduce chance of chain reactions
 					mGrid[x][y] = new Tile(RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND), x, y);
 			}
 		}
 		
 		return 0;
 	}
+	
 }
 
 /*

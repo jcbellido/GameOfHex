@@ -23,37 +23,30 @@ namespace KingsTest {
 	private:
 		King::Engine mEngine;
 		Board *mBoard;
-		// IMPROVEMENT: MGRID_AS_UNIQUE_PTR
-		//std::unique_ptr<Tile**[]> mGrid;
 
 		Tile *mFirstSelectedTile = NULL;
 		Tile *mSecondSelectedTile = NULL;
 		bool mClickControl = false;
 
+		void HandleMouse();
+		void Render();
+
 		int mCoordX = 0;
 		int mCoordY = 0;
 		int mTotalScore = 0;
 
+		float mMouseX = -1;
+		float mMouseY = -1;
 
-		// IMPROVEMENT: make this get GRID_START too to reduce to one function per conversion
-		inline float XBoardCoordToPixelPosition(int x) {
-			return GRID_START_X + (TEXTURE_SIZE * x * PADDING_FACTOR);
+		inline float BoardCoordToPixelPosition(int c, float start) const
+		{
+			return start + (TEXTURE_SIZE * c * PADDING_FACTOR);
 		}
 
-		inline float YBoardCoordToPixelPosition(int y) {
-			return GRID_START_Y + (TEXTURE_SIZE * y * PADDING_FACTOR);
+		inline int PixelPositionToBoardCoord(float p, float start) const
+		{
+			return static_cast<int> ((p - start) / (TEXTURE_SIZE * PADDING_FACTOR));
 		}
-
-		inline int XPixelPositionToBoardCoord(float p) {
-			return static_cast<int> ((p - GRID_START_X) / (TEXTURE_SIZE * PADDING_FACTOR));
-		}
-
-		inline int YPixelPositionToBoardCoord(float p) {
-			return static_cast<int> ((p - GRID_START_Y) / (TEXTURE_SIZE * PADDING_FACTOR));
-		}
-
-		// TODO: EXTRA STUFF CLEAN THIS UP AT THE END
-		std::string TSwap();
 	};
 
 

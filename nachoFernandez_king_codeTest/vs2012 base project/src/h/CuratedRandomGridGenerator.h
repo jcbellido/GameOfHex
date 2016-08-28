@@ -20,8 +20,7 @@ namespace KingsTest
 
 	static Grid CuratedRandomGridGenerator(int size = GRID_SIZE)
 	{
-		// sadly hardcoded values for the texture enum colors
-		// this is a bit bad, but I think clearer than having lower bound BLUE and upper bound YELLOW
+		// sadly hardcoded values for the backwards check
 		int min_backwards_check = 1;
 		int max_backwards_check = 2;
 
