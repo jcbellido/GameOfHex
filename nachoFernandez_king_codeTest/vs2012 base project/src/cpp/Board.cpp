@@ -17,13 +17,17 @@ namespace KingsTest
 
 	Board::Board(GENERATION_TYPES gen)
 	{
+		mState = STATE_IDLE;
+		mMatched = std::vector<Tile>();
+		mAffected = std::map<int, AffectedTilesBarrier>();
+
 		switch (gen)
 		{
 		case GENERATION_TYPES::RANDOM_GENERATION:
-			mGrid = RandomGridGenerator();
+			RandomGridGenerator(mGrid);
 			break;
 		case GENERATION_TYPES::CURATED_RANDOM_GENERATION:
-			mGrid = CuratedRandomGridGenerator();
+			CuratedRandomGridGenerator(mGrid);
 			break;
 		default:
 			// raise exception
@@ -35,8 +39,10 @@ namespace KingsTest
 	{
 	}
 
-	King::Engine::Texture Board::GetColorOfTile(int x, int y)
+	int Board::GetColorOfTile(int x, int y)
 	{
+		if ((!IsWithinBoard(x, y)) || (mGrid[x][y] == nullptr))
+			return -1;
 		return mGrid[x][y]->GetColor();
 	}
 
@@ -62,75 +68,108 @@ namespace KingsTest
 		return 0;
 	}
 
-	int Board::HandleTileMove(Tile* src, Tile* dest)
+	int Board::Update(Tile* src, Tile* dest)
 	{
-		int sX = src->GetX(), sY = src->GetY(), dX = dest->GetX(), dY = dest->GetY();
-		int dirX = dX - sX;
-		int dirY = dY - sY;
-
-		// check distance
-		if (Dist(sX, sY, dX, dY) > 1)
-			return 0;
-
-		TileSwap(sX, sY, dX, dY);
-
-
 		int total = 0;
-		std::vector<Tile*> matchedTiles = std::vector<Tile*>();
-		
-		std::vector<Tile*> sMatchedTiles = std::vector<Tile*>();
-		King::Engine::Texture sColor = mGrid[sX][sY]->GetColor();
-		King::Engine::Texture dColor = mGrid[dX][dY]->GetColor();
 
-		matchedTiles = MatchTile(dX, dY, dColor);
-		
-		// source
-		sMatchedTiles = MatchTile(sX, sY, sColor);
+		std::vector<Tile> sMatchedTiles = std::vector<Tile>();
 
-		matchedTiles.insert(matchedTiles.end(), sMatchedTiles.begin(), sMatchedTiles.end());
-
-		if (matchedTiles.empty())
+		switch (mState)
 		{
-			TileSwap(sX, sY, dX, dY);
-		}
+		case STATE_IDLE:
+			mSX = -1; mSY = -1; mDX = -1; mDY = -1;
+			if ((src != nullptr) && (dest != nullptr))
+			{
+				mSX = src->GetX(); mSY = src->GetY(); mDX = dest->GetX(); mDY = dest->GetY();
 
-		std::map<int, AffectedTilesBarrier> affectedTilesBarrier;
+				// check distance
+				if (Dist(mSX, mSY, mDX, mDY) > 1)
+					return 0;
 
-		ProcessMatchedTiles(matchedTiles, affectedTilesBarrier, total);
+				TileSwap(mSX, mSY, mDX, mDY);
+				mState = STATE_MOVED;
+			}	
 
-		bool stop = false;
-		while (!stop)
-		{
-			ProcessAffectedTiles(affectedTilesBarrier);
+			break;
+		case STATE_MOVED:
 
-			affectedTilesBarrier.clear();
+			mSColor = mGrid[mSX][mSY]->GetColor();
+			mDColor = mGrid[mDX][mDY]->GetColor();
+
+			mMatched = MatchTile(mDX, mDY, mDColor);
+
+			// source
+			sMatchedTiles = MatchTile(mSX, mSY, mSColor);
+
+			mMatched.insert(mMatched.end(), sMatchedTiles.begin(), sMatchedTiles.end());
+
+			if (mMatched.empty())
+			{
+				TileSwap(mSX, mSY, mDX, mDY);
+				mState = STATE_IDLE;
+				break;
+			}
+
+			mState = STATE_MATCHED;
+
+			break;
+		case STATE_MATCHED:
+			if (mMatched.empty())
+			{
+				mState = STATE_IDLE;
+				break;
+			}
+				
+			ProcessMatchedTiles(mMatched, mAffected, total);
+			mMatched.clear();
+			mState = STATE_AFFECTED;
+
+			break;
+		case STATE_AFFECTED:
+			if (mAffected.empty())
+			{
+				mState = STATE_IDLE;
+				break;
+			}
+
+			ProcessAffectedTiles(mAffected);
+			mAffected.clear();
+			mState = STATE_FALLOUT;
+
+			break;
+		case STATE_FALLOUT:
+			sMatchedTiles.clear();
 
 			// board wide check
 			for (int x = 0; x < GRID_SIZE; x++)
 			{
 				for (int y = 0; y < GRID_SIZE; y++)
 				{
-					matchedTiles.clear();
-
 					if (mGrid[x][y] == nullptr)
 						continue;
 
-					matchedTiles = MatchTile(x, y, mGrid[x][y]->GetColor());
-					ProcessMatchedTiles(matchedTiles, affectedTilesBarrier, total);
+					sMatchedTiles = MatchTile(x, y, mGrid[x][y]->GetColor());
+					if (sMatchedTiles.empty())
+						continue;
+
+					mMatched.insert(mMatched.end(), sMatchedTiles.begin(), sMatchedTiles.end());
 				}
 			}
 
-			if (affectedTilesBarrier.empty())
-				stop = true;
+			mState = STATE_MATCHED;
+
+			break;
+		default:
+			break;
 		}
-		
+
 		return total;
 	}
 
-	std::vector<Tile*> Board::MatchTile(int x, int y, King::Engine::Texture color)
+	std::vector<Tile> Board::MatchTile(int x, int y, King::Engine::Texture color)
 	{
-		std::vector<Tile*> matched = std::vector<Tile*>();
-		std::vector<Tile*> tmp = std::vector<Tile*>();
+		std::vector<Tile> matched = std::vector<Tile>();
+		std::vector<Tile> tmp = std::vector<Tile>();
 		
 		// vertical
 		int tileCount = MatchTileRecur(x, y + 1, 0, 1, color, tmp) +
@@ -151,12 +190,22 @@ namespace KingsTest
 				matched.push_back(t);
 
 		if (!matched.empty())
-			matched.push_back(mGrid[x][y]);
+			matched.push_back(*mGrid[x][y]);
+
+		for (auto t : matched)
+		{
+			int x = t.GetX(); int y = t.GetY();
+			if (mGrid[x][y] != nullptr)
+			{
+				delete mGrid[x][y];
+				mGrid[x][y] = nullptr;
+			}
+		}
 
 		return matched;
 	}
 
-	int Board::MatchTileRecur(int x, int y, int dx, int dy, King::Engine::Texture color, std::vector<Tile*>& matched)
+	int Board::MatchTileRecur(int x, int y, int dx, int dy, King::Engine::Texture color, std::vector<Tile> &matched)
 	{
 		if (!IsWithinBoard(x, y))
 			return 0;
@@ -166,31 +215,24 @@ namespace KingsTest
 
 		if (mGrid[x][y]->GetColor() == color)
 		{
-			matched.push_back(mGrid[x][y]);
+			matched.push_back(*mGrid[x][y]);
 			return 1 + MatchTileRecur(x + dx, y + dy, dx, dy, color, matched);
 		}
 		return 0;
 	}
 	
-	int Board::ProcessMatchedTiles(std::vector<Tile*> matched, std::map<int, AffectedTilesBarrier> &affected, int &total)
+	int Board::ProcessMatchedTiles(std::vector<Tile> matched, std::map<int, AffectedTilesBarrier> &affected, int &total)
 	{
 		for (auto t : matched)
 		{
-			if (t == nullptr)
-				continue;
+			int x = t.GetX(); int y = t.GetY();
 
-			int x = t->GetX(); int y = t->GetY();
-			if (mGrid[x][y] != nullptr)
-			{
-				affected.insert(std::pair<int, AffectedTilesBarrier>(x, AffectedTilesBarrier()));
-				affected.at(x).distY += 1;
-				if (y < affected.at(x).minY)
-					affected.at(x).minY = y;
+			affected.insert(std::pair<int, AffectedTilesBarrier>(x, AffectedTilesBarrier()));
+			affected.at(x).distY += 1;
+			if (y > affected.at(x).maxY)
+				affected.at(x).maxY = y;
 
-				total += 10;
-				delete mGrid[x][y];
-				mGrid[x][y] = nullptr;
-			}
+			total += 10;
 		}
 
 		return 0;
@@ -201,25 +243,29 @@ namespace KingsTest
 		for (auto barrier : affected)
 		{
 			int x = barrier.first;
-			int maxY = barrier.second.minY;
+			int maxY = barrier.second.maxY;
 			int distY = barrier.second.distY;
-			for (int y = maxY - 1; y >= 0; y--)
+			for (int y = maxY; y >= 0; y--)
 			{
-				mGrid[x][y + distY] = mGrid[x][y];
-				mGrid[x][y + distY]->SetCoords(x, y + distY);
-
-				mGrid[x][y] = nullptr;
-
-				// IMPROVEMENT look at the neighbours to reduce chance of chain reactions
-
-				mGrid[x][y] = new Tile(RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND), x, y);
+				int i = 0;
+				while (mGrid[x][y] == nullptr)
+				{
+					i++;
+					if (!IsWithinBoard(x, y - i))
+						break;
+					if (mGrid[x][y - i] == nullptr)
+						continue;
+					mGrid[x][y] = mGrid[x][y - i];
+					mGrid[x][y]->SetCoords(x, y);
+					mGrid[x][y - i] = nullptr;				
+				}
 			}
 			
 			// handle elements close to the edge
 			for (int y = 0; y <= distY; y++)
 			{
 				if (mGrid[x][y] == nullptr)
-					// IMPROVEMENT look at the neighbours to reduce chance of chain reactions
+					// IMPROVEMENT look at the neighbors to reduce chance of chain reactions
 					mGrid[x][y] = new Tile(RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND), x, y);
 			}
 		}
@@ -228,93 +274,3 @@ namespace KingsTest
 	}
 	
 }
-
-/*
-MANUAL MATCHING VERSION
-*/
-
-/*
-if (dirX != 0)
-{
-// horizontally first - double check dir is abs(1)
-if (mGrid[dX + dirX][dY]->GetColor() == mGrid[dX][dY]->GetColor())
-{
-if (mGrid[dX + 2 * dirX][dY]->GetColor() == mGrid[dX][dY]->GetColor())
-{
-// we have a match, destroy
-matchedTiles.push_back(mGrid[dX][dY]);
-matchedTiles.push_back(mGrid[dX + dirX][dY]);
-matchedTiles.push_back(mGrid[dX + 2 * dirX][dY]);
-}
-}
-
-// vertically
-if (mGrid[dX][dY + 1]->GetColor() == mGrid[dX][dY]->GetColor())
-{
-if (mGrid[dX][dY + 2]->GetColor() == mGrid[dX][dY]->GetColor())
-{
-// we have a match, destroy
-matchedTiles.push_back(mGrid[dX][dY]);
-matchedTiles.push_back(mGrid[dX][dY + 1]);
-matchedTiles.push_back(mGrid[dX][dY + 2]);
-}
-}
-if (mGrid[dX][dY - 1]->GetColor() == mGrid[dX][dY]->GetColor())
-{
-if (mGrid[dX][dY - 2]->GetColor() == mGrid[dX][dY]->GetColor())
-{
-// we have a match, destroy
-matchedTiles.push_back(mGrid[dX][dY]);
-matchedTiles.push_back(mGrid[dX][dY - 1]);
-matchedTiles.push_back(mGrid[dX][dY - 2]);
-}
-}
-
-}
-else if (dirY != 0)
-{
-// vertical it is then
-if (mGrid[dX][dY + dirY]->GetColor() == mGrid[dX][dY]->GetColor())
-{
-if (mGrid[dX][dY + 2 * dirY]->GetColor() == mGrid[dX][dY]->GetColor())
-{
-// we have a match, destroy
-matchedTiles.push_back(mGrid[dX][dY]);
-matchedTiles.push_back(mGrid[dX][dY + dirY]);
-matchedTiles.push_back(mGrid[dX][dY + 2 * dirY]);
-}
-}
-}
-
-for (auto t : matchedTiles)
-{
-int x = t->GetX(); int y = t->GetY();
-if (mGrid[x][y] != nullptr)
-{
-delete mGrid[x][y];
-mGrid[x][y] = new Tile(RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND), x, y);
-}
-}
-*/
-
-/* for (auto t : sMatchedTiles)
-{
-int x = t->GetX(); int y = t->GetY();
-if (mGrid[x][y] != nullptr)
-{
-total += 10;
-delete mGrid[x][y];
-mGrid[x][y] = new Tile(RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND), x, y);
-}
-}
-
-for (auto t : dMatchedTiles)
-{
-int x = t->GetX(); int y = t->GetY();
-if (mGrid[x][y] != nullptr)
-{
-total += 10;
-delete mGrid[x][y];
-mGrid[x][y] = new Tile(RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND), x, y);
-}
-} */

@@ -18,7 +18,7 @@ namespace KingsTest
 		return static_cast<King::Engine::Texture>(randColor);
 	}
 
-	static Grid CuratedRandomGridGenerator(int size = GRID_SIZE)
+	static void CuratedRandomGridGenerator(Grid &grid, int size = GRID_SIZE)
 	{
 		// sadly hardcoded values for the backwards check
 		int min_backwards_check = 1;
@@ -40,7 +40,6 @@ namespace KingsTest
 		int randColor = 0;
 		int back = 0;
 
-		Grid res;
 		for (int x = 0; x < size; x++)
 		{
 			for (int y = 0; y < size; y++)
@@ -56,27 +55,25 @@ namespace KingsTest
 				if (back == 1)
 				{
 					// check just one neighbor behind (on both axis)
-					if ((y > 1) && (res[x][y - 1]->GetColor() == selectedColor))
+					if ((y > 1) && (grid[x][y - 1]->GetColor() == selectedColor))
 						selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % NUMBER_OF_COLORS) + 1);
-					if ((x > 1) && (res[x - 1][y]->GetColor() == selectedColor))
+					if ((x > 1) && (grid[x - 1][y]->GetColor() == selectedColor))
 						selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % NUMBER_OF_COLORS) + 1);
 				}
 				else
 				{
 					// check two neighbors back
-					if ((y > 1) && (res[x][y - 1]->GetColor() == selectedColor))
-						if ((y > 2) && (res[x][y - 2]->GetColor() == selectedColor))
+					if ((y > 1) && (grid[x][y - 1]->GetColor() == selectedColor))
+						if ((y > 2) && (grid[x][y - 2]->GetColor() == selectedColor))
 							selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % NUMBER_OF_COLORS) + 1);
-					if ((x > 1) && (res[x - 1][y]->GetColor() == selectedColor))
-						if ((x > 2) && (res[x - 2][y]->GetColor() == selectedColor))
+					if ((x > 1) && (grid[x - 1][y]->GetColor() == selectedColor))
+						if ((x > 2) && (grid[x - 2][y]->GetColor() == selectedColor))
 							selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % NUMBER_OF_COLORS) + 1);
 				}
 
-				res[x][y] = new Tile(selectedColor, x, y);
+				grid[x][y] = new Tile(selectedColor, x, y);
 			}
 		}
-
-		return res;
 	}
 }
 

@@ -47,5 +47,13 @@ namespace KingsTest {
 	{
 		mX = x; mY = y;
 	}
+
+	Tile & Tile::operator=(const Tile & right)
+	{
+		mColor = right.mColor;
+		mX = right.mX;
+		mY = right.mY;
+		return *this;
+	}
 	
 }

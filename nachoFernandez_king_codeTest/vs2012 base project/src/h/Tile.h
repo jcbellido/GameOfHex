@@ -20,9 +20,10 @@ namespace KingsTest {
 		void SetY(int y);
 		void SetCoords(int x, int y);
 
+		Tile& operator=(const Tile& right);
 		
 	private:
-		const King::Engine::Texture mColor;
+		King::Engine::Texture mColor;
 		int mX, mY;
 	};
 

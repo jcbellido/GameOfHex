@@ -17,7 +17,7 @@ namespace KingsTest
 		return static_cast<King::Engine::Texture>(r);
 	}
 
-	static Grid RandomGridGenerator(int size = GRID_SIZE)
+	static void RandomGridGenerator(Grid &grid, int size = GRID_SIZE)
 	{
 		// IMPROVEMENT: Make statistics! time taken to complete, # of swaps, etc
 #ifdef _DEBUG_
@@ -27,19 +27,17 @@ namespace KingsTest
 		srand(static_cast <unsigned> (__rdtsc()));
 #endif // !_DEBUG_
 
-		Grid res;
+		//Grid res;
 
 		for (int x = 0; x < size; x++)
 		{
 			for (int y = 0; y < size; y++)
 			{
 				King::Engine::Texture selectedColor = RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND);
-				res[x][y] = new Tile(selectedColor, x, y);
+				grid[x][y] = new Tile(selectedColor, x, y);
 			}
 				
 		}
-
-		return res;
 	}
 }
 

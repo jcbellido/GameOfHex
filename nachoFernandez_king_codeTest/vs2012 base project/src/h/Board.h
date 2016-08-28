@@ -16,29 +16,43 @@ namespace KingsTest
 	{
 	public:
 		struct AffectedTilesBarrier {
-			AffectedTilesBarrier(int min = GRID_SIZE, int d = 0) : minY(min), distY(d) {}
-			int minY;
+			AffectedTilesBarrier(int max = 0, int d = 0) : maxY(max), distY(d) {}
+			int maxY;
 			int distY;
+		};
+
+		const enum STATE {
+			STATE_IDLE,
+			STATE_MOVED,
+			STATE_MATCHED,
+			STATE_AFFECTED,
+			STATE_FALLOUT
 		};
 
 		Board(GENERATION_TYPES gen = GENERATION_TYPES::RANDOM_GENERATION);
 		~Board();
 
-		int HandleTileMove(Tile* source, Tile* dest);
-		King::Engine::Texture GetColorOfTile(int x, int y);
+		int Update(Tile* source, Tile* dest);
+		int GetColorOfTile(int x, int y);
 		Tile* GetTile(int x, int y);
 
 	private:
 		Grid mGrid;
+		STATE mState;
+		std::vector<Tile> mMatched;
+		std::map<int, AffectedTilesBarrier> mAffected;
+
+		int mSX = -1; int mSY = -1; int mDX = -1; int mDY = -1;
+		King::Engine::Texture mSColor;
+		King::Engine::Texture mDColor;
 
 		int GenerateTile(int x, int y);
 		int TileSwap(int sX, int sY, int dX, int dY);
 
-		std::vector<Tile*> MatchTile(int x, int y, King::Engine::Texture color);
-		int MatchTileRecur(int x, int y, int dx, int dy, King::Engine::Texture color, std::vector<Tile*> &matched);
-		int ProcessMatchedTiles(std::vector<Tile*> matched, std::map<int, AffectedTilesBarrier> &affected, int &total);
+		std::vector<Tile> MatchTile(int x, int y, King::Engine::Texture color);
+		int MatchTileRecur(int x, int y, int dx, int dy, King::Engine::Texture color, std::vector<Tile> &matched);
+		int ProcessMatchedTiles(std::vector<Tile> matched, std::map<int, AffectedTilesBarrier> &affected, int &total);
 		int ProcessAffectedTiles(std::map<int, AffectedTilesBarrier> affected);
-		bool ProcessChainReaction(std::map<int, AffectedTilesBarrier> affected);
 	};
 
 }
