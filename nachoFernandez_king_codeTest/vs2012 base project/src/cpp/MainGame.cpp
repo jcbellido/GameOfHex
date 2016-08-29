@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <stdexcept>
 
 #include <glm/glm.hpp>
 
@@ -9,47 +10,61 @@
 #include <Constants.h>
 #include <RandomGridGenerator.h>
 #include <Timer.h>
+#include <LevelInfo.h>
 #include <json.h>
+
+using json = nlohmann::json;
 
 namespace KingsTest {
 	
-	MainGame::MainGame() : mEngine("./assets") 
+	MainGame::MainGame() : mEngine("./assets")
 	{
 		unsigned int width = mEngine.GetTextureWidth(King::Engine::TEXTURE_BACKGROUND);
 		unsigned int height = mEngine.GetTextureHeight(King::Engine::TEXTURE_BACKGROUND);
 		mEngine.ResizeWindow(width, height);
+
+		json levelInfo;
+		std::ifstream file("levels\\level1.json", std::fstream::in | std::fstream::out);
+		if (!file)
+			throw std::runtime_error("Level file not found");
+
+		file >> levelInfo;
+		file.close();
+
+		LevelInfo::GetInstance().Initialize(levelInfo);
+
+		mBoard = new Board(static_cast<GENERATION_TYPES>(LevelInfo::GetInstance().GetGeneratorType()));
 	}
 	
 	MainGame::~MainGame()
 	{
+		delete mBoard;
 	}
-
-	// IMPROVEMENT Data driven
-	// get sizes and calculate padding factor from textures themselves
-	// define positions in data input format (json for instance)
 
 	void MainGame::Start()
 	{
-		mBoard = new Board(CURATED_RANDOM_GENERATION);
 		mTimer.Start();
 	    mEngine.Start(*this);
 }
 
 	void MainGame::Update()
 	{
-		HandleMouse();
-
-		mTotalScore += mBoard->Update(mFirstSelectedTile, mSecondSelectedTile);
-		if ((mFirstSelectedTile != nullptr) && (mSecondSelectedTile != nullptr))
+		if (mPlaying)
 		{
-			mFirstSelectedTile = nullptr;
-			mSecondSelectedTile = nullptr;
-		}
-		
-		Render();
+			HandleMouse();
 
-		//if ((mFirstSelectedTile != nullptr) && (mouseX > 0) && (mouseY > 0))
-			//mEngine.Render(mFirstSelectedTile->GetColor(), mouseX, mouseY);		
+			mTotalScore += mBoard->Update(mFirstSelectedTile, mSecondSelectedTile);
+			if ((mFirstSelectedTile != nullptr) && (mSecondSelectedTile != nullptr))
+			{
+				mFirstSelectedTile = nullptr;
+				mSecondSelectedTile = nullptr;
+			}
+		}
+
+		Render();
+		// check if we're out of time
+		if (LevelInfo::GetInstance().GetTimerLimit() - mTimer.GetElapsedTime() == 0)
+			mPlaying = false;
 	}
 
 	void MainGame::HandleMouse()
@@ -59,8 +74,8 @@ namespace KingsTest {
 		if (mEngine.GetMouseButtonDown()) {
 			mouseX = mEngine.GetMouseX();
 			mouseY = mEngine.GetMouseY();
-			mCoordX = PixelPositionToBoardCoord(mouseX, GRID_START_X);
-			mCoordY = PixelPositionToBoardCoord(mouseY, GRID_START_Y);
+			mCoordX = PixelPositionToBoardCoord(mouseX, LevelInfo::GetInstance().GetGridStartX());
+			mCoordY = PixelPositionToBoardCoord(mouseY, LevelInfo::GetInstance().GetGridStartY());
 
 			if (IsWithinBoard(mCoordX,mCoordY))
 			{
@@ -96,64 +111,74 @@ namespace KingsTest {
 
 	void MainGame::Render()
 	{
-		mEngine.Render(King::Engine::TEXTURE_BACKGROUND, 0.0f, 0.0f);
-
-		for (int x = 0; x < GRID_SIZE; x++)
+		if (mPlaying)
 		{
-			for (int y = 0; y < GRID_SIZE; y++)
+			mEngine.Render(King::Engine::TEXTURE_BACKGROUND, 0.0f, 0.0f);
+
+			for (int x = 0; x < LevelInfo::GetInstance().GetGridSize(); x++)
 			{
-				float xPos = BoardCoordToPixelPosition(x, GRID_START_X);
-				float yPos = BoardCoordToPixelPosition(y, GRID_START_Y);
-				glm::mat4 transform = glm::mat4(1, 0, 0, 0,
-					0, 1, 0, 0,
-					0, 0, 0, 0,
-					xPos, yPos, 0, 1);
-				
-				int toRender = mBoard->GetColorOfTile(x, y);
-				if (toRender == -1)
-					continue;
-				mEngine.Render(static_cast<King::Engine::Texture>(toRender), transform);
+				for (int y = 0; y < LevelInfo::GetInstance().GetGridSize(); y++)
+				{
+					int toRender = mBoard->GetColorOfTile(x, y);
+					if (toRender == -1)
+						continue;
+
+					float xPos = BoardCoordToPixelPosition(x, LevelInfo::GetInstance().GetGridStartX());
+					float yPos = BoardCoordToPixelPosition(y, LevelInfo::GetInstance().GetGridStartY());
+					glm::mat4 transform = glm::mat4(1, 0, 0, 0,
+						0, 1, 0, 0,
+						0, 0, 0, 0,
+						xPos, yPos, 0, 1);
+
+					mEngine.Render(static_cast<King::Engine::Texture>(toRender), transform);
+				}
 			}
-		}
 
-		std::stringstream score;
-		score << "Score: " << mTotalScore;
-		mEngine.Write(score.str().c_str(), SCORE_POS_X, SCORE_POS_Y);
+			std::stringstream score;
+			score << "Score: " << mTotalScore;
+			mEngine.Write(score.str().c_str(), LevelInfo::GetInstance().GetScorePosX(), LevelInfo::GetInstance().GetScorePosX());
 
-		score.str(std::string());
-		score.clear();
-		score << "Timer: " << mTimer.GetElapsedTime();
-		mEngine.Write(score.str().c_str(), TIMER_POS_X, TIMER_POS_Y);
+			score.str(std::string());
+			score.clear();
+			score << "Timer: " << (LevelInfo::GetInstance().GetTimerLimit() - mTimer.GetElapsedTime());
+			mEngine.Write(score.str().c_str(), LevelInfo::GetInstance().GetTimerPosX(), LevelInfo::GetInstance().GetTimerPosY());
 
-		// DEBUG BITS AND PIECES
+			// DEBUG BITS AND PIECES
 #ifdef _DEBUG_
 
-		std::stringstream debugTextStream;
-		debugTextStream << "[" << mCoordX << "," << mCoordY << "]";
-		mEngine.Write(debugTextStream.str().c_str(), DEBUG_TEXT_START_X, DEBUG_TEXT_START_Y);
+			std::stringstream debugTextStream;
+			debugTextStream << "[" << mCoordX << "," << mCoordY << "]";
+			mEngine.Write(debugTextStream.str().c_str(), DEBUG_TEXT_START_X, DEBUG_TEXT_START_Y);
 
-		// info of selected tile
-		debugTextStream.str(std::string());
-		debugTextStream.clear();
-		if (mFirstSelectedTile != NULL)
-		{
-			debugTextStream << "First tile [" << mFirstSelectedTile->GetX() << "," << mFirstSelectedTile->GetY() << "], with color " << mFirstSelectedTile->GetColor();
-			mEngine.Write(debugTextStream.str().c_str(), DEBUG_TEXT_START_X, DEBUG_TEXT_START_Y + 50.0f);
-		}
+			// info of selected tile
+			debugTextStream.str(std::string());
+			debugTextStream.clear();
+			if (mFirstSelectedTile != NULL)
+			{
+				debugTextStream << "First tile [" << mFirstSelectedTile->GetX() << "," << mFirstSelectedTile->GetY() << "], with color " << mFirstSelectedTile->GetColor();
+				mEngine.Write(debugTextStream.str().c_str(), DEBUG_TEXT_START_X, DEBUG_TEXT_START_Y + 50.0f);
+			}
 
-		debugTextStream.str(std::string());
-		debugTextStream.clear();
-		if (mSecondSelectedTile != NULL)
-		{
-			debugTextStream << "Second tile [" << mSecondSelectedTile->GetX() << "," << mSecondSelectedTile->GetY() << "], with color " << mSecondSelectedTile->GetColor();
-			mEngine.Write(debugTextStream.str().c_str(), DEBUG_TEXT_START_X, DEBUG_TEXT_START_Y + 100.0f);
-		}
+			debugTextStream.str(std::string());
+			debugTextStream.clear();
+			if (mSecondSelectedTile != NULL)
+			{
+				debugTextStream << "Second tile [" << mSecondSelectedTile->GetX() << "," << mSecondSelectedTile->GetY() << "], with color " << mSecondSelectedTile->GetColor();
+				mEngine.Write(debugTextStream.str().c_str(), DEBUG_TEXT_START_X, DEBUG_TEXT_START_Y + 100.0f);
+			}
 #endif
+		}
+		else
+		{
+			// render the background with some grey effect or something?
+			// show a simple texture on top with the final score
+			// plus maybe some stats? max combo, better play, etc.
+			// press a key and restart
+		}
 	}
 
 	void MainGame::Quit()
 	{
 		mTimer.Stop();
-		delete mBoard;
 	}
 }

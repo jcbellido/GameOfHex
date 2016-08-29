@@ -75,6 +75,9 @@ namespace King {
 		std::string purple = assets; purple += "/Purple.png";
 		std::string red = assets; red += "/Red.png";
 		std::string yellow = assets; yellow += "/Yellow.png";
+		// DIVERGENCE
+		std::string score = assets; score += "/Yellow.png";
+		// ~DIVERGENCE
 		std::string font = assets; font += "/berlin_sans_demi_72_0.png";
 
 		mPimpl->mSdlSurfaceContainer[Engine::TEXTURE_BACKGROUND].reset(new SdlSurface(background.c_str()));
@@ -83,6 +86,9 @@ namespace King {
 		mPimpl->mSdlSurfaceContainer[Engine::TEXTURE_PURPLE].reset(new SdlSurface(purple.c_str()));
 		mPimpl->mSdlSurfaceContainer[Engine::TEXTURE_RED].reset(new SdlSurface(red.c_str()));
 		mPimpl->mSdlSurfaceContainer[Engine::TEXTURE_YELLOW].reset(new SdlSurface(yellow.c_str()));
+		// DIVERGENCE
+		mPimpl->mSdlSurfaceContainer[Engine::TEXTURE_SCOREBOARD].reset(new SdlSurface(yellow.c_str()));
+		// ~DIVERGENCE
 		mPimpl->mFontSdlSurface.reset(new SdlSurface(font.c_str()));
 
 		glMatrixMode(GL_PROJECTION);

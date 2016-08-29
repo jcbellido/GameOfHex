@@ -10,7 +10,7 @@ namespace KingsTest {
 	Tile::Tile(King::Engine::Texture color, int x, int y) 
 		: mColor(color), mX(x), mY(y)
 	{
-
+		value = 10;
 	}
 
 
@@ -18,17 +18,17 @@ namespace KingsTest {
 	{
 	}
 
-	King::Engine::Texture Tile::GetColor()
+	King::Engine::Texture Tile::GetColor() const
 	{
 		return mColor;
 	}
 
-	int Tile::GetX()
+	int Tile::GetX() const
 	{
 		return mX;
 	}
 
-	int Tile::GetY()
+	int Tile::GetY() const
 	{
 		return mY;
 	}
@@ -46,6 +46,21 @@ namespace KingsTest {
 	void Tile::SetCoords(int x, int y)
 	{
 		mX = x; mY = y;
+	}
+
+	void Tile::SetDestroyed(bool status)
+	{
+		mDestroyed = status;
+	}
+
+	void Tile::SetColor(King::Engine::Texture newColor)
+	{
+		mColor = newColor;
+	}
+
+	bool Tile::IsDestroyed() const
+	{
+		return mDestroyed;
 	}
 
 	Tile & Tile::operator=(const Tile & right)

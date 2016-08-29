@@ -54,6 +54,9 @@
     <ClCompile Include="..\src\cpp\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\cpp\LevelInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\external\include\king\Engine.h">
@@ -98,7 +101,13 @@
     <ClInclude Include="..\src\h\Readme.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\h\json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\h\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\h\LevelInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

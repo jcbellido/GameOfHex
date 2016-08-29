@@ -2,7 +2,6 @@
 
 
 #include <king/Engine.h>
-#include <Constants.h>
 
 namespace KingsTest {
 
@@ -12,29 +11,22 @@ namespace KingsTest {
 		Tile(King::Engine::Texture color, int x, int y);
 		~Tile();
 
-		King::Engine::Texture GetColor();
-		int GetX();
-		int GetY();
+		King::Engine::Texture GetColor() const;
+		int GetX() const;
+		int GetY() const;
+		bool IsDestroyed() const;
 
 		void SetX(int x);
 		void SetY(int y);
 		void SetCoords(int x, int y);
+		void SetDestroyed(bool status);
+		void SetColor(King::Engine::Texture newColor);
 
 		Tile& operator=(const Tile& right);
 		
 	private:
 		King::Engine::Texture mColor;
-		int mX, mY;
+		bool mDestroyed = false;
+		int mX, mY, value;
 	};
-
-	/*
-	bool operator==(const Tile &left, const Tile &right)
-	{
-		return left.GetColor() == right.GetColor();
-	}
-	static bool TileCompare(Tile &t1, Tile &t2)
-	{
-		return t1.GetColor() == t2.GetColor();
-		
-	}*/
 }

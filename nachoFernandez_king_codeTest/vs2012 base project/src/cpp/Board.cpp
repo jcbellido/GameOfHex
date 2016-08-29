@@ -2,11 +2,14 @@
 #include <cmath>
 #include <map>
 #include <exception>
+#include <chrono>
+#include <thread>
 
 #include <Constants.h>
 #include <Board.h>
 #include <RandomGridGenerator.h>
 #include <CuratedRandomGridGenerator.h>
+#include <LevelInfo.h>
 
 namespace KingsTest 
 {
@@ -37,21 +40,30 @@ namespace KingsTest
 
 	Board::~Board()
 	{
+		for (auto x : mGrid)
+		{
+			for (auto y : x)
+			{
+				delete y;
+			}
+		}
 	}
 
-	int Board::GetGridSizeX()
+	int Board::GetGridSizeX() const
 	{
 		return mGridSizeX;
 	}
 
-	int Board::GetGridSizeY()
+	int Board::GetGridSizeY() const
 	{
 		return mGridSizeY;
 	}
 
-	int Board::GetColorOfTile(int x, int y)
+	int Board::GetColorOfTile(int x, int y) const
 	{
-		if ((!IsWithinBoard(x, y)) || (mGrid[x][y] == nullptr))
+		/*if ((!IsWithinBoard(x, y)) || (mGrid[x][y] == nullptr))
+			return -1;*/
+		if (mGrid[x][y]->IsDestroyed())
 			return -1;
 		return mGrid[x][y]->GetColor();
 	}
@@ -59,11 +71,6 @@ namespace KingsTest
 	Tile *Board::GetTile(int x, int y)
 	{
 		return mGrid[x][y];
-	}
-
-	int Board::GenerateTile(int x, int y)
-	{
-		return 0;
 	}
 
 	int Board::TileSwap(int sX, int sY, int dX, int dY)
@@ -82,11 +89,10 @@ namespace KingsTest
 	{
 		int total = 0;
 
-		std::vector<Tile> sMatchedTiles = std::vector<Tile>();
-
 		switch (mState)
 		{
 		case STATE::IDLE:
+		{
 			mSX = -1; mSY = -1; mDX = -1; mDY = -1;
 			if ((src != nullptr) && (dest != nullptr))
 			{
@@ -97,19 +103,20 @@ namespace KingsTest
 					return 0;
 
 				TileSwap(mSX, mSY, mDX, mDY);
-				mState = STATE::MOVED;
-			}	
-
-			break;
-
+				mState = STATE::WAIT;
+				mNextState = STATE::MOVED;
+			}
+			break; 
+		}	
 		case STATE::MOVED:
-
+		{
 			mSColor = mGrid[mSX][mSY]->GetColor();
 			mDColor = mGrid[mDX][mDY]->GetColor();
 
 			mMatched = MatchTile(mDX, mDY, mDColor);
 
 			// source
+			std::vector<Tile> sMatchedTiles = std::vector<Tile>();
 			sMatchedTiles = MatchTile(mSX, mSY, mSColor);
 
 			mMatched.insert(mMatched.end(), sMatchedTiles.begin(), sMatchedTiles.end());
@@ -117,49 +124,62 @@ namespace KingsTest
 			if (mMatched.empty())
 			{
 				TileSwap(mSX, mSY, mDX, mDY);
-				mState = STATE::IDLE;
+				mState = STATE::WAIT;
+				mNextState = STATE::IDLE;
 				break;
 			}
 
-			mState = STATE::MATCHED;
+			mState = STATE::WAIT;
+			mNextState = STATE::MATCHED;
 
-			break;
-
+			break; 
+		}
 		case STATE::MATCHED:
+		{
 			if (mMatched.empty())
 			{
-				mState = STATE::IDLE;
+				mState = STATE::WAIT;
+				mNextState = STATE::IDLE;
+				// return and reset score
 				break;
 			}
-				
+
 			ProcessMatchedTiles(mMatched, mAffected, total);
 			mMatched.clear();
-			mState = STATE::AFFECTED;
+			mState = STATE::WAIT;
+			mNextState = STATE::AFFECTED;
 
 			break;
-
+		}
 		case STATE::AFFECTED:
+		{
 			if (mAffected.empty())
 			{
-				mState = STATE::IDLE;
+				mState = STATE::WAIT;
+				mNextState = STATE::IDLE;
+				// return and reset score
 				break;
 			}
 
 			ProcessAffectedTiles(mAffected);
 			mAffected.clear();
-			mState = STATE::FALLOUT;
+
+			mState = STATE::WAIT;
+			mNextState = STATE::FALLOUT;
 
 			break;
-
+		}
 		case STATE::FALLOUT:
+		{
+			std::vector<Tile> sMatchedTiles = std::vector<Tile>();
 			sMatchedTiles.clear();
 
 			// board wide check
-			for (int x = 0; x < GRID_SIZE; x++)
+			for (int x = 0; x < GetGridSizeX(); x++)
 			{
-				for (int y = 0; y < GRID_SIZE; y++)
+				for (int y = 0; y < GetGridSizeY(); y++)
 				{
-					if (mGrid[x][y] == nullptr)
+					if (mGrid[x][y]->IsDestroyed())
 						continue;
 
 					sMatchedTiles = MatchTile(x, y, mGrid[x][y]->GetColor());
@@ -170,8 +190,14 @@ namespace KingsTest
 				}
 			}
 
-			mState = STATE::MATCHED;
+			mState = STATE::WAIT;
+			mNextState = STATE::MATCHED;
 
+			break;
+		}
+		case STATE::WAIT:
+			std::this_thread::sleep_for(std::chrono::milliseconds(LevelInfo::GetInstance().GetWaitLimitMs()));
+			mState = mNextState;
 			break;
 		default:
 			break;
@@ -209,10 +235,9 @@ namespace KingsTest
 		for (auto t : matched)
 		{
 			int x = t.GetX(); int y = t.GetY();
-			if (mGrid[x][y] != nullptr)
+			if (!mGrid[x][y]->IsDestroyed())
 			{
-				delete mGrid[x][y];
-				mGrid[x][y] = nullptr;
+				mGrid[x][y]->SetDestroyed(true);
 			}
 		}
 
@@ -224,7 +249,7 @@ namespace KingsTest
 		if (!IsWithinBoard(x, y))
 			return 0;
 
-		if (mGrid[x][y] == nullptr)
+		if (mGrid[x][y]->IsDestroyed())
 			return 0;
 
 		if (mGrid[x][y]->GetColor() == color)
@@ -262,25 +287,29 @@ namespace KingsTest
 			for (int y = maxY; y >= 0; y--)
 			{
 				int i = 0;
-				while (mGrid[x][y] == nullptr)
+				while (mGrid[x][y]->IsDestroyed())
 				{
 					i++;
 					if (!IsWithinBoard(x, y - i))
 						break;
-					if (mGrid[x][y - i] == nullptr)
+					if (mGrid[x][y - i]->IsDestroyed())
 						continue;
-					mGrid[x][y] = mGrid[x][y - i];
+					TileSwap(x, y, x, y - i);
+					/*mGrid[x][y] = mGrid[x][y - i];
 					mGrid[x][y]->SetCoords(x, y);
-					mGrid[x][y - i] = nullptr;				
+					mGrid[x][y - i]->SetDestroyed(true);*/
 				}
 			}
 			
 			// handle elements close to the edge
 			for (int y = 0; y <= distY; y++)
 			{
-				if (mGrid[x][y] == nullptr)
-					// IMPROVEMENT look at the neighbors to reduce chance of chain reactions
-					mGrid[x][y] = new Tile(RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND), x, y);
+				if (mGrid[x][y]->IsDestroyed())
+				{
+					mGrid[x][y]->SetColor(RandomTileGenerator(LevelInfo::GetInstance().GetLowerColorBound(), LevelInfo::GetInstance().GetUpperColorBound()));
+					mGrid[x][y]->SetCoords(x, y);
+					mGrid[x][y]->SetDestroyed(false);
+				}
 			}
 		}
 		

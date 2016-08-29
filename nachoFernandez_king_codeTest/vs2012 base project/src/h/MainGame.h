@@ -30,6 +30,8 @@ namespace KingsTest {
 		Tile *mFirstSelectedTile = NULL;
 		Tile *mSecondSelectedTile = NULL;
 
+		bool mPlaying = true;
+
 		int mCoordX = 0;
 		int mCoordY = 0;
 		int mTotalScore = 0;
@@ -40,12 +42,12 @@ namespace KingsTest {
 		void HandleMouse();
 		void Render();
 
-		inline float BoardCoordToPixelPosition(int c, float start) const
+		inline float BoardCoordToPixelPosition(int c, float start/*, float tsize*/) const
 		{
 			return start + (TEXTURE_SIZE * c * PADDING_FACTOR);
 		}
 
-		inline int PixelPositionToBoardCoord(float p, float start) const
+		inline int PixelPositionToBoardCoord(float p, float start/*, float tsize*/) const
 		{
 			return static_cast<int> ((p - start) / (TEXTURE_SIZE * PADDING_FACTOR));
 		}

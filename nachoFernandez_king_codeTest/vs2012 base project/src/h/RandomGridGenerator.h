@@ -7,6 +7,7 @@
 
 #include <Constants.h>
 #include <Tile.h>
+#include <LevelInfo.h>
 
 namespace KingsTest
 {
@@ -33,7 +34,7 @@ namespace KingsTest
 		{
 			for (int y = 0; y < size; y++)
 			{
-				King::Engine::Texture selectedColor = RandomTileGenerator(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND);
+				King::Engine::Texture selectedColor = RandomTileGenerator(LevelInfo::GetInstance().GetLowerColorBound(), LevelInfo::GetInstance().GetUpperColorBound());
 				grid[x][y] = new Tile(selectedColor, x, y);
 			}
 				

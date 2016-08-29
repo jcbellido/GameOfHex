@@ -59,6 +59,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2_image.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(TargetDir)\assets\" mkdir "$(TargetDir)\assets\"
+copy /Y "$(SolutionDir)\..\assets\*" "$(TargetDir)\assets\"
+IF NOT EXIST "$(TargetDir)\levels\" mkdir "$(TargetDir)\levels\"
+copy /Y "$(SolutionDir)\..\levels\*" "$(TargetDir)\levels\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -74,6 +80,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2_image.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(TargetDir)\assets\" mkdir "$(TargetDir)\assets\"
+copy /Y "$(SolutionDir)\..\assets\*" "$(TargetDir)\assets\"
+IF NOT EXIST "$(TargetDir)\levels\" mkdir "$(TargetDir)\levels\"
+copy /Y "$(SolutionDir)\..\levels\*" "$(TargetDir)\levels\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\external\include\king\Engine.cpp" />
@@ -83,6 +95,7 @@
     <ClCompile Include="..\external\include\king\SdlSurface.cpp" />
     <ClCompile Include="..\external\include\king\SdlWindow.cpp" />
     <ClCompile Include="..\src\cpp\Board.cpp" />
+    <ClCompile Include="..\src\cpp\LevelInfo.cpp" />
     <ClCompile Include="..\src\cpp\Tile.cpp" />
     <ClCompile Include="..\src\cpp\MainGame.cpp" />
     <ClCompile Include="..\src\cpp\Timer.cpp" />
@@ -98,6 +111,8 @@
     <ClInclude Include="..\external\include\king\Updater.h" />
     <ClInclude Include="..\src\h\Board.h" />
     <ClInclude Include="..\src\h\CuratedRandomGridGenerator.h" />
+    <ClInclude Include="..\src\h\json.h" />
+    <ClInclude Include="..\src\h\LevelInfo.h" />
     <ClInclude Include="..\src\h\RandomGridGenerator.h" />
     <ClInclude Include="..\src\h\Readme.h" />
     <ClInclude Include="..\src\h\Tile.h" />

@@ -5,6 +5,7 @@
 
 #include <Constants.h>
 #include <Tile.h>
+#include <LevelInfo.h>
 
 namespace KingsTest
 {
@@ -24,7 +25,7 @@ namespace KingsTest
 		int min_backwards_check = 1;
 		int max_backwards_check = 2;
 
-		std::uniform_int_distribution<int> boardGen(LOWER_COLOR_BOUND, UPPER_COLOR_BOUND);
+		std::uniform_int_distribution<int> boardGen(LevelInfo::GetInstance().GetLowerColorBound(), LevelInfo::GetInstance().GetUpperColorBound());
 		std::uniform_int_distribution<int> matchCheck(min_backwards_check, max_backwards_check);
 		std::mt19937 eng;
 
@@ -56,19 +57,19 @@ namespace KingsTest
 				{
 					// check just one neighbor behind (on both axis)
 					if ((y > 1) && (grid[x][y - 1]->GetColor() == selectedColor))
-						selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % NUMBER_OF_COLORS) + 1);
+						selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % LevelInfo::GetInstance().GetNumberOfColors()) + 1);
 					if ((x > 1) && (grid[x - 1][y]->GetColor() == selectedColor))
-						selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % NUMBER_OF_COLORS) + 1);
+						selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % LevelInfo::GetInstance().GetNumberOfColors()) + 1);
 				}
 				else
 				{
 					// check two neighbors back
 					if ((y > 1) && (grid[x][y - 1]->GetColor() == selectedColor))
 						if ((y > 2) && (grid[x][y - 2]->GetColor() == selectedColor))
-							selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % NUMBER_OF_COLORS) + 1);
+							selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % LevelInfo::GetInstance().GetNumberOfColors()) + 1);
 					if ((x > 1) && (grid[x - 1][y]->GetColor() == selectedColor))
 						if ((x > 2) && (grid[x - 2][y]->GetColor() == selectedColor))
-							selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % NUMBER_OF_COLORS) + 1);
+							selectedColor = static_cast<King::Engine::Texture>(((randColor + 1) % LevelInfo::GetInstance().GetNumberOfColors()) + 1);
 				}
 
 				grid[x][y] = new Tile(selectedColor, x, y);
