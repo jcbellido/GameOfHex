@@ -16,6 +16,14 @@ namespace King {
 			throw std::runtime_error(std::string("Error creating window: ") + SDL_GetError());
 		}
 	}
+
+	// DIVERGENCE: added resize function
+	void SdlWindow::Resize(unsigned int width, unsigned int height)
+	{
+		SDL_SetWindowSize(mSDLWindow.get(), width, height);
+	}
+	// ~DIVERGENCE
+
 	void SdlWindow::Show() {
 		SDL_ShowWindow(mSDLWindow.get());
 	}

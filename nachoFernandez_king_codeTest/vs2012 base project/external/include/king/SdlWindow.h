@@ -8,6 +8,7 @@ namespace King {
 	class SdlWindow {
 	public:
 		SdlWindow(unsigned int width, unsigned int height);
+		void Resize(unsigned int width, unsigned int height);
 		operator SDL_Window*();
 		void Show();
 

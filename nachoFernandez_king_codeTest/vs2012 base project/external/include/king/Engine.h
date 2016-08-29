@@ -43,6 +43,8 @@ namespace King {
 		int GetWidth() const;
 		int GetHeight() const;
 
+		void ResizeWindow(unsigned int width, unsigned int height);
+
 	private:
 		struct EngineImplementation;
 		std::unique_ptr<EngineImplementation> mPimpl;

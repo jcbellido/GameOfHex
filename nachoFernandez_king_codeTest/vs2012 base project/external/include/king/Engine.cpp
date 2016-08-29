@@ -218,6 +218,12 @@ namespace King {
 		return WindowHeight;
 	}
 
+	// DIVERGENCE
+	void Engine::ResizeWindow(unsigned int width, unsigned int height) {
+		mPimpl->mSdlWindow.Resize(width, height);
+	}
+	// ~DIVERGENCE
+
 	void Engine::EngineImplementation::Start() {
 		while (!mQuit) {
 			SDL_GL_SwapWindow(mSdlWindow);
