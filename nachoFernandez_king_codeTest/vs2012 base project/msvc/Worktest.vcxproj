@@ -85,6 +85,7 @@
     <ClCompile Include="..\src\cpp\Board.cpp" />
     <ClCompile Include="..\src\cpp\Tile.cpp" />
     <ClCompile Include="..\src\cpp\MainGame.cpp" />
+    <ClCompile Include="..\src\cpp\Timer.cpp" />
     <ClCompile Include="..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +103,7 @@
     <ClInclude Include="..\src\h\Tile.h" />
     <ClInclude Include="..\src\h\Constants.h" />
     <ClInclude Include="..\src\h\MainGame.h" />
+    <ClInclude Include="..\src\h\Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
