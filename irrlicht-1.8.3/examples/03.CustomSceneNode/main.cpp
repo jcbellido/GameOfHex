@@ -26,6 +26,7 @@ using namespace irr;
 
 #ifdef _MSC_VER
 #pragma comment(lib, "Irrlicht.lib")
+#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
 
 /*
