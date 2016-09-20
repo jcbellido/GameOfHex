@@ -44,7 +44,7 @@ MAX_SLEEP = 1000
 
 
 def calculate_checksum(source_string):
-	""" 
+	""" lolas
 	A port of the functionality of in_cksum() from ping.c
 	Ideally this would act on the string as a series of 16-bit ints (host
 	packed), but this works.
