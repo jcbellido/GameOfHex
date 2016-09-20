@@ -141,11 +141,21 @@ namespace King {
 
 		surface.Bind();
 
+		float displacement = 10;
+
 		glBegin(GL_QUADS);
+
 		glTexCoord2i(0, 1); glVertex2i(0, surface.Height());
 		glTexCoord2i(1, 1); glVertex2i(surface.Width(), surface.Height());
 		glTexCoord2i(1, 0); glVertex2i(surface.Width(), 0);
 		glTexCoord2i(0, 0); glVertex2i(0, 0);
+
+
+		glTexCoord2i(0, 1); glVertex2i(0 + displacement, surface.Height() + displacement);
+		glTexCoord2i(1, 1); glVertex2i(surface.Width() + displacement, surface.Height() + displacement);
+		glTexCoord2i(1, 0); glVertex2i(surface.Width() + displacement, 0 + displacement);
+		glTexCoord2i(0, 0); glVertex2i(0 + displacement, 0 + displacement);
+
 		glEnd();
 	}
 
