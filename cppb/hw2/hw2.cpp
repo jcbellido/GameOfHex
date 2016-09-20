@@ -1,5 +1,6 @@
 #include <irrlicht.h>
 #include "driverChoice.h"
+#include "hexagon.h"
 
 using namespace irr;
 
@@ -33,15 +34,22 @@ int main()
 	ISceneManager* smgr = device->getSceneManager();
 	IGUIEnvironment* guienv = device->getGUIEnvironment();
 
+	// Reference only ... given that I'll need some debug texts at some point ... most probably
 	guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",
 		rect<s32>(10, 10, 260, 22), true);
 
 	auto fpsReference = guienv->addStaticText(L"FPS", rect<s32>(10, 30, 260, 42), true);
+	smgr->addCameraSceneNode(0, vector3df(0, 0, -10), vector3df(0, 0, 0));
 
-	smgr->addCameraSceneNode(0, vector3df(0, 30, -40), vector3df(0, 5, 0));
+	// Create the first hexagon ever in my code
+	HexagonNode *myNode =
+		new HexagonNode(smgr->getRootSceneNode(), smgr, 666, 
+			irr::core::vector3d<f32>(0,0,0), 1);
+
+	myNode->drop();
+	myNode = nullptr; 
 
 	int fps = -1;
-
 	while (device->run())
 	{
 		if (device->isWindowActive())
