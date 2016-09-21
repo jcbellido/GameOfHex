@@ -1,6 +1,8 @@
 #include <irrlicht.h>
-#include "driverChoice.h"
+
 #include "boardview.h"
+#include "driverChoice.h"
+#include "interaction.h"
 
 using namespace irr;
 
@@ -29,37 +31,17 @@ int main()
 		return 1;
 
 	device->setWindowCaption(L"The Game of Hex - Irrlicht based");
-	device->setResizable(true);
 
 	IVideoDriver* driver = device->getVideoDriver();
 	ISceneManager* smgr = device->getSceneManager();
 	IGUIEnvironment* guienv = device->getGUIEnvironment();
 
-	/*
-	To make the font a little bit nicer, we load an external font
-	and set it as the new default font in the skin.
-	To keep the standard font for tool tip text, we set it to
-	the built-in font.
-	*/
-
-	IGUISkin* skin = guienv->getSkin();
-	IGUIFont* font = guienv->getFont("../../irrlicht-1.8.3/media/fontlucida.png");
-	if (font)
-		skin->setFont(font);
-
-	skin->setFont(guienv->getBuiltInFont(), EGDF_TOOLTIP);
-
-	guienv->addStaticText(	L"The game of Hex.", 
-							rect<s32>(10, 10, 260, 28), 
-							true, 
-							true,	// word wrap
-							0,		// parent
-							-1,		// id
-							true);	// fill background
-
+	// Useful for checking how clogged the system is right now
 	auto fpsReference = guienv->addStaticText(L"FPS", rect<s32>(10, 30, 260, 48), true, true, 0, -1, true);
 
 	BoardView boardView = BoardView(smgr, irr::core::vector3d<f32>(0, 0, 0), 11 ,1);
+
+	auto hg = HexGUI(device, guienv, &boardView);
 
 	auto board_center = boardView.GetBoardCenter();
 	smgr->addCameraSceneNode(0, 

@@ -29,6 +29,9 @@ public:
 	// Testing the coloring of the cells, randomizes the Cell states
 	void SetCellState(u32 row, u32 column, CellState new_state);
 
+	// All the cells to the Empty state
+	void ResetBoard();
+
 protected:
 	core::vector3d<f32> first_hexagon_place;
 	u32 board_dimension;

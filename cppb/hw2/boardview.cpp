@@ -80,3 +80,12 @@ void BoardView::SetCellState(u32 row, u32 column, CellState new_state)
 	u32 index = row * board_dimension + column;
 	hexagons[index]->SetCellState(new_state);
 }
+
+
+void BoardView::ResetBoard()
+{
+	for (auto h : hexagons)
+	{
+		h->SetCellState(CellState::Empty);
+	}
+}
