@@ -69,3 +69,31 @@ video::SMaterial& HexagonNode::getMaterial(u32 i)
 {
 	return Material;
 }
+
+void HexagonNode::SetCellState(CellState to_state)
+{
+	if (current_state == to_state)
+		return;
+
+	switch (to_state)
+	{
+	case (CellState::Empty):
+		Vertices[0].Color = color_two;
+		for (int index = 1; index < 7; index++)
+			Vertices[index].Color = color_one;
+		break;
+	case (CellState::Blue):
+		for (int index = 0; index < 7; index++)
+			Vertices[index].Color = color_blue;
+		break;
+	case (CellState::Red):
+		for (int index = 0; index < 7; index++)
+			Vertices[index].Color = color_red;
+		break;
+	default: 
+		// Permission to freak out
+		break;
+	}
+
+	current_state = to_state;
+}

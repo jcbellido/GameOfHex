@@ -1,6 +1,9 @@
 #pragma once
 
+#pragma warning(disable: 4244) // possible loss of data
+
 #include <irrlicht.h>
+#include "gamestates.h"
 
 using namespace irr;
 
@@ -25,9 +28,18 @@ public:
 	virtual u32 getMaterialCount() const;
 	virtual video::SMaterial& getMaterial(u32 i);
 
+public: 
+	void SetCellState(CellState to_state);
+
 protected:
 	const video::SColor color_one = video::SColor(255, 46, 96, 148);
 	const video::SColor color_two = video::SColor(255, 209, 122, 46);
+	
+	// Sacar esto a las constantes del juego? 
+	const video::SColor color_red = video::SColor(255, 220, 25, 25);
+	const video::SColor color_blue = video::SColor(255, 25, 25, 220);
+
+	CellState current_state = CellState::Empty;
 
 private:
 	inline irr::core::vector3d<f32> compute_corner(int i, f32 size) const

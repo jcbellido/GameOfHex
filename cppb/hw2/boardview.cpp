@@ -33,7 +33,7 @@ BoardView::BoardView(	scene::ISceneManager* smgr,
 	}
 }
 
-const core::vector3d<f32>& BoardView::GetBoardCenter() const
+const core::vector3d<f32> BoardView::GetBoardCenter() const
 {
 	core::vector3d<f32> board_center = first_hexagon_place;
 	board_center.X += hexagon_width * board_dimension / 1.5;
@@ -52,6 +52,6 @@ void BoardView::RandomizeBoard() const
 {
 	for (auto h : hexagons)
 	{
-
+		meter aqui un randomize entre el 0 y el maximo de colores ... 
 	}
 }

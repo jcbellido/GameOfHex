@@ -1,8 +1,11 @@
 #pragma once
 
+#pragma warning(disable: 4244) // possible loss of data
+
 #include <irrlicht.h>
 #include <vector>
 #include "hexagon.h"
+#include "gamestates.h"
 
 using namespace irr;
 using namespace std;
@@ -15,7 +18,7 @@ public:
 		u32 board_dimension,
 		f32 hexagon_size);
 
-	const core::vector3d<f32>& GetBoardCenter() const;
+	const core::vector3d<f32> GetBoardCenter() const;
 	f32 GetBoardWidth() const; 
 
 public: 
