@@ -32,6 +32,8 @@ public:
 	// All the cells to the Empty state
 	void ResetBoard();
 
+	void ClickOnBoard(const core::vector3d<f32> &click_position);
+
 protected:
 	core::vector3d<f32> first_hexagon_place;
 	u32 board_dimension;

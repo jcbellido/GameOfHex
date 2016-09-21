@@ -15,6 +15,7 @@ struct SAppContext
 {
 	IrrlichtDevice *device;
 	BoardView *board;
+	ISceneManager* smgr;
 };
 
 // Define some values that we'll use to identify individual GUI controls.
@@ -28,18 +29,24 @@ enum
 class MyEventReceiver : public IEventReceiver
 {
 public:
-	MyEventReceiver(SAppContext & context) : Context(context) { }
+	MyEventReceiver(SAppContext & context) : Context(context)
+	{ 
+		collMan = context.smgr->getSceneCollisionManager();
+		back_plane = core::plane3d<f32>(core::vector3d<f32>(0, 0, 0), core::vector3d<f32>(0, 0, -1));
+	}
 
 	virtual bool OnEvent(const SEvent& event);
 
 private:
 	SAppContext & Context;
+	scene::ISceneCollisionManager* collMan = nullptr;
+	core::plane3d<f32> back_plane;
 };
 
 class HexGUI
 {
 public:
-	HexGUI(IrrlichtDevice *device, gui::IGUIEnvironment* guienv, BoardView *boardView)
+	HexGUI(IrrlichtDevice *device, gui::IGUIEnvironment* guienv, BoardView *boardView, ISceneManager* smgr)
 	{
 		IGUISkin* skin = guienv->getSkin();
 		IGUIFont* font = guienv->getFont("../../irrlicht-1.8.3/media/fontlucida.png");
@@ -57,6 +64,7 @@ public:
 		// Store the appropriate data in a context structure.
 		m_context.device = device;
 		m_context.board = boardView;
+		m_context.smgr = smgr;
 
 		// Then create the event receiver, giving it that context structure.
 		m_receiver = new MyEventReceiver(m_context);

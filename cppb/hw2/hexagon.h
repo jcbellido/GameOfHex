@@ -15,11 +15,11 @@ protected:
 	video::S3DVertex Vertices[7];	// for this case ... let's include the center
 	video::SMaterial Material;
 
-public: 
+public:
 	static const int hexagon_sides = 6;
 
 	HexagonNode(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id, const irr::core::vector3d<f32>& center, f32 size);
-	
+
 	virtual void OnRegisterSceneNode();
 
 	virtual void HexagonNode::render();
@@ -28,8 +28,10 @@ public:
 	virtual u32 getMaterialCount() const;
 	virtual video::SMaterial& getMaterial(u32 i);
 
-public: 
+public:
 	void SetCellState(CellState to_state);
+
+	const irr::core::vector3d<f32> GetCenter() const { return center; }
 
 protected:
 	const video::SColor color_one = video::SColor(255, 46, 96, 148);

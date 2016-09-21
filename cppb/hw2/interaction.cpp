@@ -33,6 +33,17 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 		default:
 			break;
 		}
+	} 
+	else if (event.EventType == EET_MOUSE_INPUT_EVENT)
+	{
+		if (event.MouseInput.Event == EMIE_LMOUSE_DOUBLE_CLICK)
+		{
+			line3d<f32> ray = collMan->getRayFromScreenCoordinates(Context.device->getCursorControl()->getPosition(), Context.smgr->getActiveCamera());
+			core::vector3d<f32> intersection(-100, 0, 0);
+			back_plane.getIntersectionWithLimitedLine(ray.start, ray.end, intersection);
+			// Solucion temporal ... solo para determinar que el click sobre el tablero funciona
+			Context.board->ClickOnBoard(intersection);
+		}
 	}
 
 	return false;

@@ -8,7 +8,7 @@ BoardView::BoardView(	scene::ISceneManager* smgr,
 	first_hexagon_place(first_hexagon_place), board_dimension(board_dimension), hexagon_size(hexagon_size)
 {
 	core::vector3d<f32> current_center = first_hexagon_place;
-	s32 current_id = 0;
+	u32 current_id = 0;
 	// Separation calculations
 	hexagon_height = 2 * hexagon_size;
 	vertical_separation = hexagon_height * (3.0 / 4.0);
@@ -88,4 +88,28 @@ void BoardView::ResetBoard()
 	{
 		h->SetCellState(CellState::Empty);
 	}
+}
+
+
+void BoardView::ClickOnBoard(const core::vector3d<f32> &click_position)
+{
+	HexagonNode *closest_hexagon = nullptr;
+	for (auto h : hexagons)
+	{
+		if (closest_hexagon == nullptr)
+		{
+			closest_hexagon = h;
+			continue;
+		}
+		if (h->GetCenter().getDistanceFrom(click_position) < closest_hexagon->GetCenter().getDistanceFrom(click_position))
+		{
+			closest_hexagon = h;
+		}
+	}
+	
+	if (closest_hexagon->GetCenter().getDistanceFrom(click_position) < hexagon_height)
+	{
+		closest_hexagon->SetCellState(CellState::Red);
+	}
+
 }

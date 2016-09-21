@@ -12,9 +12,11 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
-#ifdef _MSC_VER
+#ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")
+#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
+
 
 #include <iostream>
 
@@ -41,12 +43,14 @@ int main()
 
 	BoardView boardView = BoardView(smgr, irr::core::vector3d<f32>(0, 0, 0), 11 ,1);
 
-	auto hg = HexGUI(device, guienv, &boardView);
-
 	auto board_center = boardView.GetBoardCenter();
 	smgr->addCameraSceneNode(0, 
 		vector3df(board_center.X, board_center.Y, - boardView.GetBoardWidth() * 0.85), 
 		board_center);
+
+	auto hg = HexGUI(device, guienv, &boardView, smgr);
+
+	// collision plane
 
 	int fps = -1;
 	while (device->run())
