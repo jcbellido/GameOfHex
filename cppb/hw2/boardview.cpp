@@ -1,4 +1,5 @@
 #include "boardview.h"
+#include "math_utils.h"
 
 BoardView::BoardView(	scene::ISceneManager* smgr, 
 						const core::vector3d<f32>& first_hexagon_place, 
@@ -33,6 +34,7 @@ BoardView::BoardView(	scene::ISceneManager* smgr,
 	}
 }
 
+
 const core::vector3d<f32> BoardView::GetBoardCenter() const
 {
 	core::vector3d<f32> board_center = first_hexagon_place;
@@ -42,9 +44,16 @@ const core::vector3d<f32> BoardView::GetBoardCenter() const
 	return board_center;
 }
 
+
 f32 BoardView::GetBoardWidth() const
 {
 	return hexagon_width * board_dimension;
+}
+
+
+u32 BoardView::GetBoardDimension() const
+{
+	return board_dimension;
 }
 
 
@@ -52,6 +61,22 @@ void BoardView::RandomizeBoard() const
 {
 	for (auto h : hexagons)
 	{
-		meter aqui un randomize entre el 0 y el maximo de colores ... 
+		int i = rand_int_in_positive_range(0, 2);
+		if (i == 0)
+			h->SetCellState(CellState::Empty);
+		if (i == 1)
+			h->SetCellState(CellState::Blue);
+		if (i == 2)
+			h->SetCellState(CellState::Red);
 	}
+}
+
+
+void BoardView::SetCellState(u32 row, u32 column, CellState new_state)
+{
+	if ((row >= board_dimension) || (column >= board_dimension))
+		return;
+
+	u32 index = row * board_dimension + column;
+	hexagons[index]->SetCellState(new_state);
 }

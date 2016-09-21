@@ -20,9 +20,14 @@ public:
 
 	const core::vector3d<f32> GetBoardCenter() const;
 	f32 GetBoardWidth() const; 
+	u32 GetBoardDimension() const; 
 
 public: 
+	// Testing the coloring of the cells, randomizes the Cell states
 	void RandomizeBoard() const; 
+
+	// Testing the coloring of the cells, randomizes the Cell states
+	void SetCellState(u32 row, u32 column, CellState new_state);
 
 protected:
 	core::vector3d<f32> first_hexagon_place;
