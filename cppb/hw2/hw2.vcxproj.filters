@@ -33,6 +33,12 @@
     <ClInclude Include="hexagon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="boardview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gamestates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="hexagon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boardview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

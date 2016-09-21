@@ -1,6 +1,6 @@
 #include <irrlicht.h>
 #include "driverChoice.h"
-#include "hexagon.h"
+#include "boardview.h"
 
 using namespace irr;
 
@@ -28,26 +28,43 @@ int main()
 	if (!device)
 		return 1;
 
-	device->setWindowCaption(L"Hello World! - Irrlicht Engine Demo");
+	device->setWindowCaption(L"The Game of Hex - Irrlicht based");
+	device->setResizable(true);
 
 	IVideoDriver* driver = device->getVideoDriver();
 	ISceneManager* smgr = device->getSceneManager();
 	IGUIEnvironment* guienv = device->getGUIEnvironment();
 
-	// Reference only ... given that I'll need some debug texts at some point ... most probably
-	guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",
-		rect<s32>(10, 10, 260, 22), true);
+	/*
+	To make the font a little bit nicer, we load an external font
+	and set it as the new default font in the skin.
+	To keep the standard font for tool tip text, we set it to
+	the built-in font.
+	*/
 
-	auto fpsReference = guienv->addStaticText(L"FPS", rect<s32>(10, 30, 260, 42), true);
-	smgr->addCameraSceneNode(0, vector3df(0, 0, -10), vector3df(0, 0, 0));
+	IGUISkin* skin = guienv->getSkin();
+	IGUIFont* font = guienv->getFont("../../irrlicht-1.8.3/media/fontlucida.png");
+	if (font)
+		skin->setFont(font);
 
-	// Create the first hexagon ever in my code
-	HexagonNode *myNode =
-		new HexagonNode(smgr->getRootSceneNode(), smgr, 666, 
-			irr::core::vector3d<f32>(0,0,0), 1);
+	skin->setFont(guienv->getBuiltInFont(), EGDF_TOOLTIP);
 
-	myNode->drop();
-	myNode = nullptr; 
+	guienv->addStaticText(	L"The game of Hex.", 
+							rect<s32>(10, 10, 260, 28), 
+							true, 
+							true,	// word wrap
+							0,		// parent
+							-1,		// id
+							true);	// fill background
+
+	auto fpsReference = guienv->addStaticText(L"FPS", rect<s32>(10, 30, 260, 48), true, true, 0, -1, true);
+
+	BoardView boardView = BoardView(smgr, irr::core::vector3d<f32>(0, 0, 0), 11 ,1);
+
+	auto board_center = boardView.GetBoardCenter();
+	smgr->addCameraSceneNode(0, 
+		vector3df(board_center.X, board_center.Y, - boardView.GetBoardWidth() * 0.85), 
+		board_center);
 
 	int fps = -1;
 	while (device->run())
@@ -55,7 +72,7 @@ int main()
 		if (device->isWindowActive())
 		{
 
-			driver->beginScene(true, true, SColor(255, 100, 101, 140));
+			driver->beginScene(true, true, SColor(255, 50, 51, 70));
 
 			smgr->drawAll();
 

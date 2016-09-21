@@ -15,7 +15,7 @@ protected:
 public: 
 	static const int hexagon_sides = 6;
 
-	HexagonNode(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id, const irr::core::vector3d<f32>& center, double size);
+	HexagonNode(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id, const irr::core::vector3d<f32>& center, f32 size);
 	
 	virtual void OnRegisterSceneNode();
 
@@ -24,6 +24,10 @@ public:
 	virtual const core::aabbox3d<f32>& getBoundingBox() const;
 	virtual u32 getMaterialCount() const;
 	virtual video::SMaterial& getMaterial(u32 i);
+
+protected:
+	const video::SColor color_one = video::SColor(255, 46, 96, 148);
+	const video::SColor color_two = video::SColor(255, 209, 122, 46);
 
 private:
 	inline irr::core::vector3d<f32> compute_corner(int i, f32 size) const
