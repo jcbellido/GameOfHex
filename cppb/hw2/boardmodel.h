@@ -1,7 +1,9 @@
 #pragma once
 
 #include <algorithm>
+#include <bitset>
 #include <random>
+#include <set>
 #include <vector>
 
 #include "gamestates.h"
@@ -59,6 +61,7 @@ private:
 		return false;
 	}
 
+private:
 	inline unsigned int GetPositionFromCoordinate(unsigned int row, unsigned int column) const
 	{
 		return row * size + column;

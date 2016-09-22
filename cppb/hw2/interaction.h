@@ -18,6 +18,7 @@ struct SAppContext
 	BoardView *board;
 	ISceneManager* smgr;
 	BoardModel *board_model;
+	IGUIStaticText *board_status;
 };
 
 // Define some values that we'll use to identify individual GUI controls.
@@ -26,6 +27,7 @@ enum
 	GUI_ID_QUIT_BUTTON = 101,
 	GUI_ID_RANDOMIZE_BOARD_BUTTON = 102,
 	GUI_ID_RESET_GAME = 103,
+	GUI_ID_EVAULATE_BOARD = 104,
 };
 
 class MyEventReceiver : public IEventReceiver
@@ -62,12 +64,17 @@ public:
 		guienv->addButton(rect<s32>(730, 560, 780, 560 + 26), 0, GUI_ID_QUIT_BUTTON, L"Quit", L"Exits Program");
 
 		guienv->addButton(rect<s32>(730, 30, 780, 30 + 26), 0, GUI_ID_RESET_GAME, L"Reset", L"Reset Game");
+		
+		guienv->addButton(rect<s32>(730, 60, 780, 60 + 26), 0, GUI_ID_EVAULATE_BOARD, L"Evaluate", L"Evaluate board");
+
+		auto board_status = guienv->addStaticText(L"No board status", rect<s32>(10, 10, 260, 28), true, true, 0, -1, true);
 
 		// Store the appropriate data in a context structure.
 		m_context.device = device;
 		m_context.board = boardView;
 		m_context.smgr = smgr;
 		m_context.board_model = board_model;
+		m_context.board_status = board_status;
 
 		// Then create the event receiver, giving it that context structure.
 		m_receiver = new MyEventReceiver(m_context);

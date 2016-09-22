@@ -18,15 +18,40 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 				return true;
 
 			case GUI_ID_RANDOMIZE_BOARD_BUTTON:
+			{
 				Context.board_model->PopulateABoardAtRandom();
 				Context.board->UpdateFromModel();
+				auto winner = Context.board_model->ComputeWinningPlayer();
+				if (winner == Player::Player_One)
+				{
+					core::stringw status = "Player one (red) horizontal wins";
+					Context.board_status->setText(status.c_str());
+				}
+				else if (winner == Player::Player_Two)
+				{
+					core::stringw status = "Player two (blue) vertical wins";
+					Context.board_status->setText(status.c_str());
+				}
+				else
+				{
+					core::stringw status = "I dont have a clue";
+					Context.board_status->setText(status.c_str());
+				}
 				return true;
-
+			}
+			case GUI_ID_EVAULATE_BOARD:
+			{
+				Context.board_model->ComputeWinningPlayer();
+				return true;
+			}
 			case GUI_ID_RESET_GAME:
+			{
 				Context.board_model->ResetBoard();
 				Context.board->ResetBoard();
+				core::stringw status = "Board reseted";
+				Context.board_status->setText(status.c_str());
 				return true;
-
+			}
 			default:
 				return false;
 			}
