@@ -250,3 +250,17 @@ bool BoardModel::ClickOnStone(unsigned int position, CellState to_color)
 	}
 	return false;
 }
+
+
+void BoardModel::ComputeMove(CellState cpu_color)
+{
+	while (true)
+	{
+		unsigned int position = rand_int_in_positive_range(0, size * size - 1);
+		if (stones[position] == CellState::Empty)
+		{
+			stones[position] = cpu_color;
+			return;
+		}
+	}
+}

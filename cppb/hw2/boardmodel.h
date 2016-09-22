@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "gamestates.h"
+#include "math_utils.h"
 
 using namespace std;
 
@@ -26,6 +27,8 @@ public:
 	bool ClickOnStone(unsigned int position, CellState to_color);
 
 	bool CheckColorWins(CellState color_to_check) const;
+
+	void ComputeMove(CellState cpu_color);
 
 private:
 	void CreateEdges();

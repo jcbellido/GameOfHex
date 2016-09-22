@@ -89,9 +89,24 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 						}
 						else
 						{
+							// FIXME esto no va aqui ... esto es un mensaje entre el board model y el main loop
 							core::stringw status = "Waiting for CPU move";
 							Context.board_status->setText(status.c_str());
 							Context.hexGUI->EndOfHumanTurn();
+							Context.board_model->ComputeMove(Context.hexGUI->GetCPUColor());
+							Context.board->UpdateFromModel();
+							if (Context.board_model->CheckColorWins(Context.hexGUI->GetCPUColor()))
+							{
+								core::stringw status = "CPU Wins";
+								Context.board_status->setText(status.c_str());
+								Context.hexGUI->CPUWins();
+							}
+							else
+							{
+								core::stringw status = "Waiting for Player move";
+								Context.board_status->setText(status.c_str());
+								Context.hexGUI->EndOfCPUTurn();
+							}
 						}
 					}
 				}

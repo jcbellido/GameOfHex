@@ -113,7 +113,9 @@ public:
 	CellState GetHumanColor() const { return human_color; }
 	CellState GetCPUColor() const { return cpu_color; }
 	void HumanWins() { current_state = GameStates::Finished; }
+	void CPUWins() { current_state = GameStates::Finished; }
 	void EndOfHumanTurn() { current_state = GameStates::Waiting_CPU; }
+	void EndOfCPUTurn() { current_state = GameStates::Waiting_Human; }
 
 public: 
 	void StartGameByHuman() 
