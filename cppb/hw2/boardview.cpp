@@ -4,8 +4,9 @@
 BoardView::BoardView(	scene::ISceneManager* smgr, 
 						const core::vector3d<f32>& first_hexagon_place, 
 						u32 board_dimension,
-						f32 hexagon_size):
-	first_hexagon_place(first_hexagon_place), board_dimension(board_dimension), hexagon_size(hexagon_size)
+						f32 hexagon_size,
+						BoardModel *board_model):
+	first_hexagon_place(first_hexagon_place), board_dimension(board_dimension), hexagon_size(hexagon_size), board_model(board_model)
 {
 	core::vector3d<f32> current_center = first_hexagon_place;
 	u32 current_id = 0;
@@ -112,4 +113,14 @@ void BoardView::ClickOnBoard(const core::vector3d<f32> &click_position)
 		closest_hexagon->SetCellState(CellState::Red);
 	}
 
+}
+
+void BoardView::UpdateFromModel()
+{
+	unsigned int position = 0;
+	for (auto h : hexagons)
+	{
+		h->SetCellState(board_model->GetStoneColor(position));
+		position++;
+	}
 }

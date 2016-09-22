@@ -151,6 +151,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="boardmodel.h" />
     <ClInclude Include="boardview.h" />
     <ClInclude Include="gamestates.h" />
     <ClInclude Include="Graph.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="boardmodel.cpp" />
     <ClCompile Include="boardview.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="hexagon.cpp" />

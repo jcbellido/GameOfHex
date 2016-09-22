@@ -3,6 +3,7 @@
 #include "boardview.h"
 #include "driverChoice.h"
 #include "interaction.h"
+#include "boardmodel.h"
 
 using namespace irr;
 
@@ -41,16 +42,18 @@ int main()
 	// Useful for checking how clogged the system is right now
 	auto fpsReference = guienv->addStaticText(L"FPS", rect<s32>(10, 30, 260, 48), true, true, 0, -1, true);
 
-	BoardView boardView = BoardView(smgr, irr::core::vector3d<f32>(0, 0, 0), 11 ,1);
+	const u32 board_size = 5;
 
+	auto board_model = BoardModel(board_size);
+	BoardView boardView = BoardView(smgr, irr::core::vector3d<f32>(0, 0, 0), board_size ,1, &board_model);
+
+	auto hg = HexGUI(device, guienv, &boardView, smgr, &board_model);
+
+	// Camera placement
 	auto board_center = boardView.GetBoardCenter();
-	smgr->addCameraSceneNode(0, 
-		vector3df(board_center.X, board_center.Y, - boardView.GetBoardWidth() * 0.85), 
+	smgr->addCameraSceneNode(0,
+		vector3df(board_center.X, board_center.Y, -boardView.GetBoardWidth() * 0.85),
 		board_center);
-
-	auto hg = HexGUI(device, guienv, &boardView, smgr);
-
-	// collision plane
 
 	int fps = -1;
 	while (device->run())

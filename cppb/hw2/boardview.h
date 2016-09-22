@@ -6,6 +6,7 @@
 #include <vector>
 #include "hexagon.h"
 #include "gamestates.h"
+#include "boardmodel.h"
 
 using namespace irr;
 using namespace std;
@@ -16,7 +17,8 @@ public:
 	BoardView(scene::ISceneManager* smgr, 
 		const core::vector3d<f32>& first_hexagon_place,
 		u32 board_dimension,
-		f32 hexagon_size);
+		f32 hexagon_size,
+		BoardModel *board_model);
 
 	const core::vector3d<f32> GetBoardCenter() const;
 	f32 GetBoardWidth() const; 
@@ -34,6 +36,9 @@ public:
 
 	void ClickOnBoard(const core::vector3d<f32> &click_position);
 
+public: 
+	void UpdateFromModel();
+
 protected:
 	core::vector3d<f32> first_hexagon_place;
 	u32 board_dimension;
@@ -44,4 +49,5 @@ protected:
 	f32 hexagon_width;
 
 	vector<HexagonNode*> hexagons;
+	BoardModel *board_model;
 };

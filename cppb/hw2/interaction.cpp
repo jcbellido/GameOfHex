@@ -18,10 +18,12 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 				return true;
 
 			case GUI_ID_RANDOMIZE_BOARD_BUTTON:
-				Context.board->RandomizeBoard();
+				Context.board_model->PopulateABoardAtRandom();
+				Context.board->UpdateFromModel();
 				return true;
 
 			case GUI_ID_RESET_GAME:
+				Context.board_model->ResetBoard();
 				Context.board->ResetBoard();
 				return true;
 
@@ -38,6 +40,7 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 	{
 		if (event.MouseInput.Event == EMIE_LMOUSE_DOUBLE_CLICK)
 		{
+			// Just in case is the human players turn to move, then, accept the event
 			line3d<f32> ray = collMan->getRayFromScreenCoordinates(Context.device->getCursorControl()->getPosition(), Context.smgr->getActiveCamera());
 			core::vector3d<f32> intersection(-100, 0, 0);
 			back_plane.getIntersectionWithLimitedLine(ray.start, ray.end, intersection);

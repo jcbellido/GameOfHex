@@ -2,6 +2,7 @@
 
 #include <irrlicht.h>
 #include "boardview.h"
+#include "boardmodel.h"
 
 using namespace irr;
 
@@ -16,6 +17,7 @@ struct SAppContext
 	IrrlichtDevice *device;
 	BoardView *board;
 	ISceneManager* smgr;
+	BoardModel *board_model;
 };
 
 // Define some values that we'll use to identify individual GUI controls.
@@ -46,7 +48,7 @@ private:
 class HexGUI
 {
 public:
-	HexGUI(IrrlichtDevice *device, gui::IGUIEnvironment* guienv, BoardView *boardView, ISceneManager* smgr)
+	HexGUI(IrrlichtDevice *device, gui::IGUIEnvironment* guienv, BoardView *boardView, ISceneManager* smgr, BoardModel *board_model)
 	{
 		IGUISkin* skin = guienv->getSkin();
 		IGUIFont* font = guienv->getFont("../../irrlicht-1.8.3/media/fontlucida.png");
@@ -55,7 +57,7 @@ public:
 
 		skin->setFont(guienv->getBuiltInFont(), EGDF_TOOLTIP);
 
-		guienv->addButton(rect<s32>(30, 560, 130, 560 + 26), 0, GUI_ID_RANDOMIZE_BOARD_BUTTON, L"Randomize", L"Randomize board (just graphical)");
+		guienv->addButton(rect<s32>(30, 560, 130, 560 + 26), 0, GUI_ID_RANDOMIZE_BOARD_BUTTON, L"Randomize", L"Randomize board, shuffles the board model");
 
 		guienv->addButton(rect<s32>(730, 560, 780, 560 + 26), 0, GUI_ID_QUIT_BUTTON, L"Quit", L"Exits Program");
 
@@ -65,6 +67,7 @@ public:
 		m_context.device = device;
 		m_context.board = boardView;
 		m_context.smgr = smgr;
+		m_context.board_model = board_model;
 
 		// Then create the event receiver, giving it that context structure.
 		m_receiver = new MyEventReceiver(m_context);
