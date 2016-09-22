@@ -23,6 +23,10 @@ public:
 	const CellState GetStoneColor(unsigned int row, unsigned int column) const;
 	const CellState GetStoneColor(unsigned int position) const;
 
+	bool ClickOnStone(unsigned int position, CellState to_color);
+
+	bool CheckColorWins(CellState color_to_check) const;
+
 private:
 	void CreateEdges();
 	inline bool IsCentralNode(unsigned int row, unsigned int column) const

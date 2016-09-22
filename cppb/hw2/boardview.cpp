@@ -92,7 +92,7 @@ void BoardView::ResetBoard()
 }
 
 
-void BoardView::ClickOnBoard(const core::vector3d<f32> &click_position)
+bool BoardView::ClickOnBoard(const core::vector3d<f32> &click_position, u32 &id)
 {
 	HexagonNode *closest_hexagon = nullptr;
 	for (auto h : hexagons)
@@ -108,11 +108,12 @@ void BoardView::ClickOnBoard(const core::vector3d<f32> &click_position)
 		}
 	}
 	
-	if (closest_hexagon->GetCenter().getDistanceFrom(click_position) < hexagon_height)
+	if (closest_hexagon->GetCenter().getDistanceFrom(click_position) < hexagon_size * 0.9)	// just a graphical tweak
 	{
-		closest_hexagon->SetCellState(CellState::Red);
-	}
-
+		id = closest_hexagon->getID();
+		return true;
+	} 
+	return false;
 }
 
 void BoardView::UpdateFromModel()

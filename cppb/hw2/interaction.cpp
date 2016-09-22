@@ -21,27 +21,13 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 			{
 				Context.board_model->PopulateABoardAtRandom();
 				Context.board->UpdateFromModel();
-				auto winner = Context.board_model->ComputeWinningPlayer();
-				if (winner == Player::Player_One)
-				{
-					core::stringw status = "Player one (red) horizontal wins";
-					Context.board_status->setText(status.c_str());
-				}
-				else if (winner == Player::Player_Two)
-				{
-					core::stringw status = "Player two (blue) vertical wins";
-					Context.board_status->setText(status.c_str());
-				}
-				else
-				{
-					core::stringw status = "I dont have a clue";
-					Context.board_status->setText(status.c_str());
-				}
+				UpdateBoardWinningLabel();
 				return true;
 			}
-			case GUI_ID_EVAULATE_BOARD:
+			case GUI_ID_EVALUATE_BOARD:
 			{
 				Context.board_model->ComputeWinningPlayer();
+				UpdateBoardWinningLabel();
 				return true;
 			}
 			case GUI_ID_RESET_GAME:
@@ -50,6 +36,24 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 				Context.board->ResetBoard();
 				core::stringw status = "Board reseted";
 				Context.board_status->setText(status.c_str());
+				return true;
+			}
+			case GUI_ID_PLAYER_STARTS:
+			{
+				Context.board_model->ResetBoard();
+				Context.board->ResetBoard();
+				core::stringw status = "Waiting for Player move";
+				Context.board_status->setText(status.c_str());
+				Context.hexGUI->StartGameByHuman();
+				return true;
+			}
+			case GUI_ID_CPU_STARTS:
+			{
+				Context.board_model->ResetBoard();
+				Context.board->ResetBoard();
+				core::stringw status = "Waiting for CPU move";
+				Context.board_status->setText(status.c_str());
+				Context.hexGUI->StartGameByCPU();
 				return true;
 			}
 			default:
@@ -65,14 +69,57 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 	{
 		if (event.MouseInput.Event == EMIE_LMOUSE_DOUBLE_CLICK)
 		{
-			// Just in case is the human players turn to move, then, accept the event
-			line3d<f32> ray = collMan->getRayFromScreenCoordinates(Context.device->getCursorControl()->getPosition(), Context.smgr->getActiveCamera());
-			core::vector3d<f32> intersection(-100, 0, 0);
-			back_plane.getIntersectionWithLimitedLine(ray.start, ray.end, intersection);
-			// Solucion temporal ... solo para determinar que el click sobre el tablero funciona
-			Context.board->ClickOnBoard(intersection);
+			if (Context.hexGUI->GetGameState() == GameStates::Waiting_Human)
+			{
+				line3d<f32> ray = collMan->getRayFromScreenCoordinates(Context.device->getCursorControl()->getPosition(), Context.smgr->getActiveCamera());
+				core::vector3d<f32> intersection(-100, 0, 0);
+				back_plane.getIntersectionWithLimitedLine(ray.start, ray.end, intersection);
+				u32 output_id; 
+				if (Context.board->ClickOnBoard(intersection, output_id))
+				{
+					if (Context.board_model->GetStoneColor(output_id) == CellState::Empty)
+					{
+						Context.board_model->ClickOnStone(output_id, Context.hexGUI->GetHumanColor());
+						Context.board->UpdateFromModel();
+						if (Context.board_model->CheckColorWins(Context.hexGUI->GetHumanColor()))
+						{
+							core::stringw status = "Player Wins";
+							Context.board_status->setText(status.c_str());
+							Context.hexGUI->HumanWins();
+						}
+						else
+						{
+							core::stringw status = "Waiting for CPU move";
+							Context.board_status->setText(status.c_str());
+							Context.hexGUI->EndOfHumanTurn();
+						}
+					}
+				}
+			}
+			return true;
 		}
 	}
-
 	return false;
+}
+
+
+void MyEventReceiver::UpdateBoardWinningLabel()
+{
+	auto winner = Context.board_model->ComputeWinningPlayer();
+	if (winner == Player::Player_One)
+	{
+		core::stringw status = "Player one (red) horizontal wins";
+		Context.board_status->setText(status.c_str());
+	}
+	else if (winner == Player::Player_Two)
+	{
+		core::stringw status = "Player two (blue) vertical wins";
+		Context.board_status->setText(status.c_str());
+	}
+	else
+	{
+		core::stringw status = "I dont have a clue";
+		Context.board_status->setText(status.c_str());
+	}
+
 }

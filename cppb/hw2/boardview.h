@@ -34,7 +34,7 @@ public:
 	// All the cells to the Empty state
 	void ResetBoard();
 
-	void ClickOnBoard(const core::vector3d<f32> &click_position);
+	bool ClickOnBoard(const core::vector3d<f32> &click_position, u32 &id);
 
 public: 
 	void UpdateFromModel();
