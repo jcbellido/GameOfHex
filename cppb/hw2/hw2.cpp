@@ -82,6 +82,13 @@ int main()
 		{
 			device->yield();
 		}
+
+		// Check the board logic
+		if (board_model.GetBoardState() == BoardStates::MoveReadyWaitingForViewUpdate)
+		{
+			hg.EndOfCPUTurn();
+			board_model.SetBoardToIdling();
+		}
 	}
 
 	device->drop();

@@ -83,7 +83,8 @@ public:
 
 		guienv->addButton(rect<s32>(715, 120, 780, 120 + 26), 0, GUI_ID_CPU_STARTS, L"CPU", L"Start game by CPU");
 
-		auto board_status = guienv->addStaticText(L"No board status", rect<s32>(10, 10, 260, 28), true, true, 0, -1, true);
+		auto static_text = guienv->addStaticText(L"No board status", rect<s32>(10, 10, 260, 28), true, true, 0, -1, true);
+		board_status = static_text;
 
 		// Store the appropriate data in a context structure.
 		m_context.device = device;
@@ -112,10 +113,33 @@ public:
 	GameStates GetGameState() const { return current_state; }
 	CellState GetHumanColor() const { return human_color; }
 	CellState GetCPUColor() const { return cpu_color; }
+	
 	void HumanWins() { current_state = GameStates::Finished; }
+	
 	void CPUWins() { current_state = GameStates::Finished; }
-	void EndOfHumanTurn() { current_state = GameStates::Waiting_CPU; }
-	void EndOfCPUTurn() { current_state = GameStates::Waiting_Human; }
+	
+	void EndOfHumanTurn() 
+	{ 
+		current_state = GameStates::Waiting_CPU; 
+		m_context.board_model->ComputeMove(m_context.hexGUI->GetCPUColor());
+	}
+	
+	void EndOfCPUTurn() 
+	{ 
+		m_context.board->UpdateFromModel();
+		current_state = GameStates::Waiting_Human; 
+		if (m_context.board_model->CheckColorWins(m_context.hexGUI->GetCPUColor()))
+		{
+			core::stringw status = "CPU Wins";
+			m_context.board_status->setText(status.c_str());
+			m_context.hexGUI->CPUWins();
+		}
+		else
+		{
+			core::stringw status = "Waiting for Player move";
+			m_context.board_status->setText(status.c_str());
+		}
+	}
 
 public: 
 	void StartGameByHuman() 
@@ -130,6 +154,7 @@ public:
 		current_state = GameStates::Waiting_CPU; 
 		human_color = CellState::Blue;
 		cpu_color = CellState::Red;
+		m_context.board_model->ComputeMove(m_context.hexGUI->GetCPUColor());
 	}
 
 protected: 
@@ -139,4 +164,5 @@ protected:
 	CellState human_color = CellState::Empty;
 	CellState cpu_color = CellState::Empty;
 	BoardModel *board_model;
+	IGUIStaticText *board_status;
 };

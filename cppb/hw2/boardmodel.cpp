@@ -254,13 +254,26 @@ bool BoardModel::ClickOnStone(unsigned int position, CellState to_color)
 
 void BoardModel::ComputeMove(CellState cpu_color)
 {
+	// assert board state is in Idling
+	board_state = BoardStates::Computing;
 	while (true)
 	{
 		unsigned int position = rand_int_in_positive_range(0, size * size - 1);
 		if (stones[position] == CellState::Empty)
 		{
 			stones[position] = cpu_color;
-			return;
+			break;
 		}
+	}
+	board_state = BoardStates::MoveReadyWaitingForViewUpdate;
+}
+
+
+void BoardModel::SetBoardToIdling()
+{
+	// assert board state is in Computing
+	if (board_state == BoardStates::MoveReadyWaitingForViewUpdate)
+	{
+		board_state = BoardStates::Idling;
 	}
 }

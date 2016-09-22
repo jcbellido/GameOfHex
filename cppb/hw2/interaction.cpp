@@ -81,6 +81,7 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 					{
 						Context.board_model->ClickOnStone(output_id, Context.hexGUI->GetHumanColor());
 						Context.board->UpdateFromModel();
+						// FIXME move this logic to interaction.h ... close to CPU logic handling
 						if (Context.board_model->CheckColorWins(Context.hexGUI->GetHumanColor()))
 						{
 							core::stringw status = "Player Wins";
@@ -89,24 +90,9 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 						}
 						else
 						{
-							// FIXME esto no va aqui ... esto es un mensaje entre el board model y el main loop
 							core::stringw status = "Waiting for CPU move";
 							Context.board_status->setText(status.c_str());
 							Context.hexGUI->EndOfHumanTurn();
-							Context.board_model->ComputeMove(Context.hexGUI->GetCPUColor());
-							Context.board->UpdateFromModel();
-							if (Context.board_model->CheckColorWins(Context.hexGUI->GetCPUColor()))
-							{
-								core::stringw status = "CPU Wins";
-								Context.board_status->setText(status.c_str());
-								Context.hexGUI->CPUWins();
-							}
-							else
-							{
-								core::stringw status = "Waiting for Player move";
-								Context.board_status->setText(status.c_str());
-								Context.hexGUI->EndOfCPUTurn();
-							}
 						}
 					}
 				}
@@ -117,7 +103,7 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 	return false;
 }
 
-
+// Deprecated most probably
 void MyEventReceiver::UpdateBoardWinningLabel()
 {
 	auto winner = Context.board_model->ComputeWinningPlayer();
@@ -136,5 +122,4 @@ void MyEventReceiver::UpdateBoardWinningLabel()
 		core::stringw status = "I dont have a clue";
 		Context.board_status->setText(status.c_str());
 	}
-
 }

@@ -11,6 +11,13 @@
 
 using namespace std;
 
+enum class BoardStates : unsigned int 
+{
+	Idling = 0,
+	Computing = 1, 
+	MoveReadyWaitingForViewUpdate = 2,
+};
+
 class BoardModel
 {
 public:
@@ -29,6 +36,10 @@ public:
 	bool CheckColorWins(CellState color_to_check) const;
 
 	void ComputeMove(CellState cpu_color);
+
+	BoardStates GetBoardState() const { return board_state; }
+
+	void SetBoardToIdling();
 
 private:
 	void CreateEdges();
@@ -78,4 +89,5 @@ protected:
 	unsigned int size = 0;
 	vector<vector<unsigned int>> edges;
 	vector<CellState> stones;
+	BoardStates board_state = BoardStates::Idling;
 };
