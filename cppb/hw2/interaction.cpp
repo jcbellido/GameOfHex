@@ -24,12 +24,6 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 				UpdateBoardWinningLabel();
 				return true;
 			}
-			case GUI_ID_EVALUATE_BOARD:
-			{
-				Context.board_model->ComputeWinningPlayer();
-				UpdateBoardWinningLabel();
-				return true;
-			}
 			case GUI_ID_RESET_GAME:
 			{
 				Context.board_model->ResetBoard();
@@ -106,20 +100,15 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 // Deprecated most probably
 void MyEventReceiver::UpdateBoardWinningLabel()
 {
-	auto winner = Context.board_model->ComputeWinningPlayer();
-	if (winner == Player::Player_One)
+	auto redWins = Context.board_model->CheckColorWins(CellState::Red);
+	if (redWins)
 	{
 		core::stringw status = "Player one (red) horizontal wins";
 		Context.board_status->setText(status.c_str());
 	}
-	else if (winner == Player::Player_Two)
-	{
-		core::stringw status = "Player two (blue) vertical wins";
-		Context.board_status->setText(status.c_str());
-	}
 	else
 	{
-		core::stringw status = "I dont have a clue";
+		core::stringw status = "Player two (blue) vertical wins";
 		Context.board_status->setText(status.c_str());
 	}
 }

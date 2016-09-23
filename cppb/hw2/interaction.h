@@ -77,13 +77,11 @@ public:
 
 		guienv->addButton(rect<s32>(715, 30, 780, 30 + 26), 0, GUI_ID_RESET_GAME, L"Reset", L"Reset Game");
 		
-		guienv->addButton(rect<s32>(715, 60, 780, 60 + 26), 0, GUI_ID_EVALUATE_BOARD, L"Evaluate", L"Evaluate board");
-				
 		guienv->addButton(rect<s32>(715, 90, 780, 90 + 26), 0, GUI_ID_PLAYER_STARTS, L"Player", L"Start game by player");
 
 		guienv->addButton(rect<s32>(715, 120, 780, 120 + 26), 0, GUI_ID_CPU_STARTS, L"CPU", L"Start game by CPU");
 
-		auto static_text = guienv->addStaticText(L"No board status", rect<s32>(10, 10, 260, 28), true, true, 0, -1, true);
+		auto static_text = guienv->addStaticText(L"Select starting player", rect<s32>(10, 30, 260, 48), true, true, 0, -1, true);
 		board_status = static_text;
 
 		// Store the appropriate data in a context structure.

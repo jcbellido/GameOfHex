@@ -25,7 +25,6 @@ using namespace std;
 
 int main()
 {
-	// Check if I need to change the type of project from Console into Window? 
 	IrrlichtDevice *device =
 		createDevice(video::EDT_DIRECT3D9, dimension2d<u32>(800, 600), 16,
 			false, false, false, 0);
@@ -40,9 +39,9 @@ int main()
 	IGUIEnvironment* guienv = device->getGUIEnvironment();
 
 	// Useful for checking how clogged the system is right now
-	auto fpsReference = guienv->addStaticText(L"FPS", rect<s32>(10, 30, 260, 48), true, true, 0, -1, true);
+	auto fpsReference = guienv->addStaticText(L"FPS", rect<s32>(10, 10, 260, 28), true, true, 0, -1, true);
 
-	const u32 board_size = 5;
+	const u32 board_size = 11;
 
 	auto board_model = BoardModel(board_size);
 	BoardView boardView = BoardView(smgr, irr::core::vector3d<f32>(0, 0, 0), board_size ,1, &board_model);
