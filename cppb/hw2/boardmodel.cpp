@@ -226,7 +226,7 @@ void BoardModel::ComputeMove(CellState cpu_color)
 	{
 		if (stones[position] == CellState::Empty)
 		{
-			auto monte_carlo = HexMonteCarlo(size, edges, stones, 50, position, cpu_color);
+			auto monte_carlo = HexMonteCarlo(size, edges, stones, tests_per_position, position, cpu_color);
 			auto my_winning_chance = monte_carlo.ComputeWinning();
 			
 			// Invert the chances if I am player two

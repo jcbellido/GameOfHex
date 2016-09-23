@@ -43,6 +43,9 @@ public:
 
 	unsigned int GetSize() const { return size; }
 
+	unsigned int GetTestsPerPosition() const { return tests_per_position; }
+	void SetTestsPerPosition(unsigned int new_tests_per_position)  { tests_per_position = new_tests_per_position; }
+
 private:
 	void CreateEdges();
 	inline bool IsCentralNode(unsigned int row, unsigned int column) const
@@ -88,6 +91,7 @@ private:
 	}
 
 protected: 
+	unsigned int tests_per_position = 100;
 	unsigned int size = 0;
 	vector<vector<unsigned int>> edges;
 	vector<CellState> stones;

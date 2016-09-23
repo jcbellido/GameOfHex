@@ -28,11 +28,11 @@ struct SAppContext
 enum
 {
 	GUI_ID_QUIT_BUTTON = 101,
-	GUI_ID_RANDOMIZE_BOARD_BUTTON = 102,
 	GUI_ID_RESET_GAME = 103,
 	GUI_ID_EVALUATE_BOARD = 104,
 	GUI_ID_PLAYER_STARTS = 105,
 	GUI_ID_CPU_STARTS = 106,
+	GUI_ID_TEST_COUNT_SCROLL_BAR = 107,
 };
 
 class MyEventReceiver : public IEventReceiver
@@ -71,8 +71,6 @@ public:
 
 		skin->setFont(guienv->getBuiltInFont(), EGDF_TOOLTIP);
 
-		guienv->addButton(rect<s32>(30, 560, 130, 560 + 26), 0, GUI_ID_RANDOMIZE_BOARD_BUTTON, L"Randomize", L"Randomize board, shuffles the board model");
-
 		guienv->addButton(rect<s32>(730, 560, 780, 560 + 26), 0, GUI_ID_QUIT_BUTTON, L"Quit", L"Exits Program");
 
 		guienv->addButton(rect<s32>(715, 30, 780, 30 + 26), 0, GUI_ID_RESET_GAME, L"Reset", L"Reset Game");
@@ -80,6 +78,12 @@ public:
 		guienv->addButton(rect<s32>(715, 90, 780, 90 + 26), 0, GUI_ID_PLAYER_STARTS, L"Player", L"Start game by player");
 
 		guienv->addButton(rect<s32>(715, 120, 780, 120 + 26), 0, GUI_ID_CPU_STARTS, L"CPU", L"Start game by CPU");
+
+		number_of_tests = guienv->addStaticText(L"Samples per move: 350", rect<s32>(10, 500, 270, 500 + 18));
+		scrollbar = guienv->addScrollBar(true, rect<s32>(10, 522, 270, 522 + 18), 0, GUI_ID_TEST_COUNT_SCROLL_BAR);
+		scrollbar->setMin(1);
+		scrollbar->setMax(1000);
+		scrollbar->setPos(350);
 
 		auto static_text = guienv->addStaticText(L"Select starting player", rect<s32>(10, 30, 260, 48), true, true, 0, -1, true);
 		board_status = static_text;
@@ -139,6 +143,15 @@ public:
 		}
 	}
 
+	void UpdateNumberOfTests()
+	{
+		s32 pos = scrollbar->getPos();
+		core::stringw status = "Samples per move: ";
+		status += pos;
+		number_of_tests->setText(status.c_str());
+		board_model->SetTestsPerPosition(static_cast<unsigned int>(pos));
+	}
+
 public: 
 	void StartGameByHuman() 
 	{ 
@@ -163,4 +176,6 @@ protected:
 	CellState cpu_color = CellState::Empty;
 	BoardModel *board_model;
 	IGUIStaticText *board_status;
+	IGUIStaticText *number_of_tests;
+	IGUIScrollBar* scrollbar;
 };

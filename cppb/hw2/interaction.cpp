@@ -9,21 +9,21 @@ bool MyEventReceiver::OnEvent(const SEvent& event)
 
 		switch (event.GUIEvent.EventType)
 		{
-
+		case EGET_SCROLL_BAR_CHANGED:
+		{
+			if (id == GUI_ID_TEST_COUNT_SCROLL_BAR)
+			{
+				Context.hexGUI->UpdateNumberOfTests();
+				return true;
+			}
+			break;
+		}
 		case EGET_BUTTON_CLICKED:
 			switch (id)
 			{
 			case GUI_ID_QUIT_BUTTON:
 				Context.device->closeDevice();
 				return true;
-
-			case GUI_ID_RANDOMIZE_BOARD_BUTTON:
-			{
-				Context.board_model->PopulateABoardAtRandom();
-				Context.board->UpdateFromModel();
-				UpdateBoardWinningLabel();
-				return true;
-			}
 			case GUI_ID_RESET_GAME:
 			{
 				Context.board_model->ResetBoard();
