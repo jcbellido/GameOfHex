@@ -79,11 +79,12 @@ public:
 
 		guienv->addButton(rect<s32>(715, 120, 780, 120 + 26), 0, GUI_ID_CPU_STARTS, L"CPU", L"Start game by CPU");
 
-		number_of_tests = guienv->addStaticText(L"Samples per move: 350", rect<s32>(10, 500, 270, 500 + 18));
+		number_of_tests = guienv->addStaticText(L"Samples per move: 1000", rect<s32>(10, 500, 270, 500 + 18));
 		scrollbar = guienv->addScrollBar(true, rect<s32>(10, 522, 270, 522 + 18), 0, GUI_ID_TEST_COUNT_SCROLL_BAR);
 		scrollbar->setMin(1);
-		scrollbar->setMax(1000);
-		scrollbar->setPos(350);
+		scrollbar->setMax(10000);
+		scrollbar->setPos(1000);
+		board_model->SetTestsPerPosition(1000);
 
 		auto static_text = guienv->addStaticText(L"Select starting player", rect<s32>(10, 30, 260, 48), true, true, 0, -1, true);
 		board_status = static_text;
