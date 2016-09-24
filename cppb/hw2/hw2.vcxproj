@@ -139,6 +139,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\wrk\c-plus-plus-a\cppb\c_thread_pool;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,9 +154,11 @@
   <ItemGroup>
     <ClInclude Include="boardmodel.h" />
     <ClInclude Include="boardview.h" />
+    <ClInclude Include="ctpl_stl.h" />
     <ClInclude Include="gamestates.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="hexagon.h" />
+    <ClInclude Include="HexMonteCarlo.h" />
     <ClInclude Include="interaction.h" />
     <ClInclude Include="math_utils.h" />
     <ClInclude Include="stdafx.h" />
@@ -166,6 +169,7 @@
     <ClCompile Include="boardview.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="hexagon.cpp" />
+    <ClCompile Include="HexMonteCarlo.cpp" />
     <ClCompile Include="hw2.cpp" />
     <ClCompile Include="hw2_virtual_override.cpp" />
     <ClCompile Include="interaction.cpp" />

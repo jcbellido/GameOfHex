@@ -1,4 +1,4 @@
-#include <ctpl.h>
+#include "ctpl_stl.h"
 #include <iostream>
 #include <string>
 
@@ -107,11 +107,16 @@ int main(int argc, char **argv) {
         f2.get();
     }
     catch (std::exception & e) {
-        std::cout << "caught exception\n";
+		std::cout << "caught exception\n " << e.what() << std::endl;
     }
 
     // get thread 0
     auto & th = p.get_thread(0);
+
+	// Testing tuples and sorting functions ... :)
+
+
+
 
     return 0;
 }

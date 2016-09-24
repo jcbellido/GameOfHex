@@ -18,7 +18,6 @@ using namespace gui;
 #pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
 
-
 #include <iostream>
 
 using namespace std;

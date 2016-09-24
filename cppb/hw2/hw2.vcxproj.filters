@@ -45,6 +45,12 @@
     <ClInclude Include="boardmodel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HexMonteCarlo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctpl_stl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -69,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="boardmodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HexMonteCarlo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
