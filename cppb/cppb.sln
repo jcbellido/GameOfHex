@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hw2", "hw2\hw2.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Irrlicht", "..\irrlicht-1.8.3\source\Irrlicht\Irrlicht12.0.vcxproj", "{E08E042A-6C45-411B-92BE-3CC31331019F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "c_thread_pool", "c_thread_pool\c_thread_pool.vcxproj", "{D687D07F-AD1E-417F-92DD-F4084510A54E}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -84,6 +86,34 @@ Global
 		{E08E042A-6C45-411B-92BE-3CC31331019F}.Static lib - Release|x64.Build.0 = Static lib - Release|x64
 		{E08E042A-6C45-411B-92BE-3CC31331019F}.Static lib - Release|x86.ActiveCfg = Static lib - Release|Win32
 		{E08E042A-6C45-411B-92BE-3CC31331019F}.Static lib - Release|x86.Build.0 = Static lib - Release|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Debug|x64.ActiveCfg = Debug|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Debug|x64.Build.0 = Debug|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Debug|x86.ActiveCfg = Debug|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Debug|x86.Build.0 = Debug|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Release - Fast FPU|x64.ActiveCfg = Release|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Release - Fast FPU|x64.Build.0 = Release|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Release - Fast FPU|x86.ActiveCfg = Release|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Release - Fast FPU|x86.Build.0 = Release|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Release|x64.ActiveCfg = Release|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Release|x64.Build.0 = Release|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Release|x86.ActiveCfg = Release|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Release|x86.Build.0 = Release|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.SDL-Debug|x64.ActiveCfg = Debug|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.SDL-Debug|x64.Build.0 = Debug|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.SDL-Debug|x86.ActiveCfg = Debug|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.SDL-Debug|x86.Build.0 = Debug|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Debug|x64.ActiveCfg = Debug|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Debug|x64.Build.0 = Debug|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Debug|x86.ActiveCfg = Debug|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Debug|x86.Build.0 = Debug|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Release - Fast FPU|x64.ActiveCfg = Release|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Release - Fast FPU|x64.Build.0 = Release|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Release - Fast FPU|x86.ActiveCfg = Release|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Release - Fast FPU|x86.Build.0 = Release|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Release|x64.ActiveCfg = Release|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Release|x64.Build.0 = Release|x64
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Release|x86.ActiveCfg = Release|Win32
+		{D687D07F-AD1E-417F-92DD-F4084510A54E}.Static lib - Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
