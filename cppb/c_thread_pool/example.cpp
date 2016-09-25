@@ -1,7 +1,37 @@
 #include "ctpl_stl.h"
 #include <iostream>
 #include <string>
+#include <vector>
+#include <tuple>
 
+using namespace std;
+
+typedef tuple<double, unsigned int> MoveResult; 
+
+bool TupleCompare(const MoveResult &a, const MoveResult &b)
+{
+	return std::get<0>(a) < std::get<0>(b);
+}
+
+// previous implementation ... never worked properly
+// struct TupleCompare
+//{
+//	template<typename T>
+//	bool operator()(T const &t1, T const &t2)
+//	{
+//		return F<typename tuple_element<M, T>::type>()(std::get<M>(t1), std::get<M>(t2));
+//	}
+//};
+
+double rand_zero_to_one()
+{
+	return static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+}
+
+unsigned int rand_int_in_positive_range(unsigned int min, unsigned int max)
+{
+	return min + (rand() % (int)(max - min + 1));
+}
 
 
 void first(int id) {
@@ -113,10 +143,16 @@ int main(int argc, char **argv) {
     // get thread 0
     auto & th = p.get_thread(0);
 
-	// Testing tuples and sorting functions ... :)
+	// Populate a 10.000 element vector because fuck it
+	unsigned int requested_size = 15; 
+	vector<MoveResult> result_vector(requested_size);
+	for(unsigned int index = 0; index < requested_size; index ++)
+	{
+		MoveResult m = MoveResult(rand_zero_to_one(), rand_int_in_positive_range(0, 200));
+		result_vector[index] = m;
+	}
 
+	sort(begin(result_vector), end(result_vector), TupleCompare);
 
-
-
-    return 0;
+	return 0;
 }

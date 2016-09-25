@@ -1,5 +1,9 @@
 #pragma once
 
+#include <tuple>
+
+using namespace std;
+
 enum class CellState : unsigned int
 {
 	Empty = 0,
@@ -26,3 +30,7 @@ enum class GameStates : unsigned int
 	Waiting_CPU = 2,	// CPU does the next move
 	Finished = 3,		// Someone has won the match
 };
+
+
+// AI objects
+typedef tuple<double, unsigned int> MoveResult;

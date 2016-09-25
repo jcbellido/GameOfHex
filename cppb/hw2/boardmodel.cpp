@@ -1,5 +1,10 @@
 #include "boardmodel.h"
 
+bool TupleCompare(const MoveResult &a, const MoveResult &b)
+{
+	return std::get<0>(a) < std::get<0>(b);
+}
+
 
 BoardModel::BoardModel(unsigned int size): size(size)
 {
