@@ -1,9 +1,9 @@
 #include "boardmodel.h"
 
-bool TupleCompare(const MoveResult &a, const MoveResult &b)
-{
-	return std::get<0>(a) < std::get<0>(b);
-}
+//bool TupleCompare(const MoveResult &a, const MoveResult &b)
+//{
+//	return std::get<0>(a) < std::get<0>(b);
+//}
 
 
 BoardModel::BoardModel(unsigned int size): size(size)
@@ -245,23 +245,30 @@ void BoardModel::ComputeMove(CellState cpu_color)
 	board_state = BoardStates::Computing;
 	unsigned int selected_position = 0;
 	double my_best_winning_chance = 0;
+
+	auto move_results = std::vector<std::future<MoveResult>>();
+
 	for (unsigned int position = 0; position < (size * size); position++)
 	{
 		if (stones[position] == CellState::Empty)
 		{
-			auto monte_carlo = HexMonteCarlo(size, edges, stones, tests_per_position, position, cpu_color);
-			auto my_winning_chance = monte_carlo.ComputeWinning();
-			
-			// Invert the chances if I am player two
-			if (cpu_color != CellState::Red)
-				my_winning_chance = 1.0 - my_winning_chance;
+			auto monte_carlo = HexMonteCarlo(size, &edges, &stones, tests_per_position, position, cpu_color);
+			move_results.push_back(thread_pool->push(std::move(monte_carlo)));
+		}
+	}
 
-			// Check the position quality
-			if (my_winning_chance > my_best_winning_chance)
-			{
-				selected_position = position;
-				my_best_winning_chance = my_winning_chance;
-			}
+	while (thread_pool->size() != thread_pool->n_idle())
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(16));	// lol
+	}
+	
+	for (auto i = move_results.begin(); i < move_results.end(); i ++)
+	{
+		auto m = (*i).get();
+		if (m.chances_of_win > my_best_winning_chance)
+		{
+			selected_position = m.checked_position;
+			my_best_winning_chance = m.chances_of_win;
 		}
 	}
 

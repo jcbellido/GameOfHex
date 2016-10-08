@@ -33,4 +33,8 @@ enum class GameStates : unsigned int
 
 
 // AI objects
-typedef tuple<double, unsigned int> MoveResult;
+struct MoveResult
+{
+	double chances_of_win;
+	unsigned int checked_position;
+};

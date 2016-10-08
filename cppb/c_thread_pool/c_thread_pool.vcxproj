@@ -144,9 +144,11 @@
   <ItemGroup>
     <ClInclude Include="ctpl.h" />
     <ClInclude Include="ctpl_stl.h" />
+    <ClInclude Include="trialsatpools.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="example.cpp" />
+    <ClCompile Include="trialsatpools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

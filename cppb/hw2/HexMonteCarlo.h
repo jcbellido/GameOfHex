@@ -13,8 +13,8 @@ class HexMonteCarlo
 {
 protected:
 	unsigned int size;
-	const vector<vector<unsigned int>> &edges;	// No need for recreate this one
-	const vector<CellState> &original_stone_placement;
+	const vector<vector<unsigned int>> *edges;	// No need for recreate this one
+	const vector<CellState> *original_stone_placement;
 
 	vector<CellState> stones_shuffle_base;
 
@@ -23,11 +23,10 @@ protected:
 	CellState color_to_test = CellState::Empty;
 	double chances_of_victory_of_player_one = -1;
 
-
 public:
 	HexMonteCarlo(unsigned size,
-		vector<vector<unsigned int>> &edges,
-		vector<CellState> &starting_stones,
+		vector<vector<unsigned int>> *edges,
+		vector<CellState> *starting_stones,
 		unsigned int iterations,
 		unsigned int position_to_test,
 		CellState color_to_test) :
@@ -38,8 +37,35 @@ public:
 		original_stone_placement(starting_stones),
 		color_to_test(color_to_test)
 	{
+		// All the initialization logic moved to the Operator() logic
+	}
+
+	HexMonteCarlo(const HexMonteCarlo &hmc)
+	{
+		size = hmc.size;
+		edges = hmc.edges;
+		iterations = hmc.iterations;
+		position_to_test = hmc.position_to_test;
+		original_stone_placement = hmc.original_stone_placement;
+		color_to_test = hmc.color_to_test;
+	}
+
+	HexMonteCarlo(HexMonteCarlo &&hmc)
+	{
+		size = hmc.size;
+		edges = hmc.edges;
+		iterations = hmc.iterations;
+		position_to_test = hmc.position_to_test;
+		original_stone_placement = hmc.original_stone_placement;
+		color_to_test = hmc.color_to_test;
+	}
+
+	// Pool thread requirement
+	MoveResult operator() (int id)
+	{
 		stones_shuffle_base.resize(size * size);
 		unsigned int position = 0;
+		// FIXME: What do I need this for? 
 		for (auto stone = stones_shuffle_base.begin(); stone < stones_shuffle_base.end(); stone++)
 		{
 			if (position % 2 == 0)
@@ -48,9 +74,17 @@ public:
 				*stone = CellState::Red;
 			position++;
 		}
+		this->ComputeWinning();
+		
+		if (color_to_test != CellState::Red)
+			chances_of_victory_of_player_one = 1.0 - chances_of_victory_of_player_one;
+		
+		MoveResult m; 
+		m.chances_of_win = chances_of_victory_of_player_one;
+		m.checked_position = position_to_test;
+		return m;
 	}
 
-	
 	double ComputeWinning()
 	{
 		unsigned int player_one_victories = 0;
@@ -99,7 +133,7 @@ protected:
 			if (ending_positions.find(examining) != ending_positions.end())
 				return Player::Player_One;
 
-			for (auto connected : edges[examining])
+			for (auto connected : (*edges)[examining])
 			{
 				if (stones[connected] == CellState::Red)
 				{
@@ -132,8 +166,8 @@ private:
 		unsigned int position = 0;
 		for (auto stone = stones.begin(); stone < stones.end(); stone++)
 		{
-			if (original_stone_placement[position] != CellState::Empty)
-				*stone = original_stone_placement[position];
+			if ((*original_stone_placement)[position] != CellState::Empty)
+				*stone = (*original_stone_placement)[position];
 			else
 				*stone = stones_shuffle_base[position];
 			position++;

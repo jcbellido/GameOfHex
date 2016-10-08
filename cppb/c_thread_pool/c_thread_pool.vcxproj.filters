@@ -21,9 +21,15 @@
     <ClInclude Include="ctpl_stl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="trialsatpools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="example.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="trialsatpools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
