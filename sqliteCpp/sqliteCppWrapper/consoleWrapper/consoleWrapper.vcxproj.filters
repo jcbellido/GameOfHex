@@ -13,24 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\sqlite">
+      <UniqueIdentifier>{bc73345a-7984-4fb8-83f7-cf48aac0c231}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="consoleWrapper.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite3\sqlite3.c">
+      <Filter>Source Files\sqlite</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
