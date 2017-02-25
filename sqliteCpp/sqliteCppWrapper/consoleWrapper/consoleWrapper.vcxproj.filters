@@ -24,12 +24,36 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sqliteWrapped\Connection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\CommonMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Handle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\sqliteWrapped.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Statement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Reader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Row.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="consoleWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sqlite3\sqlite3.c">
+    <ClCompile Include="sqliteWrapped\sqlite3.c">
       <Filter>Source Files\sqlite</Filter>
     </ClCompile>
   </ItemGroup>
