@@ -94,7 +94,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)consoleWrapper\Resources\*.txt $(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy the data files to the executable directory ... I guess? </Message>
@@ -151,11 +152,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
-    <Text Include="Resources\quijote_source_ep1_ar.txt" />
-    <Text Include="Resources\quijote_source_ep1_en.txt" />
-    <Text Include="Resources\quijote_source_ep1_es.txt" />
-    <Text Include="Resources\quijote_source_ep1_fr.txt" />
-    <Text Include="Resources\quijote_source_ep1_zh.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqliteWrapped\Backup.h" />

@@ -9,15 +9,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="lineMangler">
+      <UniqueIdentifier>{42650aff-e3bd-4444-a833-1ec2715a99c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="minimal.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lineMangler\LineMangler.cpp">
+      <Filter>lineMangler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\sample.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lineMangler\LineMangler.h">
+      <Filter>lineMangler</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\quijote_source_ep1_ar.txt" />
+    <Text Include="Resources\quijote_source_ep1_en.txt" />
+    <Text Include="Resources\quijote_source_ep1_es.txt" />
+    <Text Include="Resources\quijote_source_ep1_fr.txt" />
+    <Text Include="Resources\quijote_source_ep1_zh.txt" />
   </ItemGroup>
 </Project>

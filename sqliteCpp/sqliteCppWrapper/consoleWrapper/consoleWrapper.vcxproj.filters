@@ -19,11 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
-    <Text Include="Resources\quijote_source_ep1_ar.txt" />
-    <Text Include="Resources\quijote_source_ep1_en.txt" />
-    <Text Include="Resources\quijote_source_ep1_es.txt" />
-    <Text Include="Resources\quijote_source_ep1_fr.txt" />
-    <Text Include="Resources\quijote_source_ep1_zh.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">

@@ -68,5 +68,4 @@ namespace sqliteWrapped
 	{
 		return RowIterator();
 	}
-
 }

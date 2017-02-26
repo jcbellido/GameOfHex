@@ -19,6 +19,8 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
+#include "sqliteWrapped.h"
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif

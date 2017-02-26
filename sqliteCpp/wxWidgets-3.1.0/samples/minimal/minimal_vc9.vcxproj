@@ -174,7 +174,7 @@
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\..\..\..\sqliteCppWrapper\consoleWrapper\sqliteWrapped;.\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;_WINDOWS;NOPCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -206,6 +206,9 @@
       <OutputFile>vc_mswud\minimal_vc9.bsc</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>copy $(MSBuildProjectDirectory)\Resources\*.txt  $(OutDir)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -495,6 +498,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lineMangler\LineMangler.cpp" />
     <ClCompile Include="minimal.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -504,6 +508,16 @@
     <ProjectReference Include="..\..\..\sqliteCppWrapper\consoleWrapper\consoleWrapper.vcxproj">
       <Project>{8e11894f-6ba7-4432-a7c6-cd5e9aef6419}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lineMangler\LineMangler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\quijote_source_ep1_ar.txt" />
+    <Text Include="Resources\quijote_source_ep1_en.txt" />
+    <Text Include="Resources\quijote_source_ep1_es.txt" />
+    <Text Include="Resources\quijote_source_ep1_fr.txt" />
+    <Text Include="Resources\quijote_source_ep1_zh.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
