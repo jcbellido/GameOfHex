@@ -207,7 +207,8 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(MSBuildProjectDirectory)\Resources\*.txt  $(OutDir)</Command>
+      <Command>copy $(MSBuildProjectDirectory)\Resources\*.txt  $(OutDir)
+copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -531,6 +532,9 @@
     <Text Include="Resources\quijote_source_ep1_es.txt" />
     <Text Include="Resources\quijote_source_ep1_fr.txt" />
     <Text Include="Resources\quijote_source_ep1_zh.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sqlite.exe" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -176,7 +176,7 @@ MyFrame::MyFrame(const wxString& title)
     sizer->Add(aboutBtn, wxSizerFlags().Center());
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 
-	// Let's bring it on
+	// Let's bring it on ... 
 	std::cout << "Reading the data files" << std::endl;
 	lineMangler::LineLoader loader; 
 	loader.LoadFiles();
@@ -191,6 +191,8 @@ MyFrame::MyFrame(const wxString& title)
 		auto lines = loader.GetLanguageLines(i);
 	}
 
+	
+	
 	// like this .... 
 
 #if wxUSE_STATUSBAR

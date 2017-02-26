@@ -74,10 +74,25 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resources\quijote_source_ep1_ar.txt" />
-    <Text Include="Resources\quijote_source_ep1_en.txt" />
-    <Text Include="Resources\quijote_source_ep1_es.txt" />
-    <Text Include="Resources\quijote_source_ep1_fr.txt" />
-    <Text Include="Resources\quijote_source_ep1_zh.txt" />
+    <Text Include="Resources\quijote_source_ep1_ar.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Resources\quijote_source_ep1_en.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Resources\quijote_source_ep1_es.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Resources\quijote_source_ep1_fr.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Resources\quijote_source_ep1_zh.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sqlite.exe">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
