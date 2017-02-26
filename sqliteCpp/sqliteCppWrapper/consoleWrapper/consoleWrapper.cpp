@@ -28,10 +28,6 @@ std::wstring GetExecutablePath()
 
 int main()
 {
-	//std::cout << "Reading the data files" << std::endl;
-	//lineMangler::LineLoader loader; 
-	//loader.LoadFiles();
-
 	try
 	{
 		// Connection connection = Connection::Memory();

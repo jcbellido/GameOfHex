@@ -19,7 +19,9 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#include "sqliteWrapped.h"
+#include "sqliteWrapped\sqliteWrapped.h"
+#include "lineMangler\LineMangler.h"
+#include "lineMangler\LineManglerGeneralFunctions.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -173,6 +175,23 @@ MyFrame::MyFrame(const wxString& title)
     aboutBtn->Bind(wxEVT_BUTTON, &MyFrame::OnAbout, this);
     sizer->Add(aboutBtn, wxSizerFlags().Center());
 #endif // wxUSE_MENUS/!wxUSE_MENUS
+
+	// Let's bring it on
+	std::cout << "Reading the data files" << std::endl;
+	lineMangler::LineLoader loader; 
+	loader.LoadFiles();
+
+	// populate the data ...
+	auto executablePath = lineMangler::GetExecutablePath();
+	executablePath += L".db";
+	auto connection =  sqliteWrapped::Connection(executablePath.c_str());
+	
+	for (int i = lineMangler::LanguageCode::Arabic; i != lineMangler::LanguageCode::EndOfLanguageCode; i++)
+	{
+		auto lines = loader.GetLanguageLines(i);
+	}
+
+	// like this .... 
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)

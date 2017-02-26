@@ -12,6 +12,9 @@
     <Filter Include="lineMangler">
       <UniqueIdentifier>{42650aff-e3bd-4444-a833-1ec2715a99c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sqlLiteWrapped">
+      <UniqueIdentifier>{4436b8d1-6410-4631-9e85-6dd4d20a49aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="minimal.cpp">
@@ -19,6 +22,9 @@
     </ClCompile>
     <ClCompile Include="lineMangler\LineMangler.cpp">
       <Filter>lineMangler</Filter>
+    </ClCompile>
+    <ClCompile Include="sqliteWrapped\sqlite3.c">
+      <Filter>sqlLiteWrapped</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -29,6 +35,42 @@
   <ItemGroup>
     <ClInclude Include="lineMangler\LineMangler.h">
       <Filter>lineMangler</Filter>
+    </ClInclude>
+    <ClInclude Include="lineMangler\LineManglerGeneralFunctions.h">
+      <Filter>lineMangler</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Backup.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\CommonMacros.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Exception.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Connection.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Handle.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Reader.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Row.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\sqlite3.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\sqliteWrapped.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Statement.h">
+      <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Types.h">
+      <Filter>sqlLiteWrapped</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

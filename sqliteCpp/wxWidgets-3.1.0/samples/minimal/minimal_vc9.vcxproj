@@ -174,7 +174,7 @@
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\..\..\..\sqliteCppWrapper\consoleWrapper\sqliteWrapped;.\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;_WINDOWS;NOPCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -500,6 +500,7 @@
   <ItemGroup>
     <ClCompile Include="lineMangler\LineMangler.cpp" />
     <ClCompile Include="minimal.cpp" />
+    <ClCompile Include="sqliteWrapped\sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\sample.rc" />
@@ -511,6 +512,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lineMangler\LineMangler.h" />
+    <ClInclude Include="lineMangler\LineManglerGeneralFunctions.h" />
+    <ClInclude Include="sqliteWrapped\Backup.h" />
+    <ClInclude Include="sqliteWrapped\CommonMacros.h" />
+    <ClInclude Include="sqliteWrapped\Connection.h" />
+    <ClInclude Include="sqliteWrapped\Exception.h" />
+    <ClInclude Include="sqliteWrapped\Handle.h" />
+    <ClInclude Include="sqliteWrapped\Reader.h" />
+    <ClInclude Include="sqliteWrapped\Row.h" />
+    <ClInclude Include="sqliteWrapped\sqlite3.h" />
+    <ClInclude Include="sqliteWrapped\sqliteWrapped.h" />
+    <ClInclude Include="sqliteWrapped\Statement.h" />
+    <ClInclude Include="sqliteWrapped\Types.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\quijote_source_ep1_ar.txt" />
