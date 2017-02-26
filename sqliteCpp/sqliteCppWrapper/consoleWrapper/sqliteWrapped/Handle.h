@@ -1,118 +1,122 @@
 #pragma once
 #include"CommonMacros.h"
 
-template <typename T>
-struct HandleTraits
+namespace sqliteWrapped
 {
-	using Type = T;
-	
-	static Type Invalid() noexcept
+
+	template <typename T>
+	struct HandleTraits
 	{
-		return nullptr;
-	}
+		using Type = T;
 
-	// static void Close(Type value) noexcept
-};
-
-template <typename Traits>
-class Handle
-{
-	using Type = decltype(Traits::Invalid());	// Check this thing
-	Type m_value;
-
-	void Close() noexcept
-	{
-		if (*this)
+		static Type Invalid() noexcept
 		{
-			Traits::Close(m_value);
+			return nullptr;
 		}
-	}
 
-public:
+		// static void Close(Type value) noexcept
+	};
 
-	Handle(Handle const &) = delete;
-	Handle & operator=(Handle const &) = delete;
+	template <typename Traits>
+	class Handle
+	{
+		using Type = decltype(Traits::Invalid());	// Check this thing
+		Type m_value;
 
-	explicit Handle(Type value = Traits::Invalid()) noexcept :
+		void Close() noexcept
+		{
+			if (*this)
+			{
+				Traits::Close(m_value);
+			}
+		}
+
+	public:
+
+		Handle(Handle const &) = delete;
+		Handle & operator=(Handle const &) = delete;
+
+		explicit Handle(Type value = Traits::Invalid()) noexcept :
 		m_value(value)
-	{}
+		{}
 
-	Handle(Handle && other) noexcept :
-		m_value(oter.Detach())
-	{}
+		Handle(Handle && other) noexcept :
+			m_value(oter.Detach())
+		{}
 
-	Handle & operator=(Handle && other) noexcept
-	{
-		if (this != &other)
+		Handle & operator=(Handle && other) noexcept
 		{
-			Reset(other.Detach());
+			if (this != &other)
+			{
+				Reset(other.Detach());
+			}
+
+			return *this;
 		}
-		
-		return *this;
-	}
 
-	~Handle() noexcept
-	{
-		Close();
-	}
-
-	explicit operator bool() const noexcept
-	{
-		return m_value != Traits::Invalid();
-	}
-
-	Type Get() const noexcept
-	{
-		return m_value;
-	}
-
-	Type * Set() noexcept
-	{
-		ASSERT(!*this);
-		return &m_value;
-	}
-
-	Type Detach() noexcept
-	{
-		Type value = m_value;
-		m_value = Traits::Invalid();
-		return value;
-	}
-
-	bool Reset(Type value = Traits::Invalid()) noexcept
-	{
-		if (m_value != value)
+		~Handle() noexcept
 		{
 			Close();
-			m_value = value;
 		}
 
-		return static_cast<bool>(*this);
-	}
+		explicit operator bool() const noexcept
+		{
+			return m_value != Traits::Invalid();
+		}
 
-	void Swap(Handle <Traits> & other) noexcept
+		Type Get() const noexcept
+		{
+			return m_value;
+		}
+
+		Type * Set() noexcept
+		{
+			ASSERT(!*this);
+			return &m_value;
+		}
+
+		Type Detach() noexcept
+		{
+			Type value = m_value;
+			m_value = Traits::Invalid();
+			return value;
+		}
+
+		bool Reset(Type value = Traits::Invalid()) noexcept
+		{
+			if (m_value != value)
+			{
+				Close();
+				m_value = value;
+			}
+
+			return static_cast<bool>(*this);
+		}
+
+		void Swap(Handle <Traits> & other) noexcept
+		{
+			Type temp = m_value;
+			m_value = other.m_value;
+			other.m_value = temp;
+		}
+	};
+
+	template <typename Traits>
+	void swap(Handle<Traits> & left, Handle<Traits> & right) noexcept
 	{
-		Type temp = m_value;
-		m_value = other.m_value;
-		other.m_value = temp;
+		left.Swap(right);
 	}
-};
 
-template <typename Traits>
-void swap(Handle<Traits> & left, Handle<Traits> & right) noexcept
-{
-	left.Swap(right);
-}
+	template <typename Traits>
+	bool operator==(Handle<Traits> const & left, Handle<Traits> const & right) noexcept
+	{
+		return left.Get() == right.Get();
+	}
 
-template <typename Traits>
-bool operator==(Handle<Traits> const & left, Handle<Traits> const & right) noexcept
-{
-	return left.Get() == right.Get();
-}
+	template <typename Traits>
+	bool operator!=(Handle<Traits> const & left, Handle<Traits> const & right) noexcept
+	{
+		return !(left == right);
+	}
 
-template <typename Traits>
-bool operator!=(Handle<Traits> const & left, Handle<Traits> const & right) noexcept
-{
-	return !(left == right);
 }
- 

@@ -19,6 +19,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="Resources\quijote_source_ep1_ar.txt" />
+    <Text Include="Resources\quijote_source_ep1_en.txt" />
+    <Text Include="Resources\quijote_source_ep1_es.txt" />
+    <Text Include="Resources\quijote_source_ep1_fr.txt" />
+    <Text Include="Resources\quijote_source_ep1_zh.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -48,6 +53,12 @@
     <ClInclude Include="sqliteWrapped\Row.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="testing\LineMangler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="consoleWrapper.cpp">
@@ -55,6 +66,9 @@
     </ClCompile>
     <ClCompile Include="sqliteWrapped\sqlite3.c">
       <Filter>Source Files\sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\LineMangler.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

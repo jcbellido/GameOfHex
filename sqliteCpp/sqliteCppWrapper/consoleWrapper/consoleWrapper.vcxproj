@@ -93,6 +93,12 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(SolutionDir)consoleWrapper\Resources\*.txt $(OutDir)</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy the data files to the executable directory ... I guess? </Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -145,6 +151,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="Resources\quijote_source_ep1_ar.txt" />
+    <Text Include="Resources\quijote_source_ep1_en.txt" />
+    <Text Include="Resources\quijote_source_ep1_es.txt" />
+    <Text Include="Resources\quijote_source_ep1_fr.txt" />
+    <Text Include="Resources\quijote_source_ep1_zh.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqliteWrapped\Exception.h" />
@@ -155,11 +166,14 @@
     <ClInclude Include="sqliteWrapped\Row.h" />
     <ClInclude Include="sqliteWrapped\sqliteWrapped.h" />
     <ClInclude Include="sqliteWrapped\Statement.h" />
+    <ClInclude Include="sqliteWrapped\Types.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="testing\LineMangler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="consoleWrapper.cpp" />
     <ClCompile Include="sqliteWrapped\sqlite3.c" />
+    <ClCompile Include="testing\LineMangler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

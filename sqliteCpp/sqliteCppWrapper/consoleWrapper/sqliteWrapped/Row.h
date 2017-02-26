@@ -4,65 +4,69 @@
 #include "Reader.h"
 #include "Statement.h"
 
-class Row : public Reader<Row>
+namespace sqliteWrapped
 {
-	sqlite3_stmt * m_statement = nullptr;
-
-public:
-
-	sqlite3_stmt * GetAbi() const noexcept
+	class Row : public Reader<Row>
 	{
-		return m_statement;
-	}
+		sqlite3_stmt * m_statement = nullptr;
 
-	Row(sqlite3_stmt * const statement) noexcept:
-	m_statement(statement)
-	{}
-};
+	public:
 
-class RowIterator
-{
-	Statement const *m_statement = nullptr;
-
-public:
-
-	RowIterator() noexcept = default;
-
-	RowIterator(Statement const & statement) noexcept
-	{
-		if (statement.Step())
+		sqlite3_stmt * GetAbi() const noexcept
 		{
-			m_statement = &statement;
-		}
-	}
-
-	RowIterator & operator++() noexcept
-	{
-		if (!m_statement->Step())
-		{
-			m_statement = nullptr;
+			return m_statement;
 		}
 
-		return *this;
-	}
+		Row(sqlite3_stmt * const statement) noexcept:
+		m_statement(statement)
+		{}
+	};
 
-	bool operator !=(RowIterator const & other) const noexcept
+	class RowIterator
 	{
-		return m_statement != other.m_statement;
-	}
+		Statement const *m_statement = nullptr;
 
-	Row operator *() const noexcept
+	public:
+
+		RowIterator() noexcept = default;
+
+		RowIterator(Statement const & statement) noexcept
+		{
+			if (statement.Step())
+			{
+				m_statement = &statement;
+			}
+		}
+
+		RowIterator & operator++() noexcept
+		{
+			if (!m_statement->Step())
+			{
+				m_statement = nullptr;
+			}
+
+			return *this;
+		}
+
+		bool operator !=(RowIterator const & other) const noexcept
+		{
+			return m_statement != other.m_statement;
+		}
+
+		Row operator *() const noexcept
+		{
+			return Row(m_statement->GetAbi());
+		}
+	};
+
+	inline RowIterator begin(Statement const & statement)
 	{
-		return Row(m_statement->GetAbi());
+		return RowIterator(statement);
 	}
-};
 
-inline RowIterator begin(Statement const & statement)
-{
-	return RowIterator(statement);
-}
+	inline RowIterator end(Statement const & statement)
+	{
+		return RowIterator();
+	}
 
-inline RowIterator end(Statement const & statement)
-{
-	return RowIterator();
 }
