@@ -16,6 +16,15 @@ std::wstring GetExecutablePath()
 	return std::wstring(buffer);
 }
 
+//connection.Profile([](void *, char const * const statement, unsigned long long const time)
+//{
+//	unsigned long long const ms = time / 1000000;
+//	if (ms > 10)
+//	{
+//		std::cout << "Profiler " << ms << " for statement " << statement << std::endl;
+//	}
+//});
+
 
 int main()
 {
@@ -35,7 +44,7 @@ int main()
 
 		Statement insert(connection, "insert into Things (Content) values (?1)");
 
-		Execute(connection, "begin");
+		// Execute(connection, "begin");
 
 		for (int i = 0; i != 1000; ++i)
 		{
@@ -43,7 +52,7 @@ int main()
 			insert.Execute();
 		}
 
-		Execute(connection, "commit");
+		// Execute(connection, "commit");
 
 		Statement count(connection, "select count(*) from Things");
 		count.Step();

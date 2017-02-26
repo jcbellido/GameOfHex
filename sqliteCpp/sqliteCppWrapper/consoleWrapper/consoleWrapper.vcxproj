@@ -158,6 +158,7 @@
     <Text Include="Resources\quijote_source_ep1_zh.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="sqliteWrapped\Backup.h" />
     <ClInclude Include="sqliteWrapped\Exception.h" />
     <ClInclude Include="sqliteWrapped\Handle.h" />
     <ClInclude Include="sqliteWrapped\CommonMacros.h" />

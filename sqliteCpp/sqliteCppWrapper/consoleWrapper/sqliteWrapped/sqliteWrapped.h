@@ -8,3 +8,4 @@
 #include "Connection.h"
 #include "Statement.h"
 #include "Row.h"
+#include "Backup.h"
