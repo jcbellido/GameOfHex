@@ -72,6 +72,12 @@
     <ClInclude Include="sqliteWrapped\Types.h">
       <Filter>sqlLiteWrapped</Filter>
     </ClInclude>
+    <ClInclude Include="minimal.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\quijote_source_ep1_ar.txt">

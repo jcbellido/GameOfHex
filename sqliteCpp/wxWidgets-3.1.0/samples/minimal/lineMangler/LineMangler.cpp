@@ -20,7 +20,8 @@ void lineMangler::LineLoader::LoadFiles()
 			while (!myfile.eof())
 			{
 				std::string line;
-				myfile >> line;
+				getline(myfile, line);
+				// myfile >> line;
 				readLines.push_back(line);
 			}
 			myfile.close();

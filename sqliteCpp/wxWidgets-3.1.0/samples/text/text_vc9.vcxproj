@@ -35,8 +35,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>minimal</ProjectName>
-    <ProjectGuid>{853D1FD7-20AB-586C-9699-9680F84AC985}</ProjectGuid>
+    <ProjectName>text</ProjectName>
+    <ProjectGuid>{93C1437E-AFE5-554A-983D-C93FC7B2DAF1}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="Configuration">
@@ -120,49 +120,49 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>vc_mswud\</OutDir>
-    <IntDir>vc_mswud\minimal\</IntDir>
+    <IntDir>vc_mswud\text\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>vc_mswu\</OutDir>
-    <IntDir>vc_mswu\minimal\</IntDir>
+    <IntDir>vc_mswu\text\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">
     <OutDir>vc_mswuddll\</OutDir>
-    <IntDir>vc_mswuddll\minimal\</IntDir>
+    <IntDir>vc_mswuddll\text\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
     <OutDir>vc_mswudll\</OutDir>
-    <IntDir>vc_mswudll\minimal\</IntDir>
+    <IntDir>vc_mswudll\text\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>vc_mswud_x64\</OutDir>
-    <IntDir>vc_mswud_x64\minimal\</IntDir>
+    <IntDir>vc_mswud_x64\text\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>vc_mswu_x64\</OutDir>
-    <IntDir>vc_mswu_x64\minimal\</IntDir>
+    <IntDir>vc_mswu_x64\text\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">
     <OutDir>vc_mswuddll_x64\</OutDir>
-    <IntDir>vc_mswuddll_x64\minimal\</IntDir>
+    <IntDir>vc_mswuddll_x64\text\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">
     <OutDir>vc_mswudll_x64\</OutDir>
-    <IntDir>vc_mswudll_x64\minimal\</IntDir>
+    <IntDir>vc_mswudll_x64\text\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
@@ -181,8 +181,8 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <ObjectFileName>vc_mswud\minimal\</ObjectFileName>
-      <ProgramDataBaseFileName>vc_mswud\minimal.pdb</ProgramDataBaseFileName>
+      <ObjectFileName>vc_mswud\text\</ObjectFileName>
+      <ProgramDataBaseFileName>vc_mswud\text.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -194,22 +194,18 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>wxmsw31ud_core.lib;wxbase31ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>vc_mswud\minimal.exe</OutputFile>
+      <OutputFile>vc_mswud\text.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>vc_mswud\minimal.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>vc_mswud\text.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <Bscmake>
-      <OutputFile>vc_mswud\minimal_vc9.bsc</OutputFile>
+      <OutputFile>vc_mswud\text_vc9.bsc</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
-    <PostBuildEvent>
-      <Command>copy $(MSBuildProjectDirectory)\Resources\*.txt  $(OutDir)
-copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -224,8 +220,8 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <ObjectFileName>vc_mswu\minimal\</ObjectFileName>
-      <ProgramDataBaseFileName>vc_mswu\minimal.pdb</ProgramDataBaseFileName>
+      <ObjectFileName>vc_mswu\text\</ObjectFileName>
+      <ProgramDataBaseFileName>vc_mswu\text.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -237,18 +233,18 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>wxmsw31u_core.lib;wxbase31u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>vc_mswu\minimal.exe</OutputFile>
+      <OutputFile>vc_mswu\text.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>vc_mswu\minimal.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>vc_mswu\text.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <Bscmake>
-      <OutputFile>vc_mswu\minimal_vc9.bsc</OutputFile>
+      <OutputFile>vc_mswu\text_vc9.bsc</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
   </ItemDefinitionGroup>
@@ -267,8 +263,8 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <ObjectFileName>vc_mswuddll\minimal\</ObjectFileName>
-      <ProgramDataBaseFileName>vc_mswuddll\minimal.pdb</ProgramDataBaseFileName>
+      <ObjectFileName>vc_mswuddll\text\</ObjectFileName>
+      <ProgramDataBaseFileName>vc_mswuddll\text.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -280,16 +276,16 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>wxmsw31ud_core.lib;wxbase31ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>vc_mswuddll\minimal.exe</OutputFile>
+      <OutputFile>vc_mswuddll\text.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>vc_mswuddll\minimal.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>vc_mswuddll\text.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <Bscmake>
-      <OutputFile>vc_mswuddll\minimal_vc9.bsc</OutputFile>
+      <OutputFile>vc_mswuddll\text_vc9.bsc</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
   </ItemDefinitionGroup>
@@ -306,8 +302,8 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <ObjectFileName>vc_mswudll\minimal\</ObjectFileName>
-      <ProgramDataBaseFileName>vc_mswudll\minimal.pdb</ProgramDataBaseFileName>
+      <ObjectFileName>vc_mswudll\text\</ObjectFileName>
+      <ProgramDataBaseFileName>vc_mswudll\text.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -319,18 +315,18 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>wxmsw31u_core.lib;wxbase31u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>vc_mswudll\minimal.exe</OutputFile>
+      <OutputFile>vc_mswudll\text.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>vc_mswudll\minimal.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>vc_mswudll\text.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <Bscmake>
-      <OutputFile>vc_mswudll\minimal_vc9.bsc</OutputFile>
+      <OutputFile>vc_mswudll\text_vc9.bsc</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
   </ItemDefinitionGroup>
@@ -349,8 +345,8 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <ObjectFileName>vc_mswud_x64\minimal\</ObjectFileName>
-      <ProgramDataBaseFileName>vc_mswud_x64\minimal.pdb</ProgramDataBaseFileName>
+      <ObjectFileName>vc_mswud_x64\text\</ObjectFileName>
+      <ProgramDataBaseFileName>vc_mswud_x64\text.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -362,16 +358,16 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>wxmsw31ud_core.lib;wxbase31ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>vc_mswud_x64\minimal.exe</OutputFile>
+      <OutputFile>vc_mswud_x64\text.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>vc_mswud_x64\minimal.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>vc_mswud_x64\text.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <Bscmake>
-      <OutputFile>vc_mswud_x64\minimal_vc9.bsc</OutputFile>
+      <OutputFile>vc_mswud_x64\text_vc9.bsc</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
   </ItemDefinitionGroup>
@@ -388,8 +384,8 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <ObjectFileName>vc_mswu_x64\minimal\</ObjectFileName>
-      <ProgramDataBaseFileName>vc_mswu_x64\minimal.pdb</ProgramDataBaseFileName>
+      <ObjectFileName>vc_mswu_x64\text\</ObjectFileName>
+      <ProgramDataBaseFileName>vc_mswu_x64\text.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -401,18 +397,18 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>wxmsw31u_core.lib;wxbase31u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>vc_mswu_x64\minimal.exe</OutputFile>
+      <OutputFile>vc_mswu_x64\text.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>vc_mswu_x64\minimal.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>vc_mswu_x64\text.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <Bscmake>
-      <OutputFile>vc_mswu_x64\minimal_vc9.bsc</OutputFile>
+      <OutputFile>vc_mswu_x64\text_vc9.bsc</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
   </ItemDefinitionGroup>
@@ -431,8 +427,8 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <ObjectFileName>vc_mswuddll_x64\minimal\</ObjectFileName>
-      <ProgramDataBaseFileName>vc_mswuddll_x64\minimal.pdb</ProgramDataBaseFileName>
+      <ObjectFileName>vc_mswuddll_x64\text\</ObjectFileName>
+      <ProgramDataBaseFileName>vc_mswuddll_x64\text.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -444,16 +440,16 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>wxmsw31ud_core.lib;wxbase31ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>vc_mswuddll_x64\minimal.exe</OutputFile>
+      <OutputFile>vc_mswuddll_x64\text.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\vc_x64_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>vc_mswuddll_x64\minimal.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>vc_mswuddll_x64\text.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <Bscmake>
-      <OutputFile>vc_mswuddll_x64\minimal_vc9.bsc</OutputFile>
+      <OutputFile>vc_mswuddll_x64\text_vc9.bsc</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
   </ItemDefinitionGroup>
@@ -470,8 +466,8 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <ObjectFileName>vc_mswudll_x64\minimal\</ObjectFileName>
-      <ProgramDataBaseFileName>vc_mswudll_x64\minimal.pdb</ProgramDataBaseFileName>
+      <ObjectFileName>vc_mswudll_x64\text\</ObjectFileName>
+      <ProgramDataBaseFileName>vc_mswudll_x64\text.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -483,60 +479,26 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>wxmsw31u_core.lib;wxbase31u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>vc_mswudll_x64\minimal.exe</OutputFile>
+      <OutputFile>vc_mswudll_x64\text.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\vc_x64_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>vc_mswudll_x64\minimal.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>vc_mswudll_x64\text.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <Bscmake>
-      <OutputFile>vc_mswudll_x64\minimal_vc9.bsc</OutputFile>
+      <OutputFile>vc_mswudll_x64\text_vc9.bsc</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="lineMangler\LineMangler.cpp" />
-    <ClCompile Include="minimal.cpp" />
-    <ClCompile Include="sqliteWrapped\sqlite3.c" />
+    <ClCompile Include="text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\sample.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\sqliteCppWrapper\consoleWrapper\consoleWrapper.vcxproj">
-      <Project>{8e11894f-6ba7-4432-a7c6-cd5e9aef6419}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="lineMangler\LineMangler.h" />
-    <ClInclude Include="lineMangler\LineManglerGeneralFunctions.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="minimal.h" />
-    <ClInclude Include="sqliteWrapped\Backup.h" />
-    <ClInclude Include="sqliteWrapped\CommonMacros.h" />
-    <ClInclude Include="sqliteWrapped\Connection.h" />
-    <ClInclude Include="sqliteWrapped\Exception.h" />
-    <ClInclude Include="sqliteWrapped\Handle.h" />
-    <ClInclude Include="sqliteWrapped\Reader.h" />
-    <ClInclude Include="sqliteWrapped\Row.h" />
-    <ClInclude Include="sqliteWrapped\sqlite3.h" />
-    <ClInclude Include="sqliteWrapped\sqliteWrapped.h" />
-    <ClInclude Include="sqliteWrapped\Statement.h" />
-    <ClInclude Include="sqliteWrapped\Types.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Resources\quijote_source_ep1_ar.txt" />
-    <Text Include="Resources\quijote_source_ep1_en.txt" />
-    <Text Include="Resources\quijote_source_ep1_es.txt" />
-    <Text Include="Resources\quijote_source_ep1_fr.txt" />
-    <Text Include="Resources\quijote_source_ep1_zh.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sqlite.exe" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
