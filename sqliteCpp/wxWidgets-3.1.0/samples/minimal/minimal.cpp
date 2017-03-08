@@ -1,8 +1,7 @@
 #include "minimal.h"
+#include "sillyUtils.h"
 
-// ----------------------------------------------------------------------------
-// the application class
-// ----------------------------------------------------------------------------
+#include "connectionFactory.h"
 
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
@@ -24,10 +23,6 @@ bool MyApp::OnInit()
     // application would exit immediately.
     return true;
 }
-
-// ----------------------------------------------------------------------------
-// main frame
-// ----------------------------------------------------------------------------
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
@@ -61,22 +56,21 @@ MyFrame::MyFrame(const wxString& title)
     sizer->Add(aboutBtn, wxSizerFlags().Center());
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 
-	// Let's bring it on ... 
-	std::cout << "Reading the data files" << std::endl;
-	lineMangler::LineLoader loader; 
-	loader.LoadFiles();
-
 	m_log = new wxTextCtrl(this, wxID_ANY, wxT("This is the log window.\n"),
 		wxPoint(5, 260), wxSize(630, 100),
 		wxTE_MULTILINE | wxTE_READONLY);
 
 	m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
 
+	auto connection = lineMangler::ConnectionFactory::GetConnection(*this);
+
+	// Let's bring it on ... 
+	std::cout << "Reading the data files" << std::endl;
+	lineMangler::LineLoader loader;
+	loader.LoadFiles();
+
 	// populate the data ...
-	auto executablePath = lineMangler::GetExecutablePath();
-	executablePath += L".db";
-	auto connection =  sqliteWrapped::Connection(executablePath.c_str());
-	
+
 	for (int i = lineMangler::LanguageCode::Arabic; i != lineMangler::LanguageCode::EndOfLanguageCode; i++)
 	{
 		auto lines = loader.GetLanguageLines(i);
@@ -88,7 +82,7 @@ MyFrame::MyFrame(const wxString& title)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText("Welcome to wxWidgets!");
+    SetStatusText("Status default text");
 #endif // wxUSE_STATUSBAR
 }
 
@@ -121,7 +115,7 @@ MyFrame::~MyFrame()
 	delete wxLog::SetActiveTarget(m_logOld);
 }
 
-void MyFrame::AddToLog(const std::wstring const &message)
+void MyFrame::AddToLog(const std::wstring &message)
 {
 	auto wx_message = wxFormatString(message.c_str());
 	wxLogMessage(wx_message);

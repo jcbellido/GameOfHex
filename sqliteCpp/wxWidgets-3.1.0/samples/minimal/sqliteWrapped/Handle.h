@@ -41,7 +41,7 @@ namespace sqliteWrapped
 		{}
 
 		Handle(Handle && other) noexcept :
-			m_value(oter.Detach())
+			m_value(other.Detach())
 		{}
 
 		Handle & operator=(Handle && other) noexcept

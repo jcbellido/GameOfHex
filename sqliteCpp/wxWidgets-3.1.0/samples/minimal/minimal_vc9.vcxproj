@@ -499,8 +499,10 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="connectionFactory.cpp" />
     <ClCompile Include="lineMangler\LineMangler.cpp" />
     <ClCompile Include="minimal.cpp" />
+    <ClCompile Include="sillyUtils.cpp" />
     <ClCompile Include="sqliteWrapped\sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
@@ -512,10 +514,12 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="connectionFactory.h" />
     <ClInclude Include="lineMangler\LineMangler.h" />
     <ClInclude Include="lineMangler\LineManglerGeneralFunctions.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="minimal.h" />
+    <ClInclude Include="sillyUtils.h" />
     <ClInclude Include="sqliteWrapped\Backup.h" />
     <ClInclude Include="sqliteWrapped\CommonMacros.h" />
     <ClInclude Include="sqliteWrapped\Connection.h" />

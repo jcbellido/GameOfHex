@@ -26,6 +26,12 @@
     <ClCompile Include="sqliteWrapped\sqlite3.c">
       <Filter>sqlLiteWrapped</Filter>
     </ClCompile>
+    <ClCompile Include="connectionFactory.cpp">
+      <Filter>lineMangler</Filter>
+    </ClCompile>
+    <ClCompile Include="sillyUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\sample.rc">
@@ -77,6 +83,12 @@
     </ClInclude>
     <ClInclude Include="Logger.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sillyUtils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="connectionFactory.h">
+      <Filter>lineMangler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

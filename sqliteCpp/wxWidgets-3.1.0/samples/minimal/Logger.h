@@ -4,5 +4,5 @@
 
 __interface ILogger
 {
-	void AddToLog(const std::wstring const &message);
+	void AddToLog(const std::wstring &message);
 };
