@@ -499,6 +499,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="app.cpp" />
     <ClCompile Include="connectionFactory.cpp" />
     <ClCompile Include="lineMangler\LineMangler.cpp" />
     <ClCompile Include="minimal.cpp" />
@@ -514,6 +515,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="app.h" />
     <ClInclude Include="connectionFactory.h" />
     <ClInclude Include="lineMangler\LineMangler.h" />
     <ClInclude Include="lineMangler\LineManglerGeneralFunctions.h" />

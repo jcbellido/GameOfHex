@@ -15,6 +15,9 @@
     <Filter Include="sqlLiteWrapped">
       <UniqueIdentifier>{4436b8d1-6410-4631-9e85-6dd4d20a49aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{c815df97-1e87-4689-80d8-95f81e8ef5b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="minimal.cpp">
@@ -30,6 +33,9 @@
       <Filter>lineMangler</Filter>
     </ClCompile>
     <ClCompile Include="sillyUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="connectionFactory.h">
       <Filter>lineMangler</Filter>
+    </ClInclude>
+    <ClInclude Include="app.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
