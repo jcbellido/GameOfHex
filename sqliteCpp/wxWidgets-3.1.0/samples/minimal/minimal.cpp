@@ -120,3 +120,10 @@ void MyFrame::AddToLog(const std::wstring &message)
 	auto wx_message = wxFormatString(message.c_str());
 	wxLogMessage(wx_message);
 }
+
+void MyFrame::AddToLog(const std::string &message)
+{
+	auto wideString = sillyUtils::ConvertToWide(message);
+	auto wx_message = wxFormatString(message.c_str());
+	wxLogMessage(wx_message);
+}

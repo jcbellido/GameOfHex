@@ -107,6 +107,9 @@
     <Text Include="Resources\quijote_source_ep1_zh.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Resources\schema.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\sqlite.exe">

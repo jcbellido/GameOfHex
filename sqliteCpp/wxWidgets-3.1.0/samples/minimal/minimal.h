@@ -63,7 +63,8 @@ public:
 	void OnAbout(wxCommandEvent& event);
 	virtual ~MyFrame();
 
-	void AddToLog(const std::wstring &message);
+	void AddToLog(const std::wstring & message);
+	void AddToLog(const std::string & message);
 
 private:
 	// any class wishing to process wxWidgets events must use this macro

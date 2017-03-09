@@ -538,6 +538,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <Text Include="Resources\quijote_source_ep1_es.txt" />
     <Text Include="Resources\quijote_source_ep1_fr.txt" />
     <Text Include="Resources\quijote_source_ep1_zh.txt" />
+    <Text Include="Resources\schema.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\sqlite.exe" />
