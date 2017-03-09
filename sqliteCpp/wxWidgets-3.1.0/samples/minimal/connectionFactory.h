@@ -27,7 +27,7 @@ namespace lineMangler
 			return newDatabase;
 		}
 	private:
-
+		
 
 	};
 }
