@@ -17,35 +17,73 @@ MyFrame::MyFrame(const wxString& title, sqliteWrapped::Connection & connection)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
+    SetMenuBar(PopulateMenus());
+	auto boxSizerCentral = new wxBoxSizer( wxVERTICAL );
 
-    // create a menu bar
-    wxMenu *fileMenu = new wxMenu;
+	CreateAddNewLinePanel(boxSizerCentral);
 
-    // the "About" item should be in the help menu
-    wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Minimal_About, "&About\tF1", "Show about dialog");
+	CreateLogger();
+	boxSizerCentral->Add(m_log, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
-	fileMenu->Append(Minimal_GenerateCSV, "&Generate CSV\tAlt-V", "Generate a CSV, just for the lolz");
-    fileMenu->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+	// Central Stack Panel (vertical box sizer central) added to the mix
+	SetSizer(boxSizerCentral);
 
-    // now append the freshly created menu to the menu bar...
-    wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(fileMenu, "&File");
-    menuBar->Append(helpMenu, "&Help");
-
-    // ... and attach this menu bar to the frame
-    SetMenuBar(menuBar);
-
-	m_log = new wxTextCtrl(this, wxID_ANY, wxT("This is the log window.\n"),
-		wxPoint(5, 260), wxSize(630, 100),
-		wxTE_MULTILINE | wxTE_READONLY);
-
-	m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
-	
     CreateStatusBar(2);
-    SetStatusText("Status default text");
+    SetStatusText("Ready");
+
+	boxSizerCentral->SetSizeHints(this);
 }
 
+void MyFrame::CreateAddNewLinePanel(wxBoxSizer * sizer)
+{
+	sizer->Add(
+		new wxStaticText(this, wxID_ANY, wxT("Add a new line to the mix")),
+		wxSizerFlags().Align(wxALIGN_LEFT).Border(wxALL & ~wxBOTTOM, 5));
+
+	sizer->Add(
+		new wxTextCtrl(this, wxID_ANY, wxT("Text for new source line"), wxDefaultPosition, wxSize(10, 20)),
+		wxSizerFlags().Expand().Border(wxALL, 5));
+
+	wxBoxSizer *button_box = new wxBoxSizer(wxHORIZONTAL);
+	button_box->Add(
+		new wxButton(this, wxID_ANY, wxT("New Source Line")),
+		wxSizerFlags().Border(wxALL, 5));
+	button_box->Add(
+		new wxButton(this, wxID_ANY, wxT("No Op")),
+		wxSizerFlags().Border(wxALL, 5));
+
+	sizer->Add(button_box, wxSizerFlags().Right());
+}
+
+void MyFrame::CreateLogger()
+{
+	m_log = new wxTextCtrl(this, wxID_ANY, wxT("This is the log window.\n"),
+		wxDefaultPosition, wxSize(300, 100), wxTE_MULTILINE | wxTE_READONLY); 
+
+	m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
+}
+
+wxMenuBar * MyFrame::PopulateMenus()
+{
+	wxMenu *fileMenu = new wxMenu;
+
+	// the "About" item should be in the help menu
+	wxMenu *helpMenu = new wxMenu;
+	helpMenu->Append(Minimal_About, "&About\tF1", "Show about dialog");
+
+	fileMenu->Append(Minimal_GenerateCSV, "&Generate CSV\tAlt-V", "Generate a CSV, just for the lolz");
+	fileMenu->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+	
+	// now append the freshly created menu to the menu bar...
+	wxMenuBar *menuBar = new wxMenuBar();
+	menuBar->Append(fileMenu, "&File");
+	menuBar->Append(helpMenu, "&Help");
+	
+	return menuBar;
+}
+
+
+// ------------------------------------------------------------------------------------
 // event handlers
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

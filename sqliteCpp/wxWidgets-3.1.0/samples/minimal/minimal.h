@@ -55,4 +55,7 @@ public:
 private:
 	// any class wishing to process wxWidgets events must use this macro
 	wxDECLARE_EVENT_TABLE();
+	wxMenuBar * PopulateMenus();
+	void CreateLogger();
+	void CreateAddNewLinePanel(wxBoxSizer * sizer);
 };
