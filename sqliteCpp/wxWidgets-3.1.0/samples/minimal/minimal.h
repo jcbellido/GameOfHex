@@ -16,6 +16,8 @@
 #include "../sample.xpm"
 #endif
 
+#include "sqliteWrapped\sqliteWrapped.h"
+
 // IDs for the controls and the menu commands
 enum
 {
@@ -25,7 +27,9 @@ enum
 	// it is important for the id corresponding to the "About" command to have
 	// this standard value as otherwise it won't be handled properly under Mac
 	// (where it is special and put into the "Apple" menu)
-	Minimal_About = wxID_ABOUT
+	Minimal_About = wxID_ABOUT,
+
+	Minimal_GenerateCSV = wxID_ANY
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -34,9 +38,11 @@ class MyFrame : public wxFrame, public ILogger
 private:
 	wxTextCtrl    *m_log;
 	wxLog         *m_logOld;
+	sqliteWrapped::Connection & m_connection;
+
 public:
 	// ctor(s)
-	MyFrame(const wxString& title);
+	MyFrame(const wxString& title, sqliteWrapped::Connection & connection);
 
 	// event handlers (these functions should _not_ be virtual)
 	void OnQuit(wxCommandEvent& event);

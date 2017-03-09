@@ -12,9 +12,11 @@ namespace lineMangler
 	{
 	public: 
 		static sqliteWrapped::Connection GetConnection(ILogger &logger);
-
+		static sqliteWrapped::Connection GetConnection();
 	private:
 		static sqliteWrapped::Connection OpenExistingDb(std::wstring const & filePath, ILogger &logger);
 		static sqliteWrapped::Connection CreateNewDb(std::wstring const & filePath, ILogger &logger);
+		static sqliteWrapped::Connection OpenExistingDb(std::wstring const & filePath);
+		static sqliteWrapped::Connection CreateNewDb(std::wstring const & filePath);
 	};
 }
