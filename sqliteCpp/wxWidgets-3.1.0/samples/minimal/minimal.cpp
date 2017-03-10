@@ -9,6 +9,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_MENU(Minimal_Quit, MyFrame::OnQuit)
 EVT_MENU(Minimal_About, MyFrame::OnAbout)
 EVT_MENU(Minimal_GenerateCSV, MyFrame::OnAbout)
+EVT_BUTTON(Minimal_GenerateCSV, MyFrame::OnAbout)
 wxEND_EVENT_TABLE()
 
 // frame constructor
@@ -46,10 +47,10 @@ void MyFrame::CreateAddNewLinePanel(wxBoxSizer * sizer)
 
 	wxBoxSizer *button_box = new wxBoxSizer(wxHORIZONTAL);
 	button_box->Add(
-		new wxButton(this, wxID_ANY, wxT("New Source Line")),
+		new wxButton(this, Minimal_GenerateCSV, wxT("New Source Line")),
 		wxSizerFlags().Border(wxALL, 5));
 	button_box->Add(
-		new wxButton(this, wxID_ANY, wxT("No Op")),
+		new wxButton(this, Minimal_GenerateCSV, wxT("No Op")),
 		wxSizerFlags().Border(wxALL, 5));
 
 	sizer->Add(button_box, wxSizerFlags().Right());

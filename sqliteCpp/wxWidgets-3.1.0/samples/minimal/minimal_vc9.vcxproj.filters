@@ -29,14 +29,14 @@
     <ClCompile Include="sqliteWrapped\sqlite3.c">
       <Filter>sqlLiteWrapped</Filter>
     </ClCompile>
-    <ClCompile Include="connectionFactory.cpp">
-      <Filter>lineMangler</Filter>
-    </ClCompile>
     <ClCompile Include="sillyUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="app.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lineMangler\connectionFactory.cpp">
+      <Filter>lineMangler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,11 +93,11 @@
     <ClInclude Include="sillyUtils.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="connectionFactory.h">
-      <Filter>lineMangler</Filter>
-    </ClInclude>
     <ClInclude Include="app.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lineMangler\connectionFactory.h">
+      <Filter>lineMangler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +117,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Resources\schema.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Resources\LanguagesAndPlatforms.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

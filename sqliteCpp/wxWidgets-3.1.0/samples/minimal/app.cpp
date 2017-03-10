@@ -1,8 +1,8 @@
 #include "app.h"
 #include "minimal.h"
 
-#include "connectionFactory.h"	// I'm very sorry about this
 #include "lineMangler\LineMangler.h"
+#include "lineMangler\connectionFactory.h"
 
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
