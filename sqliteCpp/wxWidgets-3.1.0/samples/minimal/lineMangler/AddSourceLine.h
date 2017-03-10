@@ -16,6 +16,9 @@ namespace lineMangler
 		string m_text;
 		string m_lastErrorMessage;
 
+	private:
+		void InternalModifySourceLine();
+
 	public:
 		ModifySourceLine(sqliteWrapped::Connection & connection, string stringID, string text) :
 			m_connection(connection),
@@ -25,7 +28,7 @@ namespace lineMangler
 		{ }
 
 		bool Commit();
-
+		bool Queue();
 		string const & ErrorMessage();
 	};
 
@@ -41,6 +44,9 @@ namespace lineMangler
 
 		string m_lastErrorMessage;
 
+	private:
+		void InternalAddSourceLine();
+
 	public: 
 		AddSourceLine(sqliteWrapped::Connection & connection, string stringID, string text, int platform, int status) :
 			m_connection(connection),
@@ -52,7 +58,7 @@ namespace lineMangler
 		{ }
 		// The idea here is to always commit to the on memory data
 		bool Commit();
-		// bool RollBack();
+		bool Queue();
 
 		string const & ErrorMessage();
 

@@ -501,6 +501,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
   <ItemGroup>
     <ClCompile Include="app.cpp" />
     <ClCompile Include="lineMangler\AddSourceLine.cpp" />
+    <ClCompile Include="lineMangler\AddTranslation.cpp" />
     <ClCompile Include="lineMangler\connectionFactory.cpp" />
     <ClCompile Include="lineMangler\LineMangler.cpp" />
     <ClCompile Include="lineMangler\QuixoteDatabase.cpp" />
@@ -519,6 +520,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
   <ItemGroup>
     <ClInclude Include="app.h" />
     <ClInclude Include="lineMangler\AddSourceLine.h" />
+    <ClInclude Include="lineMangler\AddTranslation.h" />
     <ClInclude Include="lineMangler\connectionFactory.h" />
     <ClInclude Include="lineMangler\ILineManglerCommand.h" />
     <ClInclude Include="lineMangler\LineMangler.h" />
@@ -537,6 +539,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <ClInclude Include="sqliteWrapped\sqlite3.h" />
     <ClInclude Include="sqliteWrapped\sqliteWrapped.h" />
     <ClInclude Include="sqliteWrapped\Statement.h" />
+    <ClInclude Include="sqliteWrapped\StatementCSVWriter.h" />
     <ClInclude Include="sqliteWrapped\Types.h" />
   </ItemGroup>
   <ItemGroup>

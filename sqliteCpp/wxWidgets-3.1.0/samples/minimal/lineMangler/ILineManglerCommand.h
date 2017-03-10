@@ -11,6 +11,7 @@ namespace lineMangler
 	__interface ILineManglerCommand
 	{
 		bool Commit();
+		bool Queue();
 		string const & ErrorMessage();
 	};
 }

@@ -30,6 +30,7 @@ namespace lineMangler
 		{ }
 
 		bool Commit();
+		bool Queue();
 		string const & ErrorMessage();
 	};
 }

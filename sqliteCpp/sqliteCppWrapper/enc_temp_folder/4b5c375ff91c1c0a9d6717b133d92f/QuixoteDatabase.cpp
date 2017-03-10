@@ -39,7 +39,7 @@ bool QuixoteDatabase::Commit()
 			*currentLine,
 			1,	// Hardcoded Platform (Common by design) 
 			0);	// Hardcoded Status
-		a.Queue();
+		a.Queue();	// Super stupid implementation
 
 		for (int j = 0; j < m_versions; ++j)
 		{

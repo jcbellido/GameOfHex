@@ -44,6 +44,9 @@
     <ClCompile Include="lineMangler\QuixoteDatabase.cpp">
       <Filter>lineMangler</Filter>
     </ClCompile>
+    <ClCompile Include="lineMangler\AddTranslation.cpp">
+      <Filter>lineMangler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\sample.rc">
@@ -113,6 +116,12 @@
     </ClInclude>
     <ClInclude Include="lineMangler\QuixoteDatabase.h">
       <Filter>lineMangler</Filter>
+    </ClInclude>
+    <ClInclude Include="lineMangler\AddTranslation.h">
+      <Filter>lineMangler</Filter>
+    </ClInclude>
+    <ClInclude Include="sqliteWrapped\StatementCSVWriter.h">
+      <Filter>sqlLiteWrapped</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
