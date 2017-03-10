@@ -500,6 +500,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="app.cpp" />
+    <ClCompile Include="lineMangler\AddSourceLine.cpp" />
     <ClCompile Include="lineMangler\connectionFactory.cpp" />
     <ClCompile Include="lineMangler\LineMangler.cpp" />
     <ClCompile Include="minimal.cpp" />
@@ -516,6 +517,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.h" />
+    <ClInclude Include="lineMangler\AddSourceLine.h" />
     <ClInclude Include="lineMangler\connectionFactory.h" />
     <ClInclude Include="lineMangler\LineMangler.h" />
     <ClInclude Include="lineMangler\LineManglerGeneralFunctions.h" />

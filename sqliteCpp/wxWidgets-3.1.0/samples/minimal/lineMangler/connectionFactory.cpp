@@ -10,10 +10,16 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::GetConnection(ILogger 
 	executablePath += L".db";
 	logger.AddToLog(executablePath);
 
+	sqliteWrapped::Connection conn; 
+
 	if (sillyUtils::is_file_exist(executablePath))
-		return ConnectionFactory::OpenExistingDb(executablePath, logger);
+		conn = ConnectionFactory::OpenExistingDb(executablePath, logger);
 	else
-		return ConnectionFactory::CreateNewDb(executablePath, logger);
+		conn = ConnectionFactory::CreateNewDb(executablePath, logger);
+
+	sqliteWrapped::Execute(conn, "PRAGMA foreign_keys=on;");
+
+	return conn;
 }
 
 sqliteWrapped::Connection lineMangler::ConnectionFactory::OpenExistingDb(std::wstring const & filePath, ILogger &logger)
@@ -52,10 +58,16 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::GetConnection()
 	auto executablePath = sillyUtils::GetExecutablePath();
 	executablePath += L".db";
 
+	sqliteWrapped::Connection conn;
+
 	if (sillyUtils::is_file_exist(executablePath))
-		return ConnectionFactory::OpenExistingDb(executablePath);
+		conn = ConnectionFactory::OpenExistingDb(executablePath);
 	else
-		return ConnectionFactory::CreateNewDb(executablePath);
+		conn = ConnectionFactory::CreateNewDb(executablePath);
+
+	sqliteWrapped::Execute(conn, "PRAGMA foreign_keys=on;");
+
+	return conn;
 }
 
 sqliteWrapped::Connection lineMangler::ConnectionFactory::OpenExistingDb(std::wstring const & filePath)
@@ -74,15 +86,16 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::CreateNewDb(std::wstri
 		ShellExecute(0, L"open", L"cmd.exe", command.c_str(), 0, SW_SHOW);
 
 		Sleep(1500);	// I really don't want to implement a call to ShellExecutEx, in my shitty machine this takes less than half a second ... 
-
+		 
 		// Base config data: Languages and Platforms
 		command = baseCommand + L" < " + sillyUtils::GetExecutableDir() + L"\\LanguagesAndPlatforms.txt ";
 		ShellExecute(0, L"open", L"cmd.exe", command.c_str(), 0, SW_SHOW);
 
 		auto newDatabase = sqliteWrapped::Connection(filePath.c_str());
+
 		return newDatabase;
 	}
-	catch (sqliteWrapped::Exception const & e)
+	catch (sqliteWrapped::Exception)
 	{
 		return sqliteWrapped::Connection::WideMemory();
 	}

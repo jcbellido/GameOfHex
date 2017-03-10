@@ -2,6 +2,8 @@
 #include "sillyUtils.h"
 #include "sqliteWrapped\sqliteWrapped.h"
 
+#include "lineMangler\AddSourceLine.h"
+
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
@@ -9,7 +11,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_MENU(Minimal_Quit, MyFrame::OnQuit)
 EVT_MENU(Minimal_About, MyFrame::OnAbout)
 EVT_MENU(Minimal_GenerateCSV, MyFrame::OnAbout)
-EVT_BUTTON(Minimal_GenerateCSV, MyFrame::OnAbout)
+EVT_BUTTON(Minimal_AddNewString, MyFrame::OnAddNewString)
+EVT_BUTTON(Minimal_UnusedButton, MyFrame::OnAbout)
 wxEND_EVENT_TABLE()
 
 // frame constructor
@@ -35,19 +38,35 @@ MyFrame::MyFrame(const wxString& title, sqliteWrapped::Connection & connection)
 	boxSizerCentral->SetSizeHints(this);
 }
 
+MyFrame::~MyFrame()
+{
+	delete wxLog::SetActiveTarget(m_logOld);
+}
+
+
 void MyFrame::CreateAddNewLinePanel(wxBoxSizer * sizer)
 {
 	sizer->Add(
 		new wxStaticText(this, wxID_ANY, wxT("Add a new line to the mix")),
 		wxSizerFlags().Align(wxALIGN_LEFT).Border(wxALL & ~wxBOTTOM, 5));
 
-	sizer->Add(
-		new wxTextCtrl(this, wxID_ANY, wxT("Text for new source line"), wxDefaultPosition, wxSize(10, 20)),
-		wxSizerFlags().Expand().Border(wxALL, 5));
+	m_textControlLineText = new wxTextCtrl(this, wxID_ANY, wxT("Text for new source line"));
+	m_textControlStringID = new wxTextCtrl(this, wxID_ANY, wxT("Text for String ID"));
+	
+	wxBoxSizer *boxTextInput = new wxBoxSizer(wxHORIZONTAL);
+	boxTextInput->Add(m_textControlLineText, wxSizerFlags());
+	boxTextInput->Add(m_textControlStringID, wxSizerFlags());
+
+	boxTextInput->GetItem((size_t)0)->SetProportion(2);
+	boxTextInput->GetItem((size_t)1)->SetProportion(1);
+
+	sizer->Add(boxTextInput, wxSizerFlags().Expand().Border(wxALL, 5));
+
+	// SetSizerAndFit(*sizer);
 
 	wxBoxSizer *button_box = new wxBoxSizer(wxHORIZONTAL);
 	button_box->Add(
-		new wxButton(this, Minimal_GenerateCSV, wxT("New Source Line")),
+		new wxButton(this, Minimal_AddNewString, wxT("New Source Line")),
 		wxSizerFlags().Border(wxALL, 5));
 	button_box->Add(
 		new wxButton(this, Minimal_GenerateCSV, wxT("No Op")),
@@ -84,12 +103,28 @@ wxMenuBar * MyFrame::PopulateMenus()
 }
 
 
-// ------------------------------------------------------------------------------------
+// ---------------------------------------------------------------
 // event handlers
+// ---------------------------------------------------------------
+
+void MyFrame::OnAddNewString(wxCommandEvent& WXUNUSED(event))
+{
+	// Fetch the data from the visual controls 
+	wxLogMessage(m_textControlLineText->GetLineText(0));
+	wxLogMessage(m_textControlStringID->GetLineText(0));
+	
+	lineMangler::AddSourceLine a (m_connection, 
+		m_textControlStringID->GetLineText(0).ToStdString(), 
+		m_textControlLineText->GetLineText(0).ToStdString(),
+		1,	// Hardcoded Platform (Common by design) 
+		0);	// Hardcoded Status
+
+	if (!a.Commit())
+		this->AddToLog(a.ErrorMessage());
+}
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // true is to force the frame to close
     Close(true);
 }
 
@@ -107,11 +142,6 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  "About wxWidgets minimal sample",
                  wxOK | wxICON_INFORMATION,
                  this);
-}
-
-MyFrame::~MyFrame()
-{
-	delete wxLog::SetActiveTarget(m_logOld);
 }
 
 void MyFrame::AddToLog(const std::wstring &message)

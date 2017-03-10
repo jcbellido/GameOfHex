@@ -28,7 +28,8 @@ enum
 	// this standard value as otherwise it won't be handled properly under Mac
 	// (where it is special and put into the "Apple" menu)
 	Minimal_About = wxID_ABOUT,
-
+	Minimal_AddNewString = 1,
+	Minimal_UnusedButton = 2,
 	Minimal_GenerateCSV = wxID_ANY
 };
 
@@ -40,17 +41,23 @@ private:
 	wxLog         *m_logOld;
 	sqliteWrapped::Connection & m_connection;
 
+private:
+	wxTextCtrl * m_textControlLineText;
+	wxTextCtrl * m_textControlStringID;
+
 public:
 	// ctor(s)
 	MyFrame(const wxString& title, sqliteWrapped::Connection & connection);
-
-	// event handlers (these functions should _not_ be virtual)
-	void OnQuit(wxCommandEvent& event);
-	void OnAbout(wxCommandEvent& event);
+	
 	virtual ~MyFrame();
 
 	void AddToLog(const std::wstring & message);
 	void AddToLog(const std::string & message);
+
+private:
+	void OnAbout(wxCommandEvent& event);
+	void OnQuit(wxCommandEvent& event);
+	void OnAddNewString(wxCommandEvent& event);
 
 private:
 	// any class wishing to process wxWidgets events must use this macro
