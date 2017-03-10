@@ -41,6 +41,9 @@
     <ClCompile Include="lineMangler\AddSourceLine.cpp">
       <Filter>lineMangler</Filter>
     </ClCompile>
+    <ClCompile Include="lineMangler\QuixoteDatabase.cpp">
+      <Filter>lineMangler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\sample.rc">
@@ -106,6 +109,9 @@
       <Filter>lineMangler</Filter>
     </ClInclude>
     <ClInclude Include="lineMangler\ILineManglerCommand.h">
+      <Filter>lineMangler</Filter>
+    </ClInclude>
+    <ClInclude Include="lineMangler\QuixoteDatabase.h">
       <Filter>lineMangler</Filter>
     </ClInclude>
   </ItemGroup>

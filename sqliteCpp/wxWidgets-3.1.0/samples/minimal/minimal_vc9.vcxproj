@@ -503,6 +503,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <ClCompile Include="lineMangler\AddSourceLine.cpp" />
     <ClCompile Include="lineMangler\connectionFactory.cpp" />
     <ClCompile Include="lineMangler\LineMangler.cpp" />
+    <ClCompile Include="lineMangler\QuixoteDatabase.cpp" />
     <ClCompile Include="minimal.cpp" />
     <ClCompile Include="sillyUtils.cpp" />
     <ClCompile Include="sqliteWrapped\sqlite3.c" />
@@ -522,6 +523,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <ClInclude Include="lineMangler\ILineManglerCommand.h" />
     <ClInclude Include="lineMangler\LineMangler.h" />
     <ClInclude Include="lineMangler\LineManglerGeneralFunctions.h" />
+    <ClInclude Include="lineMangler\QuixoteDatabase.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="minimal.h" />
     <ClInclude Include="sillyUtils.h" />

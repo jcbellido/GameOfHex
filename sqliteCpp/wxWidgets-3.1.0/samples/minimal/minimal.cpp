@@ -3,6 +3,7 @@
 #include "sqliteWrapped\sqliteWrapped.h"
 
 #include "lineMangler\AddSourceLine.h"
+#include "lineMangler\QuixoteDatabase.h"
 
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
@@ -151,8 +152,19 @@ void MyFrame::OnUpdateString(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPopulateDatabase(wxCommandEvent& WXUNUSED(event))
 {
-
 	wxLogMessage("Populate the Database called " + m_textControlNumberOfAddedLines->GetLineText(0));
+	try
+	{
+		int newLines = std::stoi(m_textControlNumberOfAddedLines->GetLineText(0).ToStdString());
+		lineMangler::QuixoteDatabase qdb(m_connection, newLines, 5);
+		if (!qdb.Commit())
+			AddToLog(qdb.ErrorMessage());
+	}
+	catch (std::invalid_argument)
+	{
+		wxLogMessage("Error, please use a positive number");
+	}
+	wxLogMessage("Populate the Database finished");
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

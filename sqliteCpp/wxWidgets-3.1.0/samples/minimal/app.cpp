@@ -1,7 +1,6 @@
 #include "app.h"
 #include "minimal.h"
 
-#include "lineMangler\LineMangler.h"
 #include "lineMangler\connectionFactory.h"
 
 // 'Main program' equivalent: the program execution "starts" here
@@ -13,21 +12,10 @@ bool MyApp::OnInit()
 		return false;
 
 	// Base connection ...
-
 	m_connection = lineMangler::ConnectionFactory::GetConnection();
-	
-	lineMangler::LineLoader loader;
-	loader.LoadFiles();
 
 	// create the main application window
 	MyFrame *frame = new MyFrame("SQLite with froth", m_connection);
-
-	for (int i = lineMangler::LanguageCode::Arabic; i != lineMangler::LanguageCode::EndOfLanguageCode; i++)
-	{
-		auto lines = loader.GetLanguageLines(i);
-		std::wstring message = L"Added language code " + std::to_wstring(i);
-		frame->AddToLog(message);
-	}
 
 	// and show it (the frames, unlike simple controls, are not shown when
 	// created initially)
