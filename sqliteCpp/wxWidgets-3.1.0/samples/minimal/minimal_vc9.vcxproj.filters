@@ -105,6 +105,9 @@
     <ClInclude Include="lineMangler\AddSourceLine.h">
       <Filter>lineMangler</Filter>
     </ClInclude>
+    <ClInclude Include="lineMangler\ILineManglerCommand.h">
+      <Filter>lineMangler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\quijote_source_ep1_ar.txt">

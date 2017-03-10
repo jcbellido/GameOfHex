@@ -2,13 +2,35 @@
 
 #include <string>
 #include "../sqliteWrapped/sqliteWrapped.h"
+#include "ILineManglerCommand.h"
 
 using namespace std;
 
 namespace lineMangler
 {
+	class ModifySourceLine : public ILineManglerCommand
+	{
+	private:
+		sqliteWrapped::Connection & m_connection;
+		string m_stringID;
+		string m_text;
+		string m_lastErrorMessage;
+
+	public:
+		ModifySourceLine(sqliteWrapped::Connection & connection, string stringID, string text) :
+			m_connection(connection),
+			m_stringID(stringID),
+			m_text(text),
+			m_lastErrorMessage("")
+		{ }
+
+		bool Commit();
+
+		string const & ErrorMessage();
+	};
+
 	// Creates a completely new source line, requires Platform, StringID, and text
-	class AddSourceLine
+	class AddSourceLine: public ILineManglerCommand
 	{
 	private:
 		sqliteWrapped::Connection & m_connection;

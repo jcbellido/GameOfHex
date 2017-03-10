@@ -1,6 +1,7 @@
 #include <Windows.h>
 
 #include "connectionFactory.h"
+#include "sillyUtils.h"
 
 // First implementation based on the frame ... which makes like ... zero sense
 sqliteWrapped::Connection lineMangler::ConnectionFactory::GetConnection(ILogger &logger)
@@ -49,7 +50,7 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::CreateNewDb(std::wstri
 	catch (sqliteWrapped::Exception const & e)
 	{
 		logger.AddToLog(e.Message);
-		return sqliteWrapped::Connection::WideMemory();
+		return sqliteWrapped::Connection::Memory();
 	}
 }
 
@@ -72,7 +73,7 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::GetConnection()
 
 sqliteWrapped::Connection lineMangler::ConnectionFactory::OpenExistingDb(std::wstring const & filePath)
 {
-	auto connection = sqliteWrapped::Connection(filePath.c_str());
+	auto connection = sqliteWrapped::Connection(sillyUtils::ConvertToStandard(filePath).c_str());
 	return connection;
 }
 
@@ -91,7 +92,7 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::CreateNewDb(std::wstri
 		command = baseCommand + L" < " + sillyUtils::GetExecutableDir() + L"\\LanguagesAndPlatforms.txt ";
 		ShellExecute(0, L"open", L"cmd.exe", command.c_str(), 0, SW_SHOW);
 
-		auto newDatabase = sqliteWrapped::Connection(filePath.c_str());
+		auto newDatabase = sqliteWrapped::Connection(sillyUtils::ConvertToStandard(filePath).c_str());
 
 		return newDatabase;
 	}

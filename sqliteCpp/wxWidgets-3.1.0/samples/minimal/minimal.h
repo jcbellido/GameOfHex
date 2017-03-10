@@ -29,7 +29,8 @@ enum
 	// (where it is special and put into the "Apple" menu)
 	Minimal_About = wxID_ABOUT,
 	Minimal_AddNewString = 1,
-	Minimal_UnusedButton = 2,
+	Minimal_UpdateString = 2,
+	Minimal_PopulateDatabase = 3,
 	Minimal_GenerateCSV = wxID_ANY
 };
 
@@ -44,6 +45,8 @@ private:
 private:
 	wxTextCtrl * m_textControlLineText;
 	wxTextCtrl * m_textControlStringID;
+	wxTextCtrl * m_textControlNumberOfAddedLines;
+	wxTextCtrl * m_textControlNumberOfVersionsPerLine;
 
 public:
 	// ctor(s)
@@ -58,6 +61,8 @@ private:
 	void OnAbout(wxCommandEvent& event);
 	void OnQuit(wxCommandEvent& event);
 	void OnAddNewString(wxCommandEvent& event);
+	void OnUpdateString(wxCommandEvent& event);
+	void OnPopulateDatabase(wxCommandEvent& event);
 
 private:
 	// any class wishing to process wxWidgets events must use this macro
@@ -65,4 +70,5 @@ private:
 	wxMenuBar * PopulateMenus();
 	void CreateLogger();
 	void CreateAddNewLinePanel(wxBoxSizer * sizer);
+	void CreateAutoPopulatorPanel(wxBoxSizer * sizer);
 };

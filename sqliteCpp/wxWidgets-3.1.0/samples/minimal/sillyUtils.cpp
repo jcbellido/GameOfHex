@@ -19,6 +19,11 @@ std::wstring sillyUtils::ConvertToWide(const std::string & text)
 	return converter.from_bytes(text);
 }
 
+std::string sillyUtils::ConvertToStandard(const std::wstring & text)
+{
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	return converter.to_bytes(text);
+}
 
 std::wstring sillyUtils::GetExecutableDir()
 {

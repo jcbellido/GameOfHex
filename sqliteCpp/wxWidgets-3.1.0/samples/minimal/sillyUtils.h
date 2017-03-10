@@ -13,4 +13,5 @@ namespace sillyUtils
 	std::wstring GetExecutablePath();
 	std::wstring GetExecutableDir();
 	std::wstring ConvertToWide(const std::string & text);
+	std::string ConvertToStandard(const std::wstring & text);
 }

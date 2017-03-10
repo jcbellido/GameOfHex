@@ -519,6 +519,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <ClInclude Include="app.h" />
     <ClInclude Include="lineMangler\AddSourceLine.h" />
     <ClInclude Include="lineMangler\connectionFactory.h" />
+    <ClInclude Include="lineMangler\ILineManglerCommand.h" />
     <ClInclude Include="lineMangler\LineMangler.h" />
     <ClInclude Include="lineMangler\LineManglerGeneralFunctions.h" />
     <ClInclude Include="Logger.h" />
