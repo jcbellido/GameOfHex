@@ -76,7 +76,6 @@ bool ModifySourceLine::Queue()
 	return true;
 }
 
-
 void ModifySourceLine::InternalModifySourceLine()
 {
 	// Find the SourceLine ID
