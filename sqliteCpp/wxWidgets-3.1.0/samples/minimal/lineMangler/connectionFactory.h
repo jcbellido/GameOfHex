@@ -22,5 +22,7 @@ namespace lineMangler
 		static sqliteWrapped::Connection CreateNewDb(std::wstring const & filePath, ILogger &logger);
 		static sqliteWrapped::Connection OpenExistingDb(std::wstring const & filePath);
 		static sqliteWrapped::Connection CreateNewDb(std::wstring const & filePath);
+
+		static void ProfileQueryTookTooLong(void *, char const * const statement, unsigned long long const time);
 	};
 }

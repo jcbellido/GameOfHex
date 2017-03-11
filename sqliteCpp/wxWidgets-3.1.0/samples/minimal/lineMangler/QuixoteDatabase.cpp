@@ -29,9 +29,13 @@ bool QuixoteDatabase::Commit()
 	auto lines = loader.GetLanguageLines(lineMangler::LanguageCode::English);
 	auto currentLine = lines.begin();
 
-	const int HARD_LIMIT = 2048;
+	sqliteWrapped::Execute(m_connection, "PRAGMA synchronous=OFF");
+	//Statement pragmaMemory (m_connection, "PRAGMA journal_mode=MEMORY");
+	//pragmaMemory.Step();
+
+	const int HARD_LIMIT = 4096;
 	int currentWrittingNumber = 0;
-	Execute(m_connection, "begin");
+	sqliteWrapped::Execute(m_connection, "begin transaction");
 	for (int i = 0; i < m_lines; ++i)
 	{
 		string stringId = GenerateNewStringID();
@@ -58,13 +62,17 @@ bool QuixoteDatabase::Commit()
 		currentWrittingNumber++;
 		if (HARD_LIMIT <= currentWrittingNumber)
 		{
-			Execute(m_connection, "commit");
-			Execute(m_connection, "begin");
+			sqliteWrapped::Execute(m_connection, "end transaction");
+			sqliteWrapped::Execute(m_connection, "begin transaction");
 			currentWrittingNumber = 0;
 		}
 	}
+	sqliteWrapped::Execute(m_connection, "end transaction");
+	sqliteWrapped::Execute(m_connection, "PRAGMA synchronous=ON");
+	sqliteWrapped::Execute(m_connection, "analyze");
+	//Statement pragmaDelete(m_connection, "PRAGMA journal_mode=DELETE");
+	//pragmaDelete.Step();
 
-	Execute(m_connection, "commit");
 	return true;
 }
 

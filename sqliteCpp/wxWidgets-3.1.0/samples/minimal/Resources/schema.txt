@@ -24,6 +24,7 @@ CREATE TABLE "SourceLineContents" (
                 `SourceLineId`   INTEGER,
                 FOREIGN KEY(`SourceLineId`) REFERENCES `SourceLines`(`SourceLineId`)
 );
+CREATE INDEX `SLContentsSourceLineIdIndex` ON `SourceLineContents` (`SourceLineId` );
 CREATE TABLE "SourceLineContentsHistory" (
                 `SourceLineContentHistoryId`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
                 `Version`              INTEGER NOT NULL DEFAULT 0 CHECK(Version >= 0),
@@ -40,6 +41,7 @@ CREATE TABLE "TranslationContents" (
 	FOREIGN KEY(`SourceLineContentId`) REFERENCES `SourceLineContents`(`SourceLineContentId`),
 	FOREIGN KEY(`LanguageId`) REFERENCES `Languages`(`LanguageId`)
 );
+CREATE INDEX `TContentsSLCIdIndex` ON `TranslationContents` (`SourceLineContentId` );
 CREATE TABLE `TranslationContentsHistory` (
                 `TranslationContentHistoryId`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
                 `Version`              INTEGER NOT NULL DEFAULT 0 CHECK(Version >=0),

@@ -3,8 +3,12 @@
 #include "connectionFactory.h"
 #include "sillyUtils.h"
 
+#include <iostream>
+
+using namespace lineMangler;
+
 // First implementation based on the frame ... which makes like ... zero sense
-sqliteWrapped::Connection lineMangler::ConnectionFactory::GetConnection(ILogger &logger)
+sqliteWrapped::Connection ConnectionFactory::GetConnection(ILogger &logger)
 {
 	logger.AddToLog(L"Connection factory called");
 	auto executablePath = sillyUtils::GetExecutablePath();
@@ -19,18 +23,18 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::GetConnection(ILogger 
 		conn = ConnectionFactory::CreateNewDb(executablePath, logger);
 
 	sqliteWrapped::Execute(conn, "PRAGMA foreign_keys=on;");
-
+	conn.Profile(ProfileQueryTookTooLong);
 	return conn;
 }
 
-sqliteWrapped::Connection lineMangler::ConnectionFactory::OpenExistingDb(std::wstring const & filePath, ILogger &logger)
+sqliteWrapped::Connection ConnectionFactory::OpenExistingDb(std::wstring const & filePath, ILogger &logger)
 {
 	auto connection = sqliteWrapped::Connection(filePath.c_str());
 	logger.AddToLog(L"File exists, Schema not created");
 	return connection;
 }
 
-sqliteWrapped::Connection lineMangler::ConnectionFactory::CreateNewDb(std::wstring const & filePath, ILogger &logger)
+sqliteWrapped::Connection ConnectionFactory::CreateNewDb(std::wstring const & filePath, ILogger &logger)
 {
 	try
 	{
@@ -54,7 +58,7 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::CreateNewDb(std::wstri
 	}
 }
 
-sqliteWrapped::Connection lineMangler::ConnectionFactory::GetConnection()
+sqliteWrapped::Connection ConnectionFactory::GetConnection()
 {
 	auto executablePath = sillyUtils::GetExecutablePath();
 	executablePath += L".db";
@@ -67,17 +71,17 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::GetConnection()
 		conn = ConnectionFactory::CreateNewDb(executablePath);
 
 	sqliteWrapped::Execute(conn, "PRAGMA foreign_keys=on;");
-
+	conn.Profile(ProfileQueryTookTooLong);
 	return conn;
 }
 
-sqliteWrapped::Connection lineMangler::ConnectionFactory::OpenExistingDb(std::wstring const & filePath)
+sqliteWrapped::Connection ConnectionFactory::OpenExistingDb(std::wstring const & filePath)
 {
 	auto connection = sqliteWrapped::Connection(sillyUtils::ConvertToStandard(filePath).c_str());
 	return connection;
 }
 
-sqliteWrapped::Connection lineMangler::ConnectionFactory::CreateNewDb(std::wstring const & filePath)
+sqliteWrapped::Connection ConnectionFactory::CreateNewDb(std::wstring const & filePath)
 {
 	try
 	{
@@ -99,5 +103,14 @@ sqliteWrapped::Connection lineMangler::ConnectionFactory::CreateNewDb(std::wstri
 	catch (sqliteWrapped::Exception)
 	{
 		return sqliteWrapped::Connection::WideMemory();
+	}
+}
+
+void ConnectionFactory::ProfileQueryTookTooLong(void *, char const * const statement, unsigned long long const time)
+{
+	unsigned long long const ms = time / 1000000;
+	if (ms > 10)
+	{
+		std::cerr << "Took too long (" << ms << ") " << statement << std::endl;
 	}
 }
