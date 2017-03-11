@@ -29,8 +29,9 @@ bool QuixoteDatabase::Commit()
 	auto lines = loader.GetLanguageLines(lineMangler::LanguageCode::English);
 	auto currentLine = lines.begin();
 
+	const int HARD_LIMIT = 2048;
+	int currentWrittingNumber = 0;
 	Execute(m_connection, "begin");
-
 	for (int i = 0; i < m_lines; ++i)
 	{
 		string stringId = GenerateNewStringID();
@@ -53,46 +54,17 @@ bool QuixoteDatabase::Commit()
 		currentLine++;
 		if (currentLine == lines.end())
 			currentLine = lines.begin();
+		
+		currentWrittingNumber++;
+		if (HARD_LIMIT <= currentWrittingNumber)
+		{
+			Execute(m_connection, "commit");
+			Execute(m_connection, "begin");
+			currentWrittingNumber = 0;
+		}
 	}
 
 	Execute(m_connection, "commit");
-
-	//try
-	//{
-	//	// Find the SourceLine ID
-	//	Statement getSourceLineId = Statement(m_connection, "select SourceLineId from SourceLines where StringId=(?1)", m_stringID);
-	//	if (!getSourceLineId.Step())
-	//	{
-	//		m_lastErrorMessage = "String ID " + m_stringID + " not found";
-	//		return false;
-	//	}
-	//	int sourceLineId = getSourceLineId.GetInt(0);
-
-	//	Statement getCurrentLineContent = Statement(m_connection, "select SourceLineContentId, Version, Text from SourceLineContents where SourceLineId=(?1)", sourceLineId);
-	//	getCurrentLineContent.Step();
-
-	//	// Push previous line to historic
-	//	Execute(m_connection, "begin");
-	//	Statement insert(m_connection, "insert into SourceLineContentsHistory(Version, Text, SourceLineContentId) values(?1, ?2, ?3)", 
-	//		getCurrentLineContent.GetInt(1),
-	//		getCurrentLineContent.GetString(2),
-	//		getCurrentLineContent.GetInt(0));
-	//	insert.Execute();
-
-	//	Statement updateCurrentContent(m_connection, "UPDATE SourceLineContents SET Version=(?1), Text=(?2) WHERE SourceLineContentId=(?3)",
-	//		getCurrentLineContent.GetInt(1) + 1,
-	//		m_text,
-	//		getCurrentLineContent.GetInt(0));
-	//	updateCurrentContent.Execute();
-
-	//	Execute(m_connection, "commit");
-	//}
-	//catch (sqliteWrapped::Exception const & e)
-	//{
-	//	Execute(m_connection, "rollback");
-	//	m_lastErrorMessage = e.Message;
-	//	return false;
-	//}
 	return true;
 }
 
