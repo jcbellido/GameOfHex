@@ -47,6 +47,9 @@
     <ClCompile Include="lineMangler\AddTranslation.cpp">
       <Filter>lineMangler</Filter>
     </ClCompile>
+    <ClCompile Include="lineMangler\LanguageMap.cpp">
+      <Filter>lineMangler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\sample.rc">
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="sqliteWrapped\StatementCSVWriter.h">
       <Filter>sqlLiteWrapped</Filter>
+    </ClInclude>
+    <ClInclude Include="lineMangler\LanguageMap.h">
+      <Filter>lineMangler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

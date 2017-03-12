@@ -4,6 +4,7 @@
 
 #include "lineMangler\LineMangler.h"
 #include "AddSourceLine.h"
+#include "AddTranslation.h"
 
 using namespace lineMangler;
 using namespace sqliteWrapped;
@@ -29,6 +30,15 @@ bool QuixoteDatabase::Commit()
 	auto lines = loader.GetLanguageLines(lineMangler::LanguageCode::English);
 	auto currentLine = lines.begin();
 
+	auto linesSpa = loader.GetLanguageLines(lineMangler::LanguageCode::Spanish);
+	auto currentSpa = linesSpa.begin();
+	auto linesFr = loader.GetLanguageLines(lineMangler::LanguageCode::French);
+	auto currentFr = linesFr.begin();
+	auto linesZh = loader.GetLanguageLines(lineMangler::LanguageCode::TraditionalChinese);
+	auto currentZh = linesZh.begin();
+	auto linesAra = loader.GetLanguageLines(lineMangler::LanguageCode::Arabic);
+	auto currentAra = linesAra.begin();
+
 	sqliteWrapped::Execute(m_connection, "PRAGMA synchronous=OFF");
 	//Statement pragmaMemory (m_connection, "PRAGMA journal_mode=MEMORY");
 	//pragmaMemory.Step();
@@ -46,6 +56,20 @@ bool QuixoteDatabase::Commit()
 			0);	// Hardcoded Status
 		a.Queue();
 
+		lineMangler::AddTranslationToSourceLine addTranslationSpa(m_connection, stringId, 2, 0, *currentSpa);
+		addTranslationSpa.Queue();
+
+		lineMangler::AddTranslationToSourceLine addTranslationFr(m_connection, stringId, 3, 0, *currentFr);
+		addTranslationFr.Queue();
+
+		lineMangler::AddTranslationToSourceLine addTranslationZh(m_connection, stringId, 4, 0, *currentZh);
+		addTranslationZh.Queue();
+
+		lineMangler::AddTranslationToSourceLine addTranslationAra(m_connection, stringId, 5, 0, *currentAra);
+		addTranslationAra.Queue();
+
+		
+		// FIXME there is a bug here FOR SURE
 		for (int j = 0; j < m_versions; ++j)
 		{
 			// Now the Versions 
@@ -53,11 +77,34 @@ bool QuixoteDatabase::Commit()
 				stringId,
 				*currentLine);
 			addVersion.Queue();
+
+			lineMangler::AddTranslationToSourceLine addTranslationSpaVer (m_connection, stringId, 2, j, *currentSpa);
+			addTranslationSpaVer.Queue();
+
+			lineMangler::AddTranslationToSourceLine addTranslationFrVer(m_connection, stringId, 3, j, *currentFr);
+			addTranslationFrVer.Queue();
+			
+			lineMangler::AddTranslationToSourceLine addTranslationZhVer(m_connection, stringId, 4, j, *currentZh);
+			addTranslationZhVer.Queue();
+
+			lineMangler::AddTranslationToSourceLine addTranslationAraVer(m_connection, stringId, 5, j, *currentAra);
+			addTranslationAra.Queue();
 		}
 
 		currentLine++;
+		currentSpa++;
+		currentFr++;
+		currentZh++;
+		currentAra++;
+
 		if (currentLine == lines.end())
+		{
 			currentLine = lines.begin();
+			currentSpa = linesSpa.begin();
+			currentFr = linesFr.begin();
+			currentZh = linesZh.begin();
+			currentAra = linesAra.begin();
+		}
 		
 		currentWrittingNumber++;
 		if (HARD_LIMIT <= currentWrittingNumber)

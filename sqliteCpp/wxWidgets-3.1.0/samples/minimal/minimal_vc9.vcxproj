@@ -503,6 +503,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <ClCompile Include="lineMangler\AddSourceLine.cpp" />
     <ClCompile Include="lineMangler\AddTranslation.cpp" />
     <ClCompile Include="lineMangler\connectionFactory.cpp" />
+    <ClCompile Include="lineMangler\LanguageMap.cpp" />
     <ClCompile Include="lineMangler\LineMangler.cpp" />
     <ClCompile Include="lineMangler\QuixoteDatabase.cpp" />
     <ClCompile Include="minimal.cpp" />
@@ -523,6 +524,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <ClInclude Include="lineMangler\AddTranslation.h" />
     <ClInclude Include="lineMangler\connectionFactory.h" />
     <ClInclude Include="lineMangler\ILineManglerCommand.h" />
+    <ClInclude Include="lineMangler\LanguageMap.h" />
     <ClInclude Include="lineMangler\LineMangler.h" />
     <ClInclude Include="lineMangler\LineManglerGeneralFunctions.h" />
     <ClInclude Include="lineMangler\QuixoteDatabase.h" />
