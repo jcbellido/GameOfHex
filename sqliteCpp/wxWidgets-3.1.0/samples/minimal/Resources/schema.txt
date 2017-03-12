@@ -61,3 +61,4 @@ CREATE TABLE `LineSetContents` (
 	FOREIGN KEY(`SourceLineId`) REFERENCES `SourceLines`(`SourceLineId`)
 );
 COMMIT;
+
