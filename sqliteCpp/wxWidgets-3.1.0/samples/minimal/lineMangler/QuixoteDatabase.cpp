@@ -32,10 +32,13 @@ bool QuixoteDatabase::Commit()
 
 	auto linesSpa = loader.GetLanguageLines(lineMangler::LanguageCode::Spanish);
 	auto currentSpa = linesSpa.begin();
+	
 	auto linesFr = loader.GetLanguageLines(lineMangler::LanguageCode::French);
 	auto currentFr = linesFr.begin();
+	
 	auto linesZh = loader.GetLanguageLines(lineMangler::LanguageCode::TraditionalChinese);
 	auto currentZh = linesZh.begin();
+	
 	auto linesAra = loader.GetLanguageLines(lineMangler::LanguageCode::Arabic);
 	auto currentAra = linesAra.begin();
 
@@ -88,7 +91,7 @@ bool QuixoteDatabase::Commit()
 			addTranslationZhVer.Queue();
 
 			lineMangler::AddTranslationToSourceLine addTranslationAraVer(m_connection, stringId, 5, j, *currentAra);
-			addTranslationAra.Queue();
+			addTranslationAraVer.Queue();
 		}
 
 		currentLine++;
@@ -115,8 +118,10 @@ bool QuixoteDatabase::Commit()
 		}
 	}
 	sqliteWrapped::Execute(m_connection, "end transaction");
+
 	sqliteWrapped::Execute(m_connection, "PRAGMA synchronous=ON");
 	sqliteWrapped::Execute(m_connection, "analyze");
+	
 	//Statement pragmaDelete(m_connection, "PRAGMA journal_mode=DELETE");
 	//pragmaDelete.Step();
 

@@ -26,9 +26,9 @@ void AddTranslationToSourceLine::InternalAddTranslationToSourceLine()
 		return;
 	}
 	int sourceLineId = getSourceLineId.GetInt(0);
-
+																													     
 	Statement getSourceLineContentId = Statement(m_connection, "select SourceLineContentId from SourceLineContents where SourceLineId=(?1)", sourceLineId);
-	if (!getSourceLineId.Step())
+	if (!getSourceLineContentId.Step())
 	{
 		m_lastErrorMessage = "Source Line Id not found in SourceLineContentId " + sourceLineId;
 		return;
@@ -48,10 +48,11 @@ void AddTranslationToSourceLine::InternalAddTranslationToSourceLine()
 				getCurrentTranslation.GetInt(0));
 			insert.Execute();
 
-			Statement updateCurrentContent(m_connection, "UPDATE TranslationContents SET Version=(?1), Text=(?2) WHERE SourceLineContentId=(?3)",
+			Statement updateCurrentContent(m_connection, "UPDATE TranslationContents SET Version=(?1), Text=(?2) WHERE SourceLineContentId=(?3) AND LanguageId=(?4)",
 				m_version,
 				m_text,
-				sourceLineContentId);
+				sourceLineContentId,
+				m_languageCode);
 			updateCurrentContent.Execute();
 	}
 	else

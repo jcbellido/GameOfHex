@@ -30,7 +30,9 @@ namespace lineMangler
 			m_connection(connection),
 			m_stringID(stringID),
 			m_text(translatedText),
-			m_lastErrorMessage("")
+			m_lastErrorMessage(""),
+			m_version(versionImported),
+			m_languageCode(languageId)
 		{ }
 
 		bool Commit();
