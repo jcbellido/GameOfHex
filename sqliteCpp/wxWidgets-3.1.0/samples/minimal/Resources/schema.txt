@@ -60,5 +60,7 @@ CREATE TABLE `LineSetContents` (
 	FOREIGN KEY(`LineSetId`) REFERENCES `LineSets`(`LinesetId`),
 	FOREIGN KEY(`SourceLineId`) REFERENCES `SourceLines`(`SourceLineId`)
 );
+CREATE INDEX `TranslationContents_SourceIDLanguageID` ON `TranslationContents` (`SourceLineContentId` ,`LanguageId` ASC);
+CREATE INDEX `LineSetContents_index` ON `LineSetContents` (`LineSetId` ASC,`SourceLineId` ASC);
 COMMIT;
 

@@ -24,7 +24,7 @@ namespace lineMangler
 			m_connection(connection),
 			m_stringID(stringID),
 			m_text(text),
-			m_lastErrorMessage("")
+			m_lastErrorMessage("")			
 		{ }
 
 		bool Commit();
@@ -41,7 +41,7 @@ namespace lineMangler
 		string m_text;
 		int m_platform;
 		int m_status;
-
+		int m_lastInsertedSourceLineID;
 		string m_lastErrorMessage;
 
 	private:
@@ -54,12 +54,13 @@ namespace lineMangler
 			m_text(text),
 			m_platform(platform),
 			m_status(status),
-			m_lastErrorMessage("")
+			m_lastErrorMessage(""),
+			m_lastInsertedSourceLineID(0)
 		{ }
 		// The idea here is to always commit to the on memory data
 		bool Commit();
 		bool Queue();
-
+		int GetSourceLineID() { return m_lastInsertedSourceLineID; }
 		string const & ErrorMessage();
 
 	private:

@@ -28,9 +28,8 @@ void AddSourceLine::InternalAddSourceLine()
 	long long rowId = m_connection.RowId();
 	Statement checkId = Statement(m_connection, "select SourceLineId from SourceLines where rowId=(?1)", static_cast<int>(rowId));
 	checkId.Step();
-	int lastIdInserted = checkId.GetInt(0);
-
-	Statement insertContents(m_connection, "insert into SourceLineContents(Version, Text, SourceLineId) values(?1, ?2, ?3)", 0, m_text, lastIdInserted);
+	m_lastInsertedSourceLineID = checkId.GetInt(0);
+	Statement insertContents(m_connection, "insert into SourceLineContents(Version, Text, SourceLineId) values(?1, ?2, ?3)", 0, m_text, m_lastInsertedSourceLineID);
 	insertContents.Execute();
 
 }

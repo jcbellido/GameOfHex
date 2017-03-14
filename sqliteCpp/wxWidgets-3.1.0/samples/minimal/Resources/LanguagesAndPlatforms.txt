@@ -11,4 +11,8 @@ INSERT INTO `Languages` (LanguageId,Name,IsSource) VALUES (2,'Spanish',0);
 INSERT INTO `Languages` (LanguageId,Name,IsSource) VALUES (3,'French',0);
 INSERT INTO `Languages` (LanguageId,Name,IsSource) VALUES (4,'TraditionalChinese',0);
 INSERT INTO `Languages` (LanguageId,Name,IsSource) VALUES (5,'Arabic',0);
+INSERT INTO `LineSets` (LineSetId,Name) VALUES (1,'Main');
+INSERT INTO `LineSets` (LineSetId,Name) VALUES (2,'DLC1');
+INSERT INTO `LineSets` (LineSetId,Name) VALUES (3,'DLC2');
+INSERT INTO `LineSets` (LineSetId,Name) VALUES (4,'DLC3');
 COMMIT;

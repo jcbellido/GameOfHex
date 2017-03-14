@@ -5,6 +5,8 @@
 #include "lineMangler\LineMangler.h"
 #include "AddSourceLine.h"
 #include "AddTranslation.h"
+#include "AssignStringToLineSet.h"
+
 
 using namespace lineMangler;
 using namespace sqliteWrapped;
@@ -49,6 +51,7 @@ bool QuixoteDatabase::Commit()
 	const int HARD_LIMIT = 4096;
 	int currentWrittingNumber = 0;
 	sqliteWrapped::Execute(m_connection, "begin transaction");
+	int currentLineSet = 1;
 	for (int i = 0; i < m_lines; ++i)
 	{
 		string stringId = GenerateNewStringID();
@@ -58,6 +61,9 @@ bool QuixoteDatabase::Commit()
 			1,	// Hardcoded Platform (Common by design) 
 			0);	// Hardcoded Status
 		a.Queue();
+
+		lineMangler::AssignStringToLineSet assignLineSet(m_connection, a.GetSourceLineID(), currentLineSet);
+		assignLineSet.Queue();
 
 		lineMangler::AddTranslationToSourceLine addTranslationSpa(m_connection, stringId, 2, 0, *currentSpa);
 		addTranslationSpa.Queue();
@@ -109,6 +115,11 @@ bool QuixoteDatabase::Commit()
 			currentAra = linesAra.begin();
 		}
 		
+		if (currentLineSet != 4)
+			currentLineSet++;
+		else
+			currentLineSet = 1;
+
 		currentWrittingNumber++;
 		if (HARD_LIMIT <= currentWrittingNumber)
 		{

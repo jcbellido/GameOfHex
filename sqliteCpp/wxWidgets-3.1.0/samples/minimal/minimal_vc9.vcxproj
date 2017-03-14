@@ -502,6 +502,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <ClCompile Include="app.cpp" />
     <ClCompile Include="lineMangler\AddSourceLine.cpp" />
     <ClCompile Include="lineMangler\AddTranslation.cpp" />
+    <ClCompile Include="lineMangler\AssignStringToLineSet.cpp" />
     <ClCompile Include="lineMangler\connectionFactory.cpp" />
     <ClCompile Include="lineMangler\LanguageMap.cpp" />
     <ClCompile Include="lineMangler\LineMangler.cpp" />
@@ -522,6 +523,7 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <ClInclude Include="app.h" />
     <ClInclude Include="lineMangler\AddSourceLine.h" />
     <ClInclude Include="lineMangler\AddTranslation.h" />
+    <ClInclude Include="lineMangler\AssignStringToLineSet.h" />
     <ClInclude Include="lineMangler\connectionFactory.h" />
     <ClInclude Include="lineMangler\ILineManglerCommand.h" />
     <ClInclude Include="lineMangler\LanguageMap.h" />

@@ -50,6 +50,9 @@
     <ClCompile Include="lineMangler\LanguageMap.cpp">
       <Filter>lineMangler</Filter>
     </ClCompile>
+    <ClCompile Include="lineMangler\AssignStringToLineSet.cpp">
+      <Filter>lineMangler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\sample.rc">
@@ -127,6 +130,9 @@
       <Filter>sqlLiteWrapped</Filter>
     </ClInclude>
     <ClInclude Include="lineMangler\LanguageMap.h">
+      <Filter>lineMangler</Filter>
+    </ClInclude>
+    <ClInclude Include="lineMangler\AssignStringToLineSet.h">
       <Filter>lineMangler</Filter>
     </ClInclude>
   </ItemGroup>
