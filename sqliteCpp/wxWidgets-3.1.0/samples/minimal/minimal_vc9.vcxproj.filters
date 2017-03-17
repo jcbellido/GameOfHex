@@ -18,11 +18,11 @@
     <Filter Include="Model">
       <UniqueIdentifier>{c815df97-1e87-4689-80d8-95f81e8ef5b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{c43da1f7-9461-4a31-8296-855b4f73dc0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="minimal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="lineMangler\LineMangler.cpp">
       <Filter>lineMangler</Filter>
     </ClCompile>
@@ -30,9 +30,6 @@
       <Filter>sqlLiteWrapped</Filter>
     </ClCompile>
     <ClCompile Include="sillyUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lineMangler\connectionFactory.cpp">
@@ -52,6 +49,12 @@
     </ClCompile>
     <ClCompile Include="lineMangler\AssignStringToLineSet.cpp">
       <Filter>lineMangler</Filter>
+    </ClCompile>
+    <ClCompile Include="app.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="minimal.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,16 +102,10 @@
     <ClInclude Include="sqliteWrapped\Types.h">
       <Filter>sqlLiteWrapped</Filter>
     </ClInclude>
-    <ClInclude Include="minimal.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Logger.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="sillyUtils.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="app.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="lineMangler\connectionFactory.h">
@@ -134,6 +131,12 @@
     </ClInclude>
     <ClInclude Include="lineMangler\AssignStringToLineSet.h">
       <Filter>lineMangler</Filter>
+    </ClInclude>
+    <ClInclude Include="app.h">
+      <Filter>Source Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="minimal.h">
+      <Filter>Source Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

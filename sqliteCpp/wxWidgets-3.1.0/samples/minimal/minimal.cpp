@@ -24,6 +24,7 @@ MyFrame::MyFrame(const wxString& title, sqliteWrapped::Connection & connection)
     // set the frame icon
     SetIcon(wxICON(sample));
     SetMenuBar(PopulateMenus());
+
 	auto boxSizerCentral = new wxBoxSizer( wxVERTICAL );
 
 	CreateAutoPopulatorPanel(boxSizerCentral);

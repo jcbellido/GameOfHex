@@ -22,6 +22,7 @@ CREATE TABLE "SourceLineContents" (
                 `Version`              INTEGER DEFAULT 0 CHECK(Version >= 0),
                 `Text`    TEXT,
                 `SourceLineId`   INTEGER,
+				`TimeStamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 FOREIGN KEY(`SourceLineId`) REFERENCES `SourceLines`(`SourceLineId`)
 );
 CREATE INDEX `SLContentsSourceLineIdIndex` ON `SourceLineContents` (`SourceLineId` );
@@ -30,6 +31,7 @@ CREATE TABLE "SourceLineContentsHistory" (
                 `Version`              INTEGER NOT NULL DEFAULT 0 CHECK(Version >= 0),
                 `Text`    TEXT,
                 `SourceLineContentId`   INTEGER,
+				`TimeStamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 FOREIGN KEY(`SourceLineContentId`) REFERENCES `SourceLineContents`(`SourceLineContentId`)
 );
 CREATE TABLE "TranslationContents" (
@@ -38,6 +40,7 @@ CREATE TABLE "TranslationContents" (
 	`Text`	TEXT,
 	`SourceLineContentId`	INTEGER,
 	`LanguageId`	INTEGER,
+	`TimeStamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	FOREIGN KEY(`SourceLineContentId`) REFERENCES `SourceLineContents`(`SourceLineContentId`),
 	FOREIGN KEY(`LanguageId`) REFERENCES `Languages`(`LanguageId`)
 );
@@ -47,6 +50,7 @@ CREATE TABLE `TranslationContentsHistory` (
                 `Version`              INTEGER NOT NULL DEFAULT 0 CHECK(Version >=0),
                 `Text`    TEXT,
                 `TranslationContentId`  INTEGER,
+				`TimeStamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 FOREIGN KEY(`TranslationContentId`) REFERENCES `TranslationContents`(`TranslationContentId`)
 );
 CREATE TABLE `LineSets` (

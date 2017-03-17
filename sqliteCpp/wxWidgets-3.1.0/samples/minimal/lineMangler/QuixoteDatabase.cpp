@@ -115,10 +115,7 @@ bool QuixoteDatabase::Commit()
 			currentAra = linesAra.begin();
 		}
 		
-		if (currentLineSet != 4)
-			currentLineSet++;
-		else
-			currentLineSet = 1;
+		currentLineSet = currentLineSet == 4 ? 1 : currentLineSet + 1;
 
 		currentWrittingNumber++;
 		if (HARD_LIMIT <= currentWrittingNumber)
