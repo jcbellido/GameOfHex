@@ -21,6 +21,9 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{c43da1f7-9461-4a31-8296-855b4f73dc0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ViewModel">
+      <UniqueIdentifier>{ffab9efc-6475-4929-bf72-6d912ba5b64e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lineMangler\LineMangler.cpp">
@@ -55,6 +58,12 @@
     </ClCompile>
     <ClCompile Include="minimal.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="LineHistoryUserControl.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="LineHistoryViewModel.cpp">
+      <Filter>Source Files\ViewModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +146,12 @@
     </ClInclude>
     <ClInclude Include="minimal.h">
       <Filter>Source Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="LineHistoryUserControl.h">
+      <Filter>Source Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="LineHistoryViewModel.h">
+      <Filter>Source Files\ViewModel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

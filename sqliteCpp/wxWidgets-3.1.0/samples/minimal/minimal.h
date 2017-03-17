@@ -1,8 +1,13 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "wx/wxprec.h"
+#include "wx/notebook.h"
+#include "wx/dataview.h"
+#include "wx/datetime.h"
+#include "wx/splitter.h"
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -48,6 +53,11 @@ private:
 	wxTextCtrl * m_textControlNumberOfAddedLines;
 	wxTextCtrl * m_textControlNumberOfVersionsPerLine;
 
+	wxNotebook * m_notebook;
+	
+	std::vector<wxDataViewCtrl *> m_dataViews;
+	std::vector<wxBoxSizer *> m_boxSizers;
+	
 public:
 	// ctor(s)
 	MyFrame(const wxString& title, sqliteWrapped::Connection & connection);
@@ -65,10 +75,9 @@ private:
 	void OnPopulateDatabase(wxCommandEvent& event);
 
 private:
-	// any class wishing to process wxWidgets events must use this macro
 	wxDECLARE_EVENT_TABLE();
 	wxMenuBar * PopulateMenus();
 	void CreateLogger();
-	void CreateAddNewLinePanel(wxBoxSizer * sizer);
-	void CreateAutoPopulatorPanel(wxBoxSizer * sizer);
+	void CreateAddNewLinePanel(wxPanel* parent, unsigned int nPanel, unsigned long style = 0);
+	void CreateAutoPopulatorPanel(wxPanel* parent, unsigned int nPanel, unsigned long style = 0);
 };

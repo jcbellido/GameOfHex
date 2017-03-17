@@ -500,6 +500,8 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="app.cpp" />
+    <ClCompile Include="LineHistoryUserControl.cpp" />
+    <ClCompile Include="LineHistoryViewModel.cpp" />
     <ClCompile Include="lineMangler\AddSourceLine.cpp" />
     <ClCompile Include="lineMangler\AddTranslation.cpp" />
     <ClCompile Include="lineMangler\AssignStringToLineSet.cpp" />
@@ -521,6 +523,8 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.h" />
+    <ClInclude Include="LineHistoryUserControl.h" />
+    <ClInclude Include="LineHistoryViewModel.h" />
     <ClInclude Include="lineMangler\AddSourceLine.h" />
     <ClInclude Include="lineMangler\AddTranslation.h" />
     <ClInclude Include="lineMangler\AssignStringToLineSet.h" />

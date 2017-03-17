@@ -1,4 +1,5 @@
 #include "minimal.h"
+
 #include "sillyUtils.h"
 #include "sqliteWrapped\sqliteWrapped.h"
 
@@ -19,27 +20,36 @@ wxEND_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, sqliteWrapped::Connection & connection)
-       : wxFrame(NULL, wxID_ANY, title), m_connection(connection)
+       : wxFrame(NULL, wxID_ANY, title, wxPoint(40, 40), wxSize(540, 1000)), m_connection(connection)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
     SetMenuBar(PopulateMenus());
-
-	auto boxSizerCentral = new wxBoxSizer( wxVERTICAL );
-
-	CreateAutoPopulatorPanel(boxSizerCentral);
-	CreateAddNewLinePanel(boxSizerCentral);
-
+	CreateStatusBar(2);
+	SetStatusText("Ready");
 	CreateLogger();
-	boxSizerCentral->Add(m_log, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
-	// Central Stack Panel (vertical box sizer central) added to the mix
-	SetSizer(boxSizerCentral);
+	m_notebook = new wxNotebook(this, wxID_ANY);
 
-    CreateStatusBar(2);
-    SetStatusText("Ready");
+	auto firstPanel = new wxPanel(m_notebook, wxID_ANY);
+	CreateAutoPopulatorPanel(firstPanel, 0);
 
-	boxSizerCentral->SetSizeHints(this);
+	auto secondPanel = new wxPanel(m_notebook, wxID_ANY);
+	CreateAddNewLinePanel(secondPanel, 0);
+
+	auto lineHistoryPanel = new wxPanel(m_notebook, wxID_ANY);
+	CreateAddNewLinePanel(lineHistoryPanel, 0);
+
+	m_notebook->AddPage(firstPanel, "DB Populator");
+	m_notebook->AddPage(secondPanel, "Add One line");
+	m_notebook->AddPage(lineHistoryPanel, "Source History");
+
+	wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+
+	mainSizer->Add(m_notebook, 1, wxGROW);
+	mainSizer->Add(m_log, 0, wxGROW);
+
+	SetSizerAndFit(mainSizer);
 }
 
 MyFrame::~MyFrame()
@@ -47,28 +57,32 @@ MyFrame::~MyFrame()
 	delete wxLog::SetActiveTarget(m_logOld);
 }
 
-void MyFrame::CreateAutoPopulatorPanel(wxBoxSizer * sizer)
+void MyFrame::CreateAutoPopulatorPanel(wxPanel * parent, unsigned int nPanel, unsigned long style)
 {
-	// Insert a panel that adds a bunch of new lines but always considering the existing lines
-	m_textControlNumberOfAddedLines = new wxTextCtrl(this, wxID_ANY, wxT(""));
-	// m_textControlNumberOfVersionsPerLine = new wxTextCtrl(this, wxID_ANY, wxT("Number of versions"));
+	auto sizer = new wxBoxSizer(wxVERTICAL);
+	m_boxSizers.push_back(sizer);
+
+	parent->SetSizer(sizer);
+
+	m_textControlNumberOfAddedLines = new wxTextCtrl(parent, wxID_ANY, wxT(""));
 
 	wxBoxSizer *boxPopulateDB = new wxBoxSizer(wxHORIZONTAL);
-	boxPopulateDB->Add(new wxStaticText(this, wxID_ANY, wxT("# Lines")), wxSizerFlags().FixedMinSize());
-	boxPopulateDB->Add(m_textControlNumberOfAddedLines, wxSizerFlags());
-	boxPopulateDB->Add(new wxButton(this, Minimal_PopulateDatabase, wxT("Populate")), wxSizerFlags());
+	boxPopulateDB->Add(new wxStaticText(parent, wxID_ANY, wxT("# Lines")), 0, wxALL, 5);
+	boxPopulateDB->Add(m_textControlNumberOfAddedLines, 0, wxALL, 5);
+	boxPopulateDB->Add(new wxButton(parent, Minimal_PopulateDatabase, wxT("Populate")), 0, wxALL, 5);
 
-	// boxPopulateDB->GetItem((size_t)0)->SetProportion(1);
 	boxPopulateDB->GetItem((size_t)1)->SetProportion(1);
-	boxPopulateDB->GetItem((size_t)2)->SetProportion(1);
 
 	sizer->Add(boxPopulateDB, wxSizerFlags().Expand().Border(wxALL, 5));
 }
 
-void MyFrame::CreateAddNewLinePanel(wxBoxSizer * sizer)
+void MyFrame::CreateAddNewLinePanel(wxPanel* parent, unsigned int nPanel, unsigned long style)
 {
-	m_textControlLineText = new wxTextCtrl(this, wxID_ANY, wxT("Text for new source line"));
-	m_textControlStringID = new wxTextCtrl(this, wxID_ANY, wxT("Text for String ID"));
+	auto sizer = new wxBoxSizer(wxVERTICAL);
+	m_boxSizers.push_back(sizer);
+
+	m_textControlLineText = new wxTextCtrl(parent, wxID_ANY, wxT("Text for new source line"));
+	m_textControlStringID = new wxTextCtrl(parent, wxID_ANY, wxT("Text for String ID"));
 	
 	wxBoxSizer *boxTextInput = new wxBoxSizer(wxHORIZONTAL);
 	boxTextInput->Add(m_textControlLineText, wxSizerFlags());
@@ -81,13 +95,15 @@ void MyFrame::CreateAddNewLinePanel(wxBoxSizer * sizer)
 
 	wxBoxSizer *button_box = new wxBoxSizer(wxHORIZONTAL);
 	button_box->Add(
-		new wxButton(this, Minimal_AddNewString, wxT("New Source Line")),
+		new wxButton(parent, Minimal_AddNewString, wxT("New Source Line")),
 		wxSizerFlags().Border(wxALL, 5));
 	button_box->Add(
-		new wxButton(this, Minimal_UpdateString, wxT("Update Source Line")),
+		new wxButton(parent, Minimal_UpdateString, wxT("Update Source Line")),
 		wxSizerFlags().Border(wxALL, 5));
 
 	sizer->Add(button_box, wxSizerFlags().Right());
+
+	parent->SetSizer(sizer);
 }
 
 void MyFrame::CreateLogger()
