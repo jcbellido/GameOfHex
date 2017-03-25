@@ -1,0 +1,70 @@
+PRAGMA foreign_keys=1;
+BEGIN TRANSACTION;
+CREATE TABLE `Platforms` (
+                `PlatformId`        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+                `Name` TEXT NOT NULL DEFAULT 'Windows' UNIQUE
+);
+CREATE TABLE `Languages` (
+                `LanguageId`      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+                `Name` TEXT NOT NULL DEFAULT 'English' UNIQUE,
+                `IsSource`            INTEGER NOT NULL DEFAULT 0 CHECK(IsSource=0 OR IsSource=1)
+);
+CREATE TABLE "SourceLines" (
+                `SourceLineId`   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+                `StringId`              TEXT NOT NULL UNIQUE,
+                `Platform`            INTEGER,
+                `Status` INTEGER NOT NULL DEFAULT 0 CHECK(Status >= 0),
+                FOREIGN KEY(`Platform`) REFERENCES `Platforms`(`PlatformId`)
+);
+CREATE INDEX `SourceLinesStringIdIndex` ON `SourceLines` (`StringId` );
+CREATE TABLE "SourceLineContents" (
+                `SourceLineContentId`   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+                `Version`              INTEGER DEFAULT 0 CHECK(Version >= 0),
+                `Text`    TEXT,
+                `SourceLineId`   INTEGER,
+				`TimeStamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                FOREIGN KEY(`SourceLineId`) REFERENCES `SourceLines`(`SourceLineId`)
+);
+CREATE INDEX `SLContentsSourceLineIdIndex` ON `SourceLineContents` (`SourceLineId` );
+CREATE TABLE "SourceLineContentsHistory" (
+                `SourceLineContentHistoryId`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+                `Version`              INTEGER NOT NULL DEFAULT 0 CHECK(Version >= 0),
+                `Text`    TEXT,
+                `SourceLineContentId`   INTEGER,
+				`TimeStamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                FOREIGN KEY(`SourceLineContentId`) REFERENCES `SourceLineContents`(`SourceLineContentId`)
+);
+CREATE TABLE "TranslationContents" (
+	`TranslationContentId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`Version`	INTEGER NOT NULL DEFAULT 0 CHECK(Version >= 0),
+	`Text`	TEXT,
+	`SourceLineContentId`	INTEGER,
+	`LanguageId`	INTEGER,
+	`TimeStamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	FOREIGN KEY(`SourceLineContentId`) REFERENCES `SourceLineContents`(`SourceLineContentId`),
+	FOREIGN KEY(`LanguageId`) REFERENCES `Languages`(`LanguageId`)
+);
+CREATE INDEX `TContentsSLCIdIndex` ON `TranslationContents` (`SourceLineContentId` );
+CREATE TABLE `TranslationContentsHistory` (
+                `TranslationContentHistoryId`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+                `Version`              INTEGER NOT NULL DEFAULT 0 CHECK(Version >=0),
+                `Text`    TEXT,
+                `TranslationContentId`  INTEGER,
+				`TimeStamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                FOREIGN KEY(`TranslationContentId`) REFERENCES `TranslationContents`(`TranslationContentId`)
+);
+CREATE TABLE `LineSets` (
+	`LineSetId`	INTEGER NOT NULL UNIQUE,
+	`Name`	TEXT NOT NULL,
+	PRIMARY KEY(`LineSetId`)
+);
+CREATE TABLE `LineSetContents` (
+	`LineSetId`	INTEGER NOT NULL,
+	`SourceLineId`	INTEGER NOT NULL,
+	FOREIGN KEY(`LineSetId`) REFERENCES `LineSets`(`LinesetId`),
+	FOREIGN KEY(`SourceLineId`) REFERENCES `SourceLines`(`SourceLineId`)
+);
+CREATE INDEX `TranslationContents_SourceIDLanguageID` ON `TranslationContents` (`SourceLineContentId` ,`LanguageId` ASC);
+CREATE INDEX `LineSetContents_index` ON `LineSetContents` (`LineSetId` ASC,`SourceLineId` ASC);
+COMMIT;
+

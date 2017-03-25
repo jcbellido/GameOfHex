@@ -1,0 +1,18 @@
+BEGIN TRANSACTION;
+INSERT INTO `Platforms` (PlatformId,Name) VALUES (1,'Common');
+INSERT INTO `Platforms` (PlatformId,Name) VALUES (2,'PS4');
+INSERT INTO `Platforms` (PlatformId,Name) VALUES (3,'PS4Pro');
+INSERT INTO `Platforms` (PlatformId,Name) VALUES (4,'Xbone');
+INSERT INTO `Platforms` (PlatformId,Name) VALUES (5,'Scorpio');
+INSERT INTO `Platforms` (PlatformId,Name) VALUES (6,'MacOSX');
+INSERT INTO `Platforms` (PlatformId,Name) VALUES (7,'Windows');
+INSERT INTO `Languages` (LanguageId,Name,IsSource) VALUES (1,'English',1);
+INSERT INTO `Languages` (LanguageId,Name,IsSource) VALUES (2,'Spanish',0);
+INSERT INTO `Languages` (LanguageId,Name,IsSource) VALUES (3,'French',0);
+INSERT INTO `Languages` (LanguageId,Name,IsSource) VALUES (4,'TraditionalChinese',0);
+INSERT INTO `Languages` (LanguageId,Name,IsSource) VALUES (5,'Arabic',0);
+INSERT INTO `LineSets` (LineSetId,Name) VALUES (1,'Main');
+INSERT INTO `LineSets` (LineSetId,Name) VALUES (2,'DLC1');
+INSERT INTO `LineSets` (LineSetId,Name) VALUES (3,'DLC2');
+INSERT INTO `LineSets` (LineSetId,Name) VALUES (4,'DLC3');
+COMMIT;
