@@ -517,11 +517,6 @@ copy $(MSBuildProjectDirectory)\Resources\*.exe  $(OutDir)</Command>
     <ResourceCompile Include="..\sample.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\sqliteCppWrapper\consoleWrapper\consoleWrapper.vcxproj">
-      <Project>{8e11894f-6ba7-4432-a7c6-cd5e9aef6419}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="app.h" />
     <ClInclude Include="LineHistoryUserControl.h" />
     <ClInclude Include="LineHistoryViewModel.h" />

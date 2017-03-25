@@ -53,8 +53,8 @@ int MyMusicTreeModel::GetYear(const wxDataViewItem &item) const
 	return node->m_year;
 }
 
-void MyMusicTreeModel::AddToClassical(const wxString &title, const wxString &artist,
-	unsigned int year)
+void MyMusicTreeModel::AddToClassical(const wxString &title, const wxString &artist, unsigned int year)
+
 {
 	if (!m_classical)
 	{

@@ -1,8 +1,13 @@
 #pragma once
 
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+	#include "wx/wx.h"
+#endif
+
 #include "wx/dataview.h"
 #include "wx/hashmap.h"
-#include "wx/wxprec.h"
 
 WX_DECLARE_HASH_MAP(unsigned, wxString, wxIntegerHash, wxIntegerEqual,
 	IntToStringMap);
@@ -140,8 +145,8 @@ public:
 
 	// helper methods to change the model
 
-	void AddToClassical(const wxString &title, const wxString &artist,
-		unsigned int year);
+	void AddToClassical(const wxString &title, const wxString &artist, unsigned int year);
+	
 	void Delete(const wxDataViewItem &item);
 
 	wxDataViewItem GetNinthItem() const
