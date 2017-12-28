@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="6e899b7c-7ec5-454e-8dbb-707394d36087" ChangeDateTime="12/28/2017 12:12:30">
+    <Property Name="ElementName" Value="[dbo].[CustomerRanking].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[CustomerRanking]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustomerRankingId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e3342c21-c05d-4b74-85e1-fc59248bf657" ChangeDateTime="12/28/2017 13:21:52">
+    <Property Name="ElementName" Value="[dbo].[CustomerRanking]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Ranking" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1faccf16-15a7-4bb3-aca6-7245f2bd6b1a" ChangeDateTime="12/28/2017 13:22:15">
+    <Property Name="ElementName" Value="[dbo].[Ranking].[CustomerRankingId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Ranking]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RankingId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="778337dc-1620-4645-9ca3-6f1babbb7976" ChangeDateTime="12/28/2017 13:22:28">
+    <Property Name="ElementName" Value="[dbo].[Customer].[CustomerRankingId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Customer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RankingId" />
+  </Operation>
+</Operations>
