@@ -2,6 +2,7 @@
     [OrderHeaderId] BIGINT NOT NULL,
     [CustomerId]    BIGINT NOT NULL,
     [OrderTotal]    MONEY  NOT NULL,
-    CONSTRAINT [FK_OrderHeader_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customer] ([CustomerId])
+    CONSTRAINT [FK_OrderHeader_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customer] ([CustomerId]), 
+    CONSTRAINT [PK_OrderHeader] PRIMARY KEY ([OrderHeaderId])
 );
 
